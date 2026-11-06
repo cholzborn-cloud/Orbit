@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.consti.orbit-brain</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/PATH/TO/node</string>
+    <string>/PATH/TO/Orbit 2/brain-server/src/server.ts</string>
+  </array>
+  <key>WorkingDirectory</key>
+  <string>/PATH/TO/Orbit 2</string>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>BRAIN_SERVER_TOKEN</key>
+    <string>SET_LOCALLY_NEVER_COMMIT</string>
+    <key>BRAIN_VAULT_PATH</key>
+    <string>/PATH/TO/zweites-gehirn-claude</string>
+    <key>BRAIN_SERVER_PORT</key>
+    <string>8420</string>
+  </dict>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/PATH/TO/Library/Logs/orbit-brain.log</string>
+  <key>StandardErrorPath</key>
+  <string>/PATH/TO/Library/Logs/orbit-brain-error.log</string>
+</dict>
+</plist>

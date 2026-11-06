@@ -1,0 +1,43 @@
+import SwiftUI
+
+// Reiter „Immer erlaubt“: gespeicherte „Immer für diese Art“-Erlaubnisse ansehen und zurücknehmen (DELETE /v1/settings/rules/:id). Keine Modi mehr.
+struct SettingsApprovalsView: View {
+    let store: SettingsStore
+    @Environment(\.settingsConfirm) private var confirm
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.Metrics.pt12) {
+            SettingsSectionTitle(text: "Freigaben")   // P37: 11 Medium muted
+            switch store.rules {
+            case .idle, .loading:
+                VStack(spacing: Theme.Metrics.pt12) { ForEach(0..<2, id: \.self) { _ in SettingsSkeleton(height: Theme.Metrics.pt48, radius: Theme.Radius.md) } }
+                    .accessibilityElement(children: .ignore).accessibilityLabel("Erlaubnisse werden geladen")
+            case .failed(let message, let offline):
+                SettingsFailure(message: message, offline: offline) { Task { await store.loadRules() } }
+            case .loaded(let rules):
+                let active = rules.filter(\.isActive)
+                if active.isEmpty {
+                    SettingsHint(text: "Noch nichts immer erlaubt. Wenn du bei einer Freigabe „Immer für diese Art“ wählst, steht es hier.")
+                } else {
+                    // P35: gruppierte Box, Zeilen 40, Aktion hinter ⋯.
+                    SettingsGroup {
+                        ForEach(active) { rule in
+                            row(rule)
+                            if rule.id != active.last?.id { SettingsGroupDivider() }
+                        }
+                    }
+                }
+            }
+            if let error = store.rulesError { SettingsAlert(text: error) }
+        }
+    }
+
+    private func row(_ rule: ApprovalRuleItem) -> some View {
+        SettingsGroupRow(title: "\(rule.kindLabel) · \(rule.botName ?? "Alle Orbis")\(rule.mode == "allow" ? "" : " · \(rule.modeLabel)")") {
+            [WebMenuItem(title: "Zurücknehmen", icon: "arrow.uturn.backward", destructive: true) {
+                confirm?(SettingsConfirm(title: "Erlaubnis zurücknehmen?", message: "„\(rule.kindLabel)“ wird wieder abgefragt.", action: "Zurücknehmen") { await store.deleteRule(rule) })
+            }]
+        }
+        .webTooltip(rule.tool)
+    }
+}

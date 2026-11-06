@@ -1,0 +1,591 @@
+{
+  "orbi": {
+    "weiss": {
+      "$type": "color",
+      "$value": "{orbi.weiss.color-dark}",
+      "$description": "Weiß – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "braun": {
+      "$type": "color",
+      "$value": "{orbi.braun.color-dark}",
+      "$description": "Braun – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "rot": {
+      "$type": "color",
+      "$value": "{orbi.rot.color-dark}",
+      "$description": "Rot – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "orange": {
+      "$type": "color",
+      "$value": "{orbi.orange.color-dark}",
+      "$description": "Orange – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "gelborange": {
+      "$type": "color",
+      "$value": "{orbi.gelborange.color-dark}",
+      "$description": "Gelborange – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "limette": {
+      "$type": "color",
+      "$value": "{orbi.limette.color-dark}",
+      "$description": "Limette – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "gruen": {
+      "$type": "color",
+      "$value": "{orbi.gruen.color-dark}",
+      "$description": "Grün – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "tuerkis": {
+      "$type": "color",
+      "$value": "{orbi.tuerkis.color-dark}",
+      "$description": "Türkis – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "himmel": {
+      "$type": "color",
+      "$value": "{orbi.himmel.color-dark}",
+      "$description": "Himmel – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "blau": {
+      "$type": "color",
+      "$value": "{orbi.blau.color-dark}",
+      "$description": "Blau – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "indigo": {
+      "$type": "color",
+      "$value": "{orbi.indigo.color-dark}",
+      "$description": "Indigo – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "violett": {
+      "$type": "color",
+      "$value": "{orbi.violett.color-dark}",
+      "$description": "Violett – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "fuchsia": {
+      "$type": "color",
+      "$value": "{orbi.fuchsia.color-dark}",
+      "$description": "Fuchsia – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "pink": {
+      "$type": "color",
+      "$value": "{orbi.pink.color-dark}",
+      "$description": "Pink – Orbi-Farbe (Avatar, Akzent)"
+    },
+    "grau": {
+      "$type": "color",
+      "$value": "{orbi.grau.color-dark}",
+      "$description": "Grau (Schiefer) – Orbi-Farbe (Avatar, Akzent)"
+    }
+  },
+  "figure": {
+    "ink": {
+      "$type": "color",
+      "$value": "#1b1d2a"
+    },
+    "gear": {
+      "$type": "color",
+      "$value": "#2a2d3e"
+    },
+    "cheek": {
+      "$type": "color",
+      "$value": "#ff808f3d"
+    },
+    "white": {
+      "$type": "color",
+      "$value": "#ffffff"
+    }
+  },
+  "gold": {
+    "1": {
+      "$type": "color",
+      "$value": "#b08d4a"
+    },
+    "2": {
+      "$type": "color",
+      "$value": "#c9a45c"
+    },
+    "3": {
+      "$type": "color",
+      "$value": "#fff4d6"
+    },
+    "4": {
+      "$type": "color",
+      "$value": "#f3d58f"
+    },
+    "thumb": {
+      "$type": "color",
+      "$value": "#e8c77a"
+    }
+  },
+  "background": {
+    "$type": "color",
+    "$value": "#161618"
+  },
+  "foreground": {
+    "$type": "color",
+    "$value": "#f5f5f7"
+  },
+  "sidebar": {
+    "$type": "color",
+    "$value": "#0f0f10"
+  },
+  "sidebar-foreground": {
+    "$type": "color",
+    "$value": "#f5f5f5"
+  },
+  "sidebar-accent": {
+    "$type": "color",
+    "$value": "#2c2c2e"
+  },
+  "sidebar-border": {
+    "$type": "color",
+    "$value": "#2c2c2e"
+  },
+  "card": {
+    "$type": "color",
+    "$value": "#242426"
+  },
+  "card-foreground": {
+    "$type": "color",
+    "$value": "#f5f5f7"
+  },
+  "popover": {
+    "$type": "color",
+    "$value": "#2c2c2e"
+  },
+  "secondary": {
+    "$type": "color",
+    "$value": "#2c2c2e"
+  },
+  "secondary-foreground": {
+    "$type": "color",
+    "$value": "#f5f5f7"
+  },
+  "secondary-hover": {
+    "$type": "color",
+    "$value": "#38383a"
+  },
+  "muted": {
+    "$type": "color",
+    "$value": "#2c2c2e"
+  },
+  "muted-foreground": {
+    "$type": "color",
+    "$value": "#a1a1a6"
+  },
+  "accent-neutral": {
+    "$type": "color",
+    "$value": "#2c2c2e"
+  },
+  "border": {
+    "$type": "color",
+    "$value": "#38383a"
+  },
+  "input": {
+    "$type": "color",
+    "$value": "#48484a"
+  },
+  "ring": {
+    "$type": "color",
+    "$value": "{accent}"
+  },
+  "primary": {
+    "$type": "color",
+    "$value": "{accent}"
+  },
+  "primary-foreground": {
+    "$type": "color",
+    "$value": "{accent-foreground}"
+  },
+  "destructive": {
+    "$type": "color",
+    "$value": "#ff6467"
+  },
+  "destructive-soft": {
+    "$type": "color",
+    "$value": "#3a1a1c"
+  },
+  "field": {
+    "$type": "color",
+    "$value": "#242426"
+  },
+  "glass": {
+    "$type": "color",
+    "$value": "#ffffff0f"
+  },
+  "glass-hover": {
+    "$type": "color",
+    "$value": "#ffffff1a"
+  },
+  "glass-ring": {
+    "$type": "color",
+    "$value": "#ffffff1a"
+  },
+  "glass-active": {
+    "$type": "color",
+    "$value": "#ffffff26"
+  },
+  "scrim": {
+    "$type": "color",
+    "$value": "#00000066"
+  },
+  "chip-selected": {
+    "$type": "color",
+    "$value": "{accent}"
+  },
+  "chip-selected-foreground": {
+    "$type": "color",
+    "$value": "{accent-foreground}"
+  },
+  "bubble-reply": {
+    "$type": "color",
+    "$value": "#2c2c2e"
+  },
+  "bubble-reply-foreground": {
+    "$type": "color",
+    "$value": "#f5f5f5"
+  },
+  "bubble-own-foreground": {
+    "$type": "color",
+    "$value": "{accent-foreground}"
+  },
+  "accent-foreground": {
+    "$type": "color",
+    "$value": "#ffffff"
+  },
+  "track": {
+    "$type": "color",
+    "$value": "#48484a"
+  },
+  "thumb": {
+    "$type": "color",
+    "$value": "#ffffff"
+  },
+  "stage": {
+    "$type": "color",
+    "$value": "#000000"
+  },
+  "status": {
+    "success": {
+      "$type": "color",
+      "$value": "#16a34a"
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "#ca8a04"
+    },
+    "info": {
+      "$type": "color",
+      "$value": "#2563eb"
+    },
+    "caution": {
+      "$type": "color",
+      "$value": "#ea580c"
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "#dc2626"
+    },
+    "star": {
+      "$type": "color",
+      "$value": "#facc15"
+    },
+    "badge": {
+      "$type": "color",
+      "$value": "#000000"
+    }
+  },
+  "orbi-bubble": {
+    "weiss": {
+      "$type": "color",
+      "$value": "{orbi.weiss.bubble-dark}",
+      "$description": "Weiß – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "braun": {
+      "$type": "color",
+      "$value": "{orbi.braun.bubble-dark}",
+      "$description": "Braun – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "rot": {
+      "$type": "color",
+      "$value": "{orbi.rot.bubble-dark}",
+      "$description": "Rot – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "orange": {
+      "$type": "color",
+      "$value": "{orbi.orange.bubble-dark}",
+      "$description": "Orange – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "gelborange": {
+      "$type": "color",
+      "$value": "{orbi.gelborange.bubble-dark}",
+      "$description": "Gelborange – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "limette": {
+      "$type": "color",
+      "$value": "{orbi.limette.bubble-dark}",
+      "$description": "Limette – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "gruen": {
+      "$type": "color",
+      "$value": "{orbi.gruen.bubble-dark}",
+      "$description": "Grün – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "tuerkis": {
+      "$type": "color",
+      "$value": "{orbi.tuerkis.bubble-dark}",
+      "$description": "Türkis – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "himmel": {
+      "$type": "color",
+      "$value": "{orbi.himmel.bubble-dark}",
+      "$description": "Himmel – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "blau": {
+      "$type": "color",
+      "$value": "{orbi.blau.bubble-dark}",
+      "$description": "Blau – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "indigo": {
+      "$type": "color",
+      "$value": "{orbi.indigo.bubble-dark}",
+      "$description": "Indigo – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "violett": {
+      "$type": "color",
+      "$value": "{orbi.violett.bubble-dark}",
+      "$description": "Violett – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "fuchsia": {
+      "$type": "color",
+      "$value": "{orbi.fuchsia.bubble-dark}",
+      "$description": "Fuchsia – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "pink": {
+      "$type": "color",
+      "$value": "{orbi.pink.bubble-dark}",
+      "$description": "Pink – eigene Blase, weiße Schrift ≥4,5:1"
+    },
+    "grau": {
+      "$type": "color",
+      "$value": "{orbi.grau.bubble-dark}",
+      "$description": "Grau (Schiefer) – eigene Blase, weiße Schrift ≥4,5:1"
+    }
+  },
+  "accent": {
+    "$type": "color",
+    "$value": "{orbi.weiss.bubble-dark}",
+    "$description": "Akzent = Farbe des gewählten Orbis. Umschalten: Alias auf orbi/<farbe> ändern (eine Stelle)."
+  },
+  "accent-bubble": {
+    "$type": "color",
+    "$value": "{orbi.weiss.bubble-dark}",
+    "$description": "Eigene Blase = Blasenfarbe des gewählten Orbis."
+  },
+  "radius": {
+    "sm": {
+      "$type": "dimension",
+      "$value": "6px"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "10px"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "14px"
+    },
+    "xl2": {
+      "$type": "dimension",
+      "$value": "18px"
+    },
+    "xl3": {
+      "$type": "dimension",
+      "$value": "22px"
+    },
+    "bubble": {
+      "$type": "dimension",
+      "$value": "18px"
+    },
+    "full": {
+      "$type": "dimension",
+      "$value": "999px"
+    }
+  },
+  "space": {
+    "xs": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "xxl": {
+      "$type": "dimension",
+      "$value": "32px"
+    }
+  },
+  "layout": {
+    "top-bar": {
+      "$type": "dimension",
+      "$value": "52px"
+    },
+    "rail": {
+      "$type": "dimension",
+      "$value": "88px"
+    },
+    "sidebar-min": {
+      "$type": "dimension",
+      "$value": "220px"
+    },
+    "sidebar": {
+      "$type": "dimension",
+      "$value": "280px"
+    },
+    "sidebar-max": {
+      "$type": "dimension",
+      "$value": "480px"
+    },
+    "panel-max": {
+      "$type": "dimension",
+      "$value": "520px"
+    },
+    "window-min-w": {
+      "$type": "dimension",
+      "$value": "720px"
+    },
+    "window-min-h": {
+      "$type": "dimension",
+      "$value": "480px"
+    },
+    "image-max": {
+      "$type": "dimension",
+      "$value": "320px"
+    },
+    "bubble-max": {
+      "$type": "dimension",
+      "$value": "560px"
+    }
+  },
+  "motion": {
+    "hover": {
+      "$type": "dimension",
+      "$value": "150px"
+    },
+    "pop": {
+      "$type": "dimension",
+      "$value": "100px"
+    },
+    "fade-in": {
+      "$type": "dimension",
+      "$value": "300px"
+    },
+    "tooltip": {
+      "$type": "dimension",
+      "$value": "150px"
+    },
+    "panel": {
+      "$type": "dimension",
+      "$value": "380px"
+    },
+    "sidebar": {
+      "$type": "dimension",
+      "$value": "300px"
+    },
+    "tab": {
+      "$type": "dimension",
+      "$value": "200px"
+    },
+    "enter": {
+      "$type": "dimension",
+      "$value": "300px"
+    },
+    "header-snap": {
+      "$type": "dimension",
+      "$value": "300px"
+    },
+    "typing-dot": {
+      "$type": "dimension",
+      "$value": "1200px"
+    }
+  },
+  "font": {
+    "body": {
+      "$type": "dimension",
+      "$value": "17px"
+    },
+    "body-line": {
+      "$type": "dimension",
+      "$value": "22px"
+    },
+    "callout": {
+      "$type": "dimension",
+      "$value": "15px"
+    },
+    "subhead": {
+      "$type": "dimension",
+      "$value": "13px"
+    },
+    "caption": {
+      "$type": "dimension",
+      "$value": "11px"
+    },
+    "title": {
+      "$type": "dimension",
+      "$value": "20px"
+    },
+    "large-title": {
+      "$type": "dimension",
+      "$value": "24px"
+    }
+  },
+  "link": {
+    "$type": "color",
+    "$value": "{accent}"
+  },
+  "mac": {
+    "red": {
+      "$type": "color",
+      "$value": "#ff5f57",
+      "$description": "macOS Fensterknopf Schließen"
+    },
+    "yellow": {
+      "$type": "color",
+      "$value": "#febc2e",
+      "$description": "macOS Fensterknopf Minimieren"
+    },
+    "green": {
+      "$type": "color",
+      "$value": "#28c840",
+      "$description": "macOS Fensterknopf Vollbild"
+    }
+  },
+  "segment-thumb": {
+    "$type": "color",
+    "$value": "#545458"
+  },
+  "link-neutral": {
+    "$type": "color",
+    "$value": "#60a5fa"
+  },
+  "orbi-auge": {
+    "$type": "color",
+    "$value": "#0f172a"
+  }
+}

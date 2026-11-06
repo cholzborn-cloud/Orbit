@@ -1,0 +1,137 @@
+name: Orbit
+options:
+  bundleIdPrefix: de.consti
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MACOSX_DEPLOYMENT_TARGET: "27.0"
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+    GCC_TREAT_WARNINGS_AS_ERRORS: YES
+    ENABLE_HARDENED_RUNTIME: NO
+    ENABLE_APP_SANDBOX: NO
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
+    LM_SKIP_METADATA_EXTRACTION: YES
+targets:
+  Orbit:
+    type: application
+    platform: macOS
+    dependencies:
+      - target: OrbitDockTile
+        embed: true
+        codeSign: true
+        copy:
+          destination: plugins
+    sources:
+      - path: Orbit
+        # iCloud-Konfliktkopien („Name 2.swift“) nie kompilieren.
+        excludes: ["**/* [0-9].swift"]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: de.consti.orbit2
+        PRODUCT_NAME: Orbit
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: Orbit/Info.plist
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.productivity
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    info:
+      path: Orbit/Info.plist
+      properties:
+        CFBundleName: Orbit
+        CFBundleDisplayName: Orbit
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSHumanReadableCopyright: Constantin Holzborn
+        # Dock-Symbol bei geschlossener App (gewähltes App-Symbol), siehe OrbitDockTile.
+        NSDockTilePlugIn: OrbitDockTile.docktileplugin
+        NSRemindersFullAccessUsageDescription: Orbit liest oder erstellt Erinnerungen nur auf deine Anfrage.
+        # Lokale Mac-Werkzeuge (lib/mac): Apps steuern, Kalender, Kontakte.
+        NSAppleEventsUsageDescription: Orbit steuert Apps auf deinem Mac (Kalender, Erinnerungen, Notizen, Browser), wenn ein Orbi das für dich erledigt.
+        NSCalendarsFullAccessUsageDescription: Orbit liest oder erstellt Termine nur, wenn ein Orbi das für dich erledigt.
+        NSContactsUsageDescription: Orbit sucht in deinen Kontakten nur, wenn ein Orbi das für dich erledigt.
+        # Entwicklungsmodus: Repo mit dem Dienst (npm run service), relativ zu mac/.
+        OrbitRepoPath: $(SRCROOT)/..
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+  # Dock-Plugin: zeigt das gewählte App-Symbol, solange Orbit nicht läuft (NSDockTilePlugIn).
+  OrbitDockTile:
+    type: bundle
+    platform: macOS
+    sources:
+      - path: OrbitDockTile
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: de.consti.orbit2.docktile
+        PRODUCT_NAME: OrbitDockTile
+        WRAPPER_EXTENSION: docktileplugin
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_NSPrincipalClass: OrbitDockTilePlugIn
+        SKIP_INSTALL: YES
+  # Unit-Tests ohne Host-App (kein Fenster, kein Dock-Symbol): die reine Logik wird direkt ins Testbundle kompiliert.
+  OrbitTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: OrbitTests
+        excludes: ["**/* [0-9].swift"]
+      - Orbit/Figures/FigureColor.swift
+      - Orbit/Figures/OrbiLook.swift
+      - Orbit/Orbis/GroupText.swift
+      - Orbit/Service/JSONValue.swift
+      - Orbit/Service/ChatModels.swift
+      - Orbit/Service/OrbiLineModels.swift
+      - Orbit/Service/Phase3Models.swift
+      - Orbit/Service/Phase4Models.swift
+      - Orbit/Service/Phase5Models.swift
+      - Orbit/Figures/OrbiState.swift
+      - Orbit/Stores/Load.swift
+      - Orbit/Stores/TaskBoard.swift
+      - Orbit/Service/MacAnbindungModels.swift
+      - Orbit/Stores/BotStore.swift
+      - Orbit/Stores/SetupModel.swift
+      - Orbit/Stores/MemoryModel.swift
+      - Orbit/Service/Models.swift
+      - Orbit/Orbis/MentionText.swift
+      - Orbit/Service/ComposerModels.swift
+      - Orbit/Service/CardModels.swift
+      - Orbit/Service/SettingsModels.swift
+      - Orbit/Service/ProvidersModels.swift
+      - Orbit/Service/AutomationModels.swift
+      - Orbit/Service/SearchModels.swift
+      - Orbit/Stores/SearchStore.swift
+      - Orbit/Service/AutomationClient.swift
+      - Orbit/Desktop/RFBProtocol.swift
+      - Orbit/Desktop/DesktopInput.swift
+      - Orbit/Stores/InteractionBoard.swift
+      - Orbit/Stores/NoticePlanner.swift
+      - Orbit/Views/Cards/AskPanelModel.swift
+      - Orbit/Theme/Theme.swift
+      - Orbit/Views/MenuModel.swift
+      - Orbit/Presentation/ChatPresentation.swift
+      - Orbit/Orbis/BotEditorModel.swift
+      - Orbit/Orbis/JobPresets.swift
+      - Orbit/Figures/OrbiBehavior.swift
+      - Orbit/Figures/FigureRenderer.swift
+      - Orbit/Service/ServiceClient.swift
+      - Orbit/Service/ReminderBridge.swift
+      - Orbit/Service/SSEParser.swift
+      - Orbit/Service/MemoryClient.swift
+      - Orbit/Service/Phase5Client.swift
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: de.consti.orbit2.tests
+        CODE_SIGNING_ALLOWED: NO
+schemes:
+  Orbit:
+    build:
+      targets:
+        Orbit: all
+    test:
+      targets:
+        - OrbitTests

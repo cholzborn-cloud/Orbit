@@ -1,0 +1,133 @@
+[
+  {
+    "id": "skill-kurze-zusammenfassung",
+    "name": "Kurze Zusammenfassung",
+    "description": "Fasst lange Texte knapp mit den wichtigsten Aussagen zusammen.",
+    "type": "skill",
+    "source": "Orbit",
+    "risk": "read",
+    "permissions": "Liest den vom Nutzer bereitgestellten Text.",
+    "verified": true,
+    "skillName": "kurze-zusammenfassung",
+    "skillDescription": "Fasst einen Text knapp und verständlich zusammen.",
+    "skillBody": "## Wann nutzen\nWenn ein langer Text kurz zusammengefasst werden soll.\n\n## Eingaben\nText des Nutzers.\n\n## Ablauf\n1. Erfasse Thema und Kernaussagen.\n2. Kürze Wiederholungen.\n3. Nenne offene Punkte.\n\n## Prüfung\nDie Zusammenfassung gibt den Text korrekt wieder.\n\n## Rückgabe\nDrei bis fünf Stichpunkte und ein Satz zum Ergebnis.\n\n## Braucht Freigabe\nNein."
+  },
+  {
+    "id": "skill-mail-entwurf",
+    "name": "Mail-Entwurf",
+    "description": "Erstellt aus Stichpunkten einen klaren, höflichen E-Mail-Entwurf.",
+    "type": "skill",
+    "source": "Orbit",
+    "risk": "write",
+    "permissions": "Erstellt nur einen Entwurf im Chat; versendet keine Nachricht.",
+    "verified": true,
+    "skillName": "mail-entwurf",
+    "skillDescription": "Formt Stichpunkte zu einem E-Mail-Entwurf.",
+    "skillBody": "## Wann nutzen\nWenn Stichpunkte als E-Mail formuliert werden sollen.\n\n## Eingaben\nEmpfänger, Anliegen, Stichpunkte und gewünschter Ton.\n\n## Ablauf\n1. Kläre fehlende Angaben knapp.\n2. Formuliere Betreff und Nachricht.\n3. Markiere unklare Fakten als Platzhalter.\n\n## Prüfung\nErfinde keine Zusagen oder persönlichen Angaben.\n\n## Rückgabe\nBetreff und kopierbarer Entwurf.\n\n## Braucht Freigabe\nVor dem Versand immer fragen; dieser Skill versendet nicht."
+  },
+  {
+    "id": "skill-todo-aus-text",
+    "name": "To-dos aus Text",
+    "description": "Zieht Aufgaben und Termine aus Notizen und markiert Unklarheiten.",
+    "type": "skill",
+    "source": "Orbit",
+    "risk": "read",
+    "permissions": "Liest nur den bereitgestellten Text und erstellt eine Liste im Chat.",
+    "verified": true,
+    "skillName": "todo-aus-text",
+    "skillDescription": "Erkennt Aufgaben und Termine in einem Text.",
+    "skillBody": "## Wann nutzen\nWenn Notizen in Aufgaben überführt werden sollen.\n\n## Eingaben\nText oder Gesprächsnotiz.\n\n## Ablauf\n1. Extrahiere konkrete Handlungen.\n2. Übernimm Termine nur, wenn sie ausdrücklich genannt sind.\n3. Kennzeichne fehlende Zuständigkeiten oder Fristen.\n\n## Prüfung\nKeine Aufgabe oder Frist hinzuerfinden.\n\n## Rückgabe\nCheckliste mit Aufgabe, Frist und offener Frage.\n\n## Braucht Freigabe\nNein."
+  },
+  {
+    "id": "skill-recherche-plan",
+    "name": "Rechercheplan",
+    "description": "Macht aus einer Frage einen prüfbaren Rechercheplan.",
+    "type": "skill",
+    "source": "Orbit",
+    "risk": "read",
+    "permissions": "Erstellt einen Plan; führt keine externen Aktionen aus.",
+    "verified": true,
+    "skillName": "recherche-plan",
+    "skillDescription": "Plant eine strukturierte Recherche mit Quellenarten.",
+    "skillBody": "## Wann nutzen\nWenn eine Frage systematisch recherchiert werden soll.\n\n## Eingaben\nFragestellung und gewünschte Tiefe.\n\n## Ablauf\n1. Zerlege die Frage in Teilfragen.\n2. Nenne passende Primärquellen.\n3. Lege fest, wie Aussagen gegengeprüft werden.\n\n## Prüfung\nTrenne Fakten, Einschätzungen und offene Punkte.\n\n## Rückgabe\nSchritte, Quellenarten und Erfolgskriterium.\n\n## Braucht Freigabe\nVor Recherche mit externen Diensten deren Nutzung kenntlich machen."
+  },
+  {
+    "id": "skill-lernkarte",
+    "name": "Lernkarten",
+    "description": "Wandelt Lernstoff in kurze Frage-Antwort-Karten um.",
+    "type": "skill",
+    "source": "Orbit",
+    "risk": "read",
+    "permissions": "Verarbeitet den vom Nutzer bereitgestellten Lernstoff.",
+    "verified": true,
+    "skillName": "lernkarten",
+    "skillDescription": "Erstellt prüfbare Frage-Antwort-Karten aus Lernstoff.",
+    "skillBody": "## Wann nutzen\nWenn Lernstoff aktiv abgefragt werden soll.\n\n## Eingaben\nText, Thema oder Mitschrift.\n\n## Ablauf\n1. Bestimme zentrale Begriffe und Zusammenhänge.\n2. Formuliere eindeutige Fragen.\n3. Halte Antworten kurz und quellengetreu.\n\n## Prüfung\nJede Antwort ist aus der Eingabe belegbar.\n\n## Rückgabe\nNummerierte Frage-Antwort-Karten.\n\n## Braucht Freigabe\nNein."
+  },
+  {
+    "id": "mcp-deepwiki",
+    "name": "DeepWiki",
+    "description": "Fragt öffentliche Dokumentation zu GitHub-Repositories über MCP ab.",
+    "type": "mcp",
+    "source": "https://mcp.deepwiki.com/mcp",
+    "risk": "read",
+    "permissions": "Kann öffentliche Repository-Dokumentation lesen.",
+    "verified": false,
+    "url": "https://mcp.deepwiki.com/mcp"
+  },
+  {
+    "id": "mcp-context7",
+    "name": "Context7",
+    "description": "Liefert öffentliche Bibliotheksdokumentation über MCP.",
+    "type": "mcp",
+    "source": "https://mcp.context7.com/mcp",
+    "risk": "read",
+    "permissions": "Kann öffentliche Bibliotheksdokumentation lesen.",
+    "verified": false,
+    "url": "https://mcp.context7.com/mcp"
+  },
+  {
+    "id": "mcp-notion",
+    "name": "Notion",
+    "description": "Sucht und bearbeitet Inhalte im Notion-Workspace.",
+    "type": "mcp",
+    "source": "https://mcp.notion.com/mcp",
+    "risk": "write",
+    "permissions": "Die tatsächlichen Berechtigungen werden bei der Anmeldung angezeigt.",
+    "verified": false,
+    "url": "https://mcp.notion.com/mcp"
+  },
+  {
+    "id": "mcp-linear",
+    "name": "Linear",
+    "description": "Arbeitet mit Aufgaben und Projekten in Linear.",
+    "type": "mcp",
+    "source": "https://mcp.linear.app/mcp",
+    "risk": "write",
+    "permissions": "Die tatsächlichen Berechtigungen werden bei der Anmeldung angezeigt.",
+    "verified": false,
+    "url": "https://mcp.linear.app/mcp"
+  },
+  {
+    "id": "mcp-github",
+    "name": "GitHub",
+    "description": "Arbeitet mit Repositorys und Pull Requests.",
+    "type": "mcp",
+    "source": "https://api.githubcopilot.com/mcp/",
+    "risk": "write",
+    "permissions": "Die tatsächlichen Berechtigungen werden bei der Anmeldung angezeigt.",
+    "verified": false,
+    "url": "https://api.githubcopilot.com/mcp/"
+  },
+  {
+    "id": "mcp-composio",
+    "name": "Composio",
+    "description": "Zusätzlicher Zugang zum Composio-Dienstkatalog.",
+    "type": "mcp",
+    "source": "https://connect.composio.dev/mcp",
+    "risk": "write",
+    "permissions": "Die tatsächlichen Berechtigungen werden bei der Anmeldung angezeigt.",
+    "verified": false,
+    "url": "https://connect.composio.dev/mcp"
+  }
+]

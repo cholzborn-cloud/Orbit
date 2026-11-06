@@ -1,0 +1,144 @@
+import SwiftUI
+
+// Löschen im Einstellungsfenster fragt über einen Dialog nach (Web: window.confirm).
+struct ConfirmAsk {
+    let run: (SettingsConfirm) -> Void
+    func callAsFunction(_ item: SettingsConfirm) { run(item) }
+}
+
+extension EnvironmentValues {
+    @Entry var settingsConfirm: ConfirmAsk?
+}
+
+// Einstellungen als eigenes Fenster (Cmd+,), Aufbau wie settings-dialog.tsx: Seitenleiste 192 mit den Reitern, rechts der Inhalt (Rand 24).
+struct SettingsView: View {
+    @Environment(\.staticRendering) private var staticRendering
+    @Environment(\.colorScheme) private var colorScheme
+    let store: SettingsStore
+    @State private var overlay = OverlayCenter()
+    @State private var confirm: SettingsConfirm?
+    @State private var confirmBusy = false
+
+    // Breiter als die Figma-Vorlage (Consti, 05.11.2026): Kacheln im Marktplatz brauchen Platz.
+    static let size = CGSize(width: Theme.Metrics.pt1120, height: Theme.Metrics.pt760)
+
+    var body: some View {
+        let modal = store.editingConnector != nil || confirm != nil
+        HStack(spacing: Theme.Metrics.pt0) {
+            nav
+            Rectangle().fill(Theme.Palette.border).frame(width: Theme.Metrics.pt0_5)   // Figma 143:54304: Linie 0,5
+            ScrollView {
+                content.padding(Theme.Metrics.pt24).frame(maxWidth: .infinity, alignment: .topLeading)
+            }
+            .scrollIndicators(.never)
+            .id(store.section)
+        }
+        .frame(width: Self.size.width, height: Self.size.height)
+        .background(Theme.Palette.background)   // Figma Einstellungen (143:54296): background
+        .background(CenteredWindow())
+        .foregroundStyle(Theme.Palette.popoverForeground)
+        .font(Theme.Fonts.body)
+        .blur(radius: modal ? Theme.Spacing.xs : Theme.Metrics.pt0)
+        .overlay { dialogs }
+        .coordinateSpace(name: "orbit-window")
+        .overlay { OverlayLayer(center: overlay) }
+        .environment(\.overlay, overlay)
+        .environment(\.settingsConfirm, ConfirmAsk { confirm = $0 })
+        .task(id: store.section) { if !staticRendering { await store.load(store.section) } }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in if !staticRendering { Task { await store.appBecameActive() } } }
+    }
+
+    private var nav: some View {
+        VStack(spacing: Theme.Metrics.pt2) {
+            ForEach(SettingsSection.allCases) { section in
+                let active = store.section == section
+                Button { store.section = section } label: {
+                    HStack(spacing: Theme.Metrics.pt8) {
+                        Image(systemName: section.symbol).font(.system(size: Theme.Metrics.pt16)).frame(width: Theme.Metrics.pt16, height: Theme.Metrics.pt16)
+                        Text(section.title).font(active ? Theme.Fonts.bodyMedium : Theme.Fonts.body).lineLimit(1)
+                        Spacer(minLength: Theme.Metrics.pt0)
+                    }
+                    .padding(.horizontal, Theme.Metrics.pt10).frame(height: Theme.Metrics.pt32)
+                    .foregroundStyle(active ? Theme.Palette.secondaryForeground : Theme.Palette.foreground)
+                    .background(active ? (colorScheme == .dark ? Theme.Palette.secondaryHover : Theme.Palette.secondary) : .clear, in: .rect(cornerRadius: Theme.Radius.md))
+                    .contentShape(.rect(cornerRadius: Theme.Radius.md))
+                }
+                .buttonStyle(NavHoverStyle(active: active))
+                .accessibilityAddTraits(active ? [.isButton, .isSelected] : .isButton)
+            }
+            Spacer(minLength: Theme.Metrics.pt0)
+        }
+        .padding(Theme.Metrics.pt12).frame(width: Theme.Metrics.pt192)
+    }
+
+    @ViewBuilder private var content: some View {
+        switch store.section {
+        case .usage: SettingsUsageView(store: store)
+        case .setup:
+            VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
+                SettingsSetupView(store: store)
+                SettingsApprovalsView(store: store)
+            }
+        case .orbis:
+            VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
+                SettingsInstructionsView(store: store)
+                SettingsSkillsView(store: store)
+            }
+        case .skills: SettingsSkillsView(store: store)
+        case .connectors: SettingsConnectorsView(store: store)
+        case .approvals: SettingsApprovalsView(store: store)
+        case .marketplace: SettingsMarketplaceView(store: store)
+        case .appearance: SettingsAppearanceView(store: store)
+        }
+    }
+
+    private var dialogs: some View {
+        ZStack {
+            DialogLayer(visible: store.editingConnector != nil, onDismiss: { store.editingConnector = nil }) {
+                if let id = store.editingConnector, let connector = store.connectors.value?.first(where: { $0.id == id }) {
+                    ConnectorEditView(store: store, connector: connector, onClose: { store.editingConnector = nil })
+                }
+            }
+            DialogLayer(visible: confirm != nil, onDismiss: { if !confirmBusy { confirm = nil } }) {
+                if let item = confirm {
+                    AlertDialogView(title: item.title, message: item.message, action: item.action, busy: confirmBusy, onCancel: { confirm = nil }) {
+                        confirmBusy = true
+                        Task { await item.perform(); confirmBusy = false; confirm = nil }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Hover wie Button ghost: muted (hell) bzw. muted/50 (dunkel).
+private struct NavHoverStyle: ButtonStyle {
+    let active: Bool
+    func makeBody(configuration: Configuration) -> some View { Hover(configuration: configuration, active: active) }
+
+    private struct Hover: View {
+        let configuration: ButtonStyleConfiguration
+        let active: Bool
+        @State private var hover = false
+        @Environment(\.colorScheme) private var scheme
+        var body: some View {
+            configuration.label
+                .background((hover && !active) ? Theme.Palette.secondaryHover : .clear, in: .rect(cornerRadius: Theme.Radius.md))   // P33
+                .onHover { hover = $0 }
+        }
+    }
+}
+
+// Das Einstellungsfenster steht beim Öffnen mittig auf dem Bildschirm und lässt sich nicht verschieben.
+private struct CenteredWindow: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            guard let window = view.window else { return }
+            window.center()
+            window.isMovable = false
+        }
+        return view
+    }
+    func updateNSView(_ view: NSView, context: Context) {}
+}

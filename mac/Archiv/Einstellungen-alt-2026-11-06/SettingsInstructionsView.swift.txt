@@ -1,0 +1,62 @@
+import SwiftUI
+
+// Reiter „Orbis-Anleitung“ (orbi-instructions-section.tsx): Editor für die gemeinsame Basis-Anleitung.
+struct SettingsInstructionsView: View {
+    let store: SettingsStore
+    @State private var text = ""
+    @State private var seeded = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.Metrics.pt16) {
+            SettingsTitle(text: "Orbis-Anleitung")
+            switch store.instructions {
+            case .idle, .loading:
+                SettingsSkeleton(height: Theme.Metrics.pt256, radius: Theme.Radius.lg)
+            case .failed(let message, let offline):
+                SettingsFailure(message: message, offline: offline) { Task { await store.loadInstructions() } }
+            case .loaded(let state):
+                editor(state)
+            }
+        }
+        .onChange(of: store.instructions.value != nil, initial: true) { _, loaded in if loaded { seed() } }
+        .onChange(of: store.instructions.value?.saved) { _, _ in seed() }
+    }
+
+    private func seed() {
+        guard let state = store.instructions.value else { return }
+        text = state.saved ?? state.defaultText
+        seeded = true
+    }
+
+    private func editor(_ state: SettingsStore.InstructionsState) -> some View {
+        let current = state.saved ?? state.defaultText
+        let tooLong = text.count > state.limit
+        let busy = store.instructionsSaving
+        return VStack(alignment: .leading, spacing: Theme.Metrics.pt16) {
+            SettingsTextArea(text: $text, minHeight: Theme.Metrics.pt256, label: "Gemeinsame Anleitung für alle Orbis").disabled(busy)
+            HStack(alignment: .center, spacing: Theme.Metrics.pt8) {
+                Button("Auf Standard zurücksetzen") { Task { await store.saveInstructions(nil) } }
+                    .buttonStyle(.card(.outline, small: true)).disabled(busy || state.saved == nil)
+                Button(busy ? "Speichert …" : "Speichern") {
+                    Task { await store.saveInstructions(text == state.defaultText ? nil : text) }
+                }
+                .buttonStyle(.card(.primary, small: true)).disabled(busy || tooLong || text == current)
+                Spacer(minLength: Theme.Metrics.pt0)
+                // K58: Der Zähler erscheint nur an der Grenze (ab 90 %).
+                if text.count * 10 >= state.limit * 9 {
+                    Text("\(Self.number(text.count)) / \(Self.number(state.limit)) Zeichen")
+                        .font(Theme.Fonts.small).foregroundStyle(Theme.Palette.mutedForeground)
+                }
+            }
+            if let error = store.instructionsError { SettingsAlert(text: error) }
+            if tooLong {
+                Text("Die Anleitung ist zu lang. Kürze sie vor dem Speichern.").font(Theme.Fonts.body).foregroundStyle(Theme.Palette.destructive)
+            }
+        }
+    }
+
+    static func number(_ value: Int) -> String {
+        let f = NumberFormatter(); f.locale = Locale(identifier: "de_DE"); f.numberStyle = .decimal
+        return f.string(from: NSNumber(value: value)) ?? "\(value)"
+    }
+}

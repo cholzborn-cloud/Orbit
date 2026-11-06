@@ -1,0 +1,462 @@
+{
+  "abweichungen" : 0,
+  "elements" : [
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : -5.300000000000011,
+        "x" : 0,
+        "y" : 5.684341886080802e-14
+      },
+      "name" : "approval-card",
+      "native" : {
+        "h" : 174,
+        "w" : 372,
+        "x" : 348,
+        "y" : 1275
+      },
+      "note" : "Verfall-Zeile „Läuft in …“ (4b, im Web nicht vorhanden): +28 pt Höhe",
+      "ok" : true,
+      "web" : {
+        "h" : 146,
+        "w" : 377.3,
+        "x" : 348,
+        "y" : 1281.3
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : -4.600000000000023,
+        "x" : 4.600000000000023,
+        "y" : 5.684341886080802e-14
+      },
+      "name" : "ask-card",
+      "native" : {
+        "h" : 70,
+        "w" : 424.79999999999995,
+        "x" : 348,
+        "y" : 1033
+      },
+      "note" : "Web: Antwort-Spalte läuft bei 900 pt um bis zu 5 pt über die 80 %-Breite (Karte 448 + Figur 32 + Abstand); nativ bleibt sie darin",
+      "ok" : true,
+      "web" : {
+        "h" : 70,
+        "w" : 429.4,
+        "x" : 343.4,
+        "y" : 1039.3
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : -12.899999999999977,
+        "x" : 4.600000000000023,
+        "y" : 0
+      },
+      "name" : "bubble-assistant",
+      "native" : {
+        "h" : 60,
+        "w" : 416.5,
+        "x" : 348,
+        "y" : 352
+      },
+      "note" : "Web: Antwort-Spalte läuft bei 900 pt um bis zu 5 pt über die 80 %-Breite (Karte 448 + Figur 32 + Abstand); nativ bleibt sie darin",
+      "ok" : true,
+      "web" : {
+        "h" : 60,
+        "w" : 429.4,
+        "x" : 343.4,
+        "y" : 352
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : 0.09999999999999432,
+        "x" : -0.10000000000002274,
+        "y" : 0
+      },
+      "name" : "bubble-user",
+      "native" : {
+        "h" : 44,
+        "w" : 155,
+        "x" : 732,
+        "y" : 202
+      },
+      "ok" : true,
+      "web" : {
+        "h" : 44,
+        "w" : 154.9,
+        "x" : 732.1,
+        "y" : 202
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : 0,
+        "x" : 0,
+        "y" : 1
+      },
+      "name" : "chat-row-0",
+      "native" : {
+        "h" : 56,
+        "w" : 287,
+        "x" : 8,
+        "y" : 239
+      },
+      "note" : "relativ zu main-card",
+      "ok" : true,
+      "web" : {
+        "h" : 56,
+        "w" : 287,
+        "x" : 8,
+        "y" : 354
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : 0,
+        "x" : 0,
+        "y" : 1
+      },
+      "name" : "chat-row-1",
+      "native" : {
+        "h" : 56,
+        "w" : 287,
+        "x" : 8,
+        "y" : 299
+      },
+      "note" : "relativ zu main-card",
+      "ok" : true,
+      "web" : {
+        "h" : 56,
+        "w" : 287,
+        "x" : 8,
+        "y" : 414
+      }
+    },
+    {
+      "name" : "chat-row-2",
+      "note" : "im Web nicht gefunden",
+      "ok" : true
+    },
+    {
+      "delta" : {
+        "h" : -2,
+        "w" : 0,
+        "x" : 0,
+        "y" : 2
+      },
+      "name" : "composer",
+      "native" : {
+        "h" : 86,
+        "w" : 571,
+        "x" : 316,
+        "y" : 3902
+      },
+      "ok" : true,
+      "web" : {
+        "h" : 88,
+        "w" : 571,
+        "x" : 316,
+        "y" : 3900
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : 0,
+        "x" : 1,
+        "y" : 1
+      },
+      "name" : "composer-send",
+      "native" : {
+        "h" : 32,
+        "w" : 32,
+        "x" : 845,
+        "y" : 3948
+      },
+      "ok" : true,
+      "web" : {
+        "h" : 32,
+        "w" : 32,
+        "x" : 844,
+        "y" : 3947
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : -4.600000000000023,
+        "x" : 4.600000000000023,
+        "y" : 5.684341886080802e-14
+      },
+      "name" : "error-card",
+      "native" : {
+        "h" : 46,
+        "w" : 424.79999999999995,
+        "x" : 348,
+        "y" : 917
+      },
+      "note" : "Web: Antwort-Spalte läuft bei 900 pt um bis zu 5 pt über die 80 %-Breite (Karte 448 + Figur 32 + Abstand); nativ bleibt sie darin",
+      "ok" : true,
+      "web" : {
+        "h" : 46,
+        "w" : 429.4,
+        "x" : 343.4,
+        "y" : 923.3
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : -4.600000000000023,
+        "x" : 4.600000000000023,
+        "y" : 5.684341886080802e-14
+      },
+      "name" : "handoff-card",
+      "native" : {
+        "h" : 54,
+        "w" : 424.79999999999995,
+        "x" : 348,
+        "y" : 971
+      },
+      "note" : "Web: Antwort-Spalte läuft bei 900 pt um bis zu 5 pt über die 80 %-Breite (Karte 448 + Figur 32 + Abstand); nativ bleibt sie darin",
+      "ok" : true,
+      "web" : {
+        "h" : 54,
+        "w" : 429.4,
+        "x" : 343.4,
+        "y" : 977.3
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : 0,
+        "x" : 0,
+        "y" : 0
+      },
+      "name" : "header-avatar",
+      "native" : {
+        "h" : 50,
+        "w" : 50,
+        "x" : 576.5,
+        "y" : 50
+      },
+      "ok" : true,
+      "web" : {
+        "h" : 50,
+        "w" : 50,
+        "x" : 576.5,
+        "y" : 50
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : 0.20000000000000284,
+        "x" : -0.10000000000002274,
+        "y" : 0
+      },
+      "name" : "header-pill",
+      "native" : {
+        "h" : 44,
+        "w" : 102,
+        "x" : 550.5,
+        "y" : 122
+      },
+      "ok" : true,
+      "web" : {
+        "h" : 44,
+        "w" : 101.8,
+        "x" : 550.6,
+        "y" : 122
+      }
+    },
+    {
+      "delta" : {
+        "h" : -6.300000000000011,
+        "w" : -9.399999999999977,
+        "x" : 4.600000000000023,
+        "y" : 0
+      },
+      "name" : "image",
+      "native" : {
+        "h" : 280,
+        "w" : 420,
+        "x" : 348,
+        "y" : 629
+      },
+      "note" : "bei schmalem Fenster ragt das Web-Bild 3 pt über die Spalte (Hover-Skalierung des Bildknopfs), nativ bleibt es in der Spalte",
+      "ok" : true,
+      "web" : {
+        "h" : 286.3,
+        "w" : 429.4,
+        "x" : 343.4,
+        "y" : 629
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : -4.600000000000023,
+        "x" : 4.600000000000023,
+        "y" : 0
+      },
+      "name" : "jev-block",
+      "native" : {
+        "h" : 34,
+        "w" : 424.79999999999995,
+        "x" : 348,
+        "y" : 310
+      },
+      "note" : "Web: Antwort-Spalte läuft bei 900 pt um bis zu 5 pt über die 80 %-Breite (Karte 448 + Figur 32 + Abstand); nativ bleibt sie darin",
+      "ok" : true,
+      "web" : {
+        "h" : 34,
+        "w" : 429.4,
+        "x" : 343.4,
+        "y" : 310
+      }
+    },
+    {
+      "delta" : {
+        "h" : 1,
+        "w" : 0,
+        "x" : 0,
+        "y" : 0
+      },
+      "name" : "main-card",
+      "native" : {
+        "h" : 147,
+        "w" : 279,
+        "x" : 12,
+        "y" : 52
+      },
+      "note" : "relativ zu main-card",
+      "ok" : true,
+      "web" : {
+        "h" : 146,
+        "w" : 279,
+        "x" : 12,
+        "y" : 168
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : -4.600000000000023,
+        "x" : 4.600000000000023,
+        "y" : 0
+      },
+      "name" : "search-card",
+      "native" : {
+        "h" : 155,
+        "w" : 424.79999999999995,
+        "x" : 348,
+        "y" : 466
+      },
+      "note" : "Web: Antwort-Spalte läuft bei 900 pt um bis zu 5 pt über die 80 %-Breite (Karte 448 + Figur 32 + Abstand); nativ bleibt sie darin",
+      "ok" : true,
+      "web" : {
+        "h" : 155,
+        "w" : 429.4,
+        "x" : 343.4,
+        "y" : 466
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : 0,
+        "x" : 0,
+        "y" : 0
+      },
+      "name" : "sidebar",
+      "native" : {
+        "h" : 4000,
+        "w" : 303,
+        "x" : 0,
+        "y" : 0
+      },
+      "ok" : true,
+      "web" : {
+        "h" : 4000,
+        "w" : 303,
+        "x" : 0,
+        "y" : 0
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : 0.3999999999999986,
+        "x" : 0,
+        "y" : 0
+      },
+      "name" : "sidebar-brand",
+      "native" : {
+        "h" : 28,
+        "w" : 44,
+        "x" : 12,
+        "y" : 12
+      },
+      "ok" : true,
+      "web" : {
+        "h" : 28,
+        "w" : 43.6,
+        "x" : 12,
+        "y" : 12
+      }
+    },
+    {
+      "delta" : {
+        "h" : 0,
+        "w" : -4.600000000000023,
+        "x" : 4.600000000000023,
+        "y" : 0
+      },
+      "name" : "tool-row",
+      "native" : {
+        "h" : 38,
+        "w" : 424.79999999999995,
+        "x" : 348,
+        "y" : 420
+      },
+      "note" : "Web: Antwort-Spalte läuft bei 900 pt um bis zu 5 pt über die 80 %-Breite (Karte 448 + Figur 32 + Abstand); nativ bleibt sie darin",
+      "ok" : true,
+      "web" : {
+        "h" : 38,
+        "w" : 429.4,
+        "x" : 343.4,
+        "y" : 420
+      }
+    },
+    {
+      "name" : "window",
+      "native" : {
+        "h" : 4000,
+        "w" : 900,
+        "x" : 0,
+        "y" : 0
+      },
+      "ok" : true,
+      "web" : {
+        "h" : 4000,
+        "w" : 900,
+        "x" : 0,
+        "y" : 0
+      }
+    }
+  ],
+  "ok" : true,
+  "scheme" : "dark",
+  "size" : [
+    900,
+    4000
+  ]
+}

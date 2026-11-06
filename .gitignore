@@ -1,0 +1,6 @@
+
+# Xcode build files
+.build-derived/
+DerivedData/
+.build/
+.DS_Store

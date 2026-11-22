@@ -1,0 +1,54 @@
+/* Chat-Bereich: Werte aus Figma 03, die es als Token noch nicht gibt (siehe Rückmeldung). */
+:root,
+[data-theme="light"] {
+  --chat-punkt-braucht: #f25c05; /* Figma Chatzeile "Braucht dich" hell; Token --orbit-attention ist #c2410c */
+}
+[data-theme="dark"] {
+  --chat-punkt-braucht: #ff7a1a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --chat-punkt-braucht: #ff7a1a;
+  }
+}
+
+.chat-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--orbit-line-strong) transparent;
+  /* Oben/unten am Ende: Scroll nicht an die Seite weitergeben (kein Mitziehen der App). */
+  overscroll-behavior: contain;
+}
+
+/* Der Verlauf läuft oben und unten weich aus, statt an einer harten Kante abzuschneiden. */
+.chat-scroll[data-verlauf] {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+}
+
+@keyframes chat-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+.chat-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 3px;
+  border-radius: 999px;
+  background: currentColor;
+  vertical-align: middle;
+  animation: chat-cursor 1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chat-cursor {
+    animation: none;
+  }
+}
+
+.chat-scroll[data-verlauf] {
+  overflow-anchor: none;
+}
+
+.chat-media-button {
+  cursor: zoom-in;
+}

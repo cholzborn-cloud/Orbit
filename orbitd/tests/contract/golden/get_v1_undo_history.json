@@ -1,0 +1,59 @@
+{
+  "body": {
+    "history": {
+      "actions": [
+        {
+          "action": "create",
+          "createdAt": 1794306266750,
+          "detail": "<text-kurz>",
+          "entityId": "3d155c44-3316-43c9-b7db-038f7c4b751d",
+          "id": "d207431a-40b1-4b11-a7b8-caba7e21b503",
+          "kind": "routine",
+          "previousState": "null"
+        }
+      ],
+      "log": [
+        {
+          "action": "replace",
+          "at": 1794219270173,
+          "botId": "yNrk4RT0f5FkpWrQWl3eP",
+          "id": 3,
+          "name": "<text-kurz>",
+          "version": null
+        },
+        {
+          "action": "create",
+          "at": 1794219270173,
+          "botId": "yNrk4RT0f5FkpWrQWl3eP",
+          "id": 4,
+          "name": "<text-kurz>",
+          "version": 1
+        },
+        {
+          "action": "create",
+          "at": 1794219256827,
+          "botId": "yNrk4RT0f5FkpWrQWl3eP",
+          "id": 2,
+          "name": "<text-kurz>",
+          "version": 1
+        },
+        {
+          "action": "create",
+          "at": 1793967228013,
+          "botId": "OqldvjIIwWmCTm1X88nsi",
+          "id": 1,
+          "name": "<text-kurz>",
+          "version": 1
+        }
+      ],
+      "trash": []
+    },
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/undo/history",
+  "status": 200
+}

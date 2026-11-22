@@ -1,0 +1,46 @@
+{
+  "body": {
+    "automations": [
+      {
+        "automation": {
+          "botId": "OqldvjIIwWmCTm1X88nsi",
+          "chatId": "xxGeMqFxiSxdXgpMZFijW",
+          "context": true,
+          "createdAt": "<text-kurz>",
+          "deletedAt": null,
+          "effort": null,
+          "enabled": false,
+          "id": "3d155c44-3316-43c9-b7db-038f7c4b751d",
+          "lastRunAt": "<text-kurz>",
+          "model": null,
+          "name": "<text-kurz>",
+          "nextRunAt": "<text-kurz>",
+          "notify": "app",
+          "pausedReason": null,
+          "prompt": "<text-lang>",
+          "resumedAt": null,
+          "schedule": {
+            "at": "08:00",
+            "kind": "daily"
+          },
+          "target": "same",
+          "timezone": "Europe/Berlin",
+          "userId": "local"
+        },
+        "bot": {
+          "avatar": "nova",
+          "id": "OqldvjIIwWmCTm1X88nsi",
+          "name": "<text-kurz>"
+        }
+      }
+    ],
+    "ok": true,
+    "trash": []
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/automations",
+  "status": 200
+}

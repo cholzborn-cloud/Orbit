@@ -1,0 +1,17 @@
+{
+  "body": {
+    "categories": [],
+    "configured": false,
+    "entries": [],
+    "nextCursor": null,
+    "ok": true,
+    "recommendedCount": 0,
+    "totalItems": 0
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/plugins",
+  "status": 200
+}

@@ -1,0 +1,13 @@
+{
+  "body": {
+    "botId": "OqldvjIIwWmCTm1X88nsi",
+    "ok": true,
+    "scratchpad": ""
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/orbis/OqldvjIIwWmCTm1X88nsi/scratchpad",
+  "status": 200
+}

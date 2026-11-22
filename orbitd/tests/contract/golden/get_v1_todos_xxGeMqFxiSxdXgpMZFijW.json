@@ -1,0 +1,12 @@
+{
+  "body": {
+    "ok": true,
+    "todos": []
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/todos/xxGeMqFxiSxdXgpMZFijW",
+  "status": 200
+}

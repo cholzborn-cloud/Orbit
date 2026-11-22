@@ -1,0 +1,45 @@
+{
+  "body": {
+    "entries": [
+      {
+        "body": "<text-lang>",
+        "createdAt": 1794219024244,
+        "description": "<text-kurz>",
+        "name": "<text-kurz>",
+        "origin": "self",
+        "source": "<text-kurz>",
+        "stated": false,
+        "type": "scratchpad",
+        "updatedAt": 1794219534536,
+        "version": 1
+      },
+      {
+        "body": "<text-mittel>",
+        "createdAt": 1794219270173,
+        "description": "<text-mittel>",
+        "name": "<text-kurz>",
+        "origin": "consti",
+        "source": "<text-mittel>",
+        "stated": true,
+        "type": "user",
+        "updatedAt": 1794219270173,
+        "version": 1
+      }
+    ],
+    "index": "<text-mittel>",
+    "limits": {
+      "body": 1200,
+      "entries": 40,
+      "index": 1500,
+      "total": 24000
+    },
+    "migrated": true,
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/bots/yNrk4RT0f5FkpWrQWl3eP/memory",
+  "status": 200
+}

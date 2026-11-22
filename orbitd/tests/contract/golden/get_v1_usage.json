@@ -1,0 +1,48 @@
+{
+  "body": {
+    "fetchedAt": 1794417022307,
+    "ok": true,
+    "providers": [
+      {
+        "accounts": [
+          {
+            "id": "cli",
+            "label": "Claude",
+            "note": "Claude meldet keine vollständig lesbare Nutzung.",
+            "status": "error",
+            "windows": []
+          }
+        ],
+        "note": "Claude meldet keine vollständig lesbare Nutzung.",
+        "provider": "claude",
+        "status": "error"
+      },
+      {
+        "accounts": [
+          {
+            "id": "cli",
+            "label": "Codex",
+            "note": "Codex meldet keine vollständig lesbaren Nutzungsfenster.",
+            "status": "error",
+            "windows": []
+          }
+        ],
+        "note": "Codex meldet keine vollständig lesbaren Nutzungsfenster.",
+        "provider": "codex",
+        "status": "error"
+      },
+      {
+        "accounts": [],
+        "note": "Antigravity meldet über die CLI keine auswertbare Nutzung.",
+        "provider": "antigravity",
+        "status": "error"
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/usage",
+  "status": 200
+}

@@ -1,0 +1,46 @@
+{
+  "body": {
+    "changes": [],
+    "cost": {
+      "capUsd": 0.2,
+      "todayUsd": 0
+    },
+    "enabled": true,
+    "lastRunAt": null,
+    "nextRunAt": 1794448800000,
+    "ok": true,
+    "running": false,
+    "runs": [
+      {
+        "costUsd": null,
+        "entriesAfter": 2,
+        "entriesBefore": 2,
+        "error": null,
+        "finishedAt": 1794362429057,
+        "id": "9937cf10-1657-491d-93c8-c6bd1c1fc01d",
+        "ops": null,
+        "reason": "<text-kurz>",
+        "startedAt": 1794362429054,
+        "status": "skipped"
+      },
+      {
+        "costUsd": null,
+        "entriesAfter": 2,
+        "entriesBefore": 2,
+        "error": null,
+        "finishedAt": 1794276006235,
+        "id": "641359b5-3ad7-44c6-b843-b406e06c759b",
+        "ops": null,
+        "reason": "<text-kurz>",
+        "startedAt": 1794276006232,
+        "status": "skipped"
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/bots/yNrk4RT0f5FkpWrQWl3eP/dreamer",
+  "status": 200
+}

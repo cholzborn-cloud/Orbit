@@ -1,0 +1,27 @@
+{
+  "revision": "784e47a120a61a8e4fade99934d790c63b53a43e",
+  "recipes": {
+    "site-playbooks-airbnb": "Search dated rentals for guests and filters, then open one listing. Report matching amenities, availability, total and cancellation terms, distinguishing nightly prices from complete quotes.",
+    "site-playbooks-bestbuy": "Search by name and check a selected SKU's store-specific stock by ZIP. Verify model, fulfillment, price and store, including ambiguous or unavailable inventory.",
+    "site-playbooks-costco": "Verify online item price and reported warehouse availability separately, then build a Same-Day grocery cart with chosen quantities. Show actual basket and membership-dependent limits.",
+    "site-playbooks-craigslist": "Search the requested city/category and filters. Return current postings, prices, neighborhoods, dates and links from that location, with no unsolicited contact.",
+    "site-playbooks-doordash": "Discover stores by address, extract a specific menu, build a customized pickup/delivery cart, then resume that cart only after the exact review. Verify receipt and handle changed merchant, address or total.",
+    "site-playbooks-ebay": "Search active and sold listings by selected filters and inspect one item. Return item ID, condition, seller, offer type, shipping and total. Distinguish asking price from sold data.",
+    "site-playbooks-etsy": "Filter by product, price and fulfillment. Verify shop, listing, price, reviews and sponsored status. Keep selected variants and shipping destinations explicit.",
+    "site-playbooks-expedia": "Compare dated lodging and flight inventory for the named party, with total, fees and flexible-date options where displayed. A comparison ends at a reproducible shortlist.",
+    "site-playbooks-facebook-marketplace": "Search the correct city/radius/category or inspect an item URL. Return price, location, date and available details. Respect account-gated results and authorized contact.",
+    "site-playbooks-fedex": "Read current status, delivery window, last scan, timeline and signer when available for an authorized number. Distinguish still in transit, delivered and unknown.",
+    "site-playbooks-google-flights": "Compare one-way and round-trip fixed-date results, reporting airports, times, airlines, stops, duration, fare and link exactly as available.",
+    "site-playbooks-instacart": "In the selected store/region, quote exact items, size, deals and subtotal and add only requested quantities to a guest cart. Verify cart, substitutions and checkout boundary.",
+    "site-playbooks-linkedin": "Search jobs by role, location and recency, verify listing and employer URLs, distinguish public results from personalized signed-in inventory and closed positions.",
+    "site-playbooks-luma": "Discover by city/category, inspect a specific event and run its registration route. Verify timezone, venue, host, ticket state and actual RSVP/approval/waitlist. Paid tickets use purchase review.",
+    "site-playbooks-opentable": "Read availability with exact venue, party, date, time and seating labels. On a booking request, verify the selected slot, restrictions/deposit and resulting confirmation.",
+    "site-playbooks-realtor": "Search and inspect one property, verify property attributes, listing identifier and dated price. Separately retrieve attributed school-rating data and mark absent ratings unknown.",
+    "site-playbooks-resy": "Read slots by date, party size and seating type. Explain unpublished, sold-out or ambiguous results, verify exact reservation after review and keep fees visible.",
+    "site-playbooks-southwest": "Check route, dates, passengers, currency or points. Return actual fare columns, routing and stops, plus low-fare calendar when requested and available.",
+    "site-playbooks-target": "Resolve the actual product/TCIN and variant, detect substituted search results, then verify store, pickup and other fulfillment options for the chosen ZIP.",
+    "site-playbooks-united": "Check cash and award availability independently. Return dated cabin/fare brand, price or miles plus fees, stops, routing and availability, marking signed-in-only results appropriately.",
+    "site-playbooks-ups": "Track an authorized tracking/InfoNotice number. Verify the latest event, delivery estimate/actual, signer if shown and timeline, leaving shipment options untouched.",
+    "site-playbooks-usps": "Verify latest event, expected delivery, status category, location and event history for an authorized parcel. Unknown numbers must not create a delivery forecast."
+  }
+}

@@ -1,0 +1,385 @@
+/*
+ * Orbit-Tokens. Quelle: Figma "01 Grundlagen · Hell" (52:48484) und "· Dunkel" (52:48767),
+ * dazu Komponentensätze 43:*. Hell ist Standard; Dunkel folgt dem System
+ * (prefers-color-scheme) oder wird mit data-theme="dark" / "light" erzwungen.
+ * data-theme darf auch an einem beliebigen Element stehen (Vorschau Hell/Dunkel nebeneinander).
+ */
+
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* Flächen */
+  --orbit-bg: #ffffff;
+  --orbit-sidebar: #f5f5f5;
+  --orbit-surface: #f0f0f0;
+  --orbit-raised: #ffffff;
+
+  /* Text */
+  --orbit-text: #1c1c1c;
+  --orbit-text-2: #6b6b6b;
+  --orbit-text-3: #858585;
+  --orbit-text-on-primary: #ffffff;
+
+  /* Status und Aktion */
+  --orbit-done: #2c67d4;
+  --orbit-attention: #c2410c;
+  --orbit-danger: #ce2b1e;
+  --orbit-success: #15803d;
+  --orbit-focus: #2c67d4;
+
+  /* Hover / Ausgewählt (Überlagerungen) */
+  --orbit-hover: rgb(28 28 28 / 0.06);
+  --orbit-selected: rgb(28 28 28 / 0.08);
+  --orbit-selected-hover: rgb(28 28 28 / 0.1);
+
+  /* Linien und Bedienelemente */
+  --orbit-line: rgb(28 28 28 / 0.08);
+  --orbit-line-strong: rgb(28 28 28 / 0.14);
+  --orbit-card-border: rgb(28 28 28 / 0.08);
+  --orbit-check-edge: #88888c;
+  --orbit-field: rgb(28 28 28 / 0.06);
+  --orbit-field-error: rgb(206 43 30 / 0.1);
+
+  /* Knöpfe */
+  --orbit-btn-primary: #1c1c1c;
+  --orbit-btn-secondary: rgb(28 28 28 / 0.08);
+  --orbit-btn-secondary-hover: rgb(28 28 28 / 0.1);
+  --orbit-btn-danger: rgb(206 43 30 / 0.1);
+  --orbit-btn-danger-hover: rgb(206 43 30 / 0.2);
+
+  /* Schalter */
+  --orbit-switch-on: #1c1c1c;
+  --orbit-switch-off: rgb(0 0 0 / 0.18);
+  --orbit-switch-knob: #ffffff;
+  --orbit-switch-knob-on: #ffffff;
+  --orbit-switch-knob-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+
+  /* Blasen */
+  --orbit-bubble-orbi: #f0f0f0;
+  --orbit-bubble-orbi-border: rgb(28 28 28 / 0.04);
+  --orbit-bubble-group: #3a3a3c;
+  --orbit-bubble-text: #1c1c1c;
+  --orbit-bubble-on-color: #ffffff;
+
+  /* Schatten */
+  --orbit-shadow-menu: 0 8px 24px rgb(0 0 0 / 0.12);
+
+  /* Orbi-Farben: Figur/Akzent (Hell) und Blase (in beiden Modi gleich) */
+  --orbit-orbi-rot: #d93a3d;
+  --orbit-orbi-orange: #df6521;
+  --orbit-orbi-gelborange: #cf811e;
+  --orbit-orbi-limette: #8fb82f;
+  --orbit-orbi-gruen: #43a561;
+  --orbit-orbi-tuerkis: #43a191;
+  --orbit-orbi-himmel: #199ecd;
+  --orbit-orbi-blau: #3378ec;
+  --orbit-orbi-indigo: #4f5ae0;
+  --orbit-orbi-violett: #8152eb;
+  --orbit-orbi-fuchsia: #b53acb;
+  --orbit-orbi-pink: #de3a8e;
+  --orbit-orbi-braun: #8a6038;
+  --orbit-orbi-grau: #6b7483;
+  --orbit-orbi-weiss: #e8e8ea;
+}
+
+/* Blasenfarben je Orbi-Farbe (nicht modusabhängig, außer "weiss") */
+:root,
+[data-theme="light"],
+[data-theme="dark"] {
+  --orbit-blase-rot: #dc343a;
+  --orbit-blase-orange: #c75200;
+  --orbit-blase-gelborange: #aa6709;
+  --orbit-blase-limette: #628106;
+  --orbit-blase-gruen: #148843;
+  --orbit-blase-tuerkis: #168576;
+  --orbit-blase-himmel: #0c7fa6;
+  --orbit-blase-blau: #2871e9;
+  --orbit-blase-indigo: #4e58e4;
+  --orbit-blase-violett: #824fef;
+  --orbit-blase-fuchsia: #b735ce;
+  --orbit-blase-pink: #d82987;
+  --orbit-blase-braun: #8b5f35;
+  --orbit-blase-grau: #6b7484;
+  --orbit-blase-weiss: #3a3a3c;
+
+  /* Radien */
+  --orbit-radius-sm: 8px;
+  --orbit-radius-control: 10px;
+  --orbit-radius-lg: 12px;
+  --orbit-radius-card: 16px;
+  --orbit-radius-dialog: 20px;
+  --orbit-radius-bubble: 18px;
+  --orbit-radius-full: 999px;
+
+  /* Abstände (4er-Raster) */
+  --orbit-space-1: 4px;
+  --orbit-space-2: 8px;
+  --orbit-space-3: 12px;
+  --orbit-space-4: 16px;
+  --orbit-space-5: 20px;
+  --orbit-space-6: 24px;
+  --orbit-space-8: 32px;
+
+  /* Schrift: SF Pro (Systemschrift) */
+  --orbit-font: system-ui, -apple-system, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  --orbit-fs-title: 24px; /* Darstellung 24/30 Halbfett */
+  --orbit-lh-title: 30px;
+  --orbit-fs-heading: 17px; /* 17/22 Halbfett */
+  --orbit-lh-heading: 22px;
+  --orbit-fs-body: 15px; /* 15/22 Regulär */
+  --orbit-lh-body: 22px;
+  --orbit-fs-label: 13px; /* 13/18 Regulär und Mittel */
+  --orbit-lh-label: 18px;
+  --orbit-fs-control: 14px; /* Bedienelemente 14/20 */
+  --orbit-lh-control: 20px;
+  --orbit-fs-caption: 11px; /* 11/14 Regulär */
+  --orbit-lh-caption: 14px;
+  --orbit-fw-regular: 400;
+  --orbit-fw-medium: 500;
+  --orbit-fw-semibold: 600;
+
+  /* Bewegung */
+  --orbit-dur: 150ms;
+  --orbit-ease: cubic-bezier(0.4, 0, 0.2, 1); /* Wechsel */
+  --orbit-ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* Eintritt */
+  --orbit-ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1); /* Feder: schnell, mit kleinem Überschwinger (nur für transform) */
+  --default-transition-duration: var(--orbit-dur);
+  --default-transition-timing-function: var(--orbit-ease);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --orbit-bg: #121212;
+  --orbit-sidebar: #0e0e0e;
+  --orbit-surface: #1f1f1f;
+  --orbit-raised: #1f1f1f;
+
+  --orbit-text: #eeeeee;
+  --orbit-text-2: #a0a0a0;
+  --orbit-text-3: #737373;
+  --orbit-text-on-primary: #121212;
+
+  --orbit-done: #5b9bff;
+  --orbit-attention: #ff9240;
+  --orbit-danger: #ff6b6b;
+  --orbit-success: #4ade80;
+  --orbit-focus: #5b9bff;
+
+  --orbit-hover: rgb(255 255 255 / 0.04);
+  --orbit-selected: rgb(255 255 255 / 0.08);
+  --orbit-selected-hover: rgb(255 255 255 / 0.1);
+
+  --orbit-line: rgb(255 255 255 / 0.07);
+  --orbit-line-strong: rgb(255 255 255 / 0.12);
+  --orbit-card-border: rgb(255 255 255 / 0.07);
+  --orbit-check-edge: #737378;
+  --orbit-field: rgb(255 255 255 / 0.06);
+  --orbit-field-error: rgb(255 107 107 / 0.12);
+
+  --orbit-btn-primary: #eeeeee;
+  --orbit-btn-secondary: rgb(255 255 255 / 0.08);
+  --orbit-btn-secondary-hover: rgb(255 255 255 / 0.12);
+  --orbit-btn-danger: rgb(255 107 107 / 0.12);
+  --orbit-btn-danger-hover: rgb(255 107 107 / 0.22);
+
+  --orbit-switch-on: #eeeeee;
+  --orbit-switch-off: rgb(255 255 255 / 0.18);
+  --orbit-switch-knob: #1f1f1f;
+  --orbit-switch-knob-on: #121212;
+  --orbit-switch-knob-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+
+  --orbit-bubble-orbi: #1f1f1f;
+  --orbit-bubble-orbi-border: rgb(255 255 255 / 0.035);
+  --orbit-bubble-group: #2c2c30;
+  --orbit-bubble-text: #eeeeee;
+
+  --orbit-shadow-menu: 0 8px 24px rgb(0 0 0 / 0.5);
+
+  --orbit-orbi-rot: #e84447;
+  --orbit-orbi-orange: #e87031;
+  --orbit-orbi-gelborange: #e9993a;
+  --orbit-orbi-limette: #a5d046;
+  --orbit-orbi-gruen: #5ac078;
+  --orbit-orbi-tuerkis: #55b5a4;
+  --orbit-orbi-himmel: #32b3e6;
+  --orbit-orbi-blau: #3e82f4;
+  --orbit-orbi-indigo: #626df5;
+  --orbit-orbi-violett: #895df3;
+  --orbit-orbi-fuchsia: #c849e4;
+  --orbit-orbi-pink: #e74897;
+  --orbit-orbi-braun: #996e42;
+  --orbit-orbi-grau: #7d8797;
+  --orbit-orbi-weiss: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --orbit-bg: #121212;
+    --orbit-sidebar: #0e0e0e;
+    --orbit-surface: #1f1f1f;
+    --orbit-raised: #1f1f1f;
+
+    --orbit-text: #eeeeee;
+    --orbit-text-2: #a0a0a0;
+    --orbit-text-3: #737373;
+    --orbit-text-on-primary: #121212;
+
+    --orbit-done: #5b9bff;
+    --orbit-attention: #ff9240;
+    --orbit-danger: #ff6b6b;
+    --orbit-success: #4ade80;
+    --orbit-focus: #5b9bff;
+
+    --orbit-hover: rgb(255 255 255 / 0.04);
+    --orbit-selected: rgb(255 255 255 / 0.08);
+    --orbit-selected-hover: rgb(255 255 255 / 0.1);
+
+    --orbit-line: rgb(255 255 255 / 0.07);
+    --orbit-line-strong: rgb(255 255 255 / 0.12);
+    --orbit-card-border: rgb(255 255 255 / 0.07);
+    --orbit-check-edge: #737378;
+    --orbit-field: rgb(255 255 255 / 0.06);
+    --orbit-field-error: rgb(255 107 107 / 0.12);
+
+    --orbit-btn-primary: #eeeeee;
+    --orbit-btn-secondary: rgb(255 255 255 / 0.08);
+    --orbit-btn-secondary-hover: rgb(255 255 255 / 0.12);
+    --orbit-btn-danger: rgb(255 107 107 / 0.12);
+    --orbit-btn-danger-hover: rgb(255 107 107 / 0.22);
+
+    --orbit-switch-on: #eeeeee;
+    --orbit-switch-off: rgb(255 255 255 / 0.18);
+    --orbit-switch-knob: #1f1f1f;
+    --orbit-switch-knob-on: #121212;
+
+    --orbit-bubble-orbi: #1f1f1f;
+    --orbit-bubble-orbi-border: rgb(255 255 255 / 0.035);
+    --orbit-bubble-group: #2c2c30;
+    --orbit-bubble-text: #eeeeee;
+
+    --orbit-shadow-menu: 0 8px 24px rgb(0 0 0 / 0.5);
+
+    --orbit-orbi-rot: #e84447;
+    --orbit-orbi-orange: #e87031;
+    --orbit-orbi-gelborange: #e9993a;
+    --orbit-orbi-limette: #a5d046;
+    --orbit-orbi-gruen: #5ac078;
+    --orbit-orbi-tuerkis: #55b5a4;
+    --orbit-orbi-himmel: #32b3e6;
+    --orbit-orbi-blau: #3e82f4;
+    --orbit-orbi-indigo: #626df5;
+    --orbit-orbi-violett: #895df3;
+    --orbit-orbi-fuchsia: #c849e4;
+    --orbit-orbi-pink: #e74897;
+    --orbit-orbi-braun: #996e42;
+    --orbit-orbi-grau: #7d8797;
+    --orbit-orbi-weiss: #ffffff;
+  }
+}
+
+/* Tailwind-4-Namen: bg-o-bg, text-o-text-2, rounded-o-card, shadow-o-menu, font-o … */
+@theme inline {
+  --color-o-bg: var(--orbit-bg);
+  --color-o-sidebar: var(--orbit-sidebar);
+  --color-o-surface: var(--orbit-surface);
+  --color-o-raised: var(--orbit-raised);
+  --color-o-text: var(--orbit-text);
+  --color-o-text-2: var(--orbit-text-2);
+  --color-o-text-3: var(--orbit-text-3);
+  --color-o-on-primary: var(--orbit-text-on-primary);
+  --color-o-done: var(--orbit-done);
+  --color-o-attention: var(--orbit-attention);
+  --color-o-danger: var(--orbit-danger);
+  --color-o-success: var(--orbit-success);
+  --color-o-focus: var(--orbit-focus);
+  --color-o-hover: var(--orbit-hover);
+  --color-o-selected: var(--orbit-selected);
+  --color-o-selected-hover: var(--orbit-selected-hover);
+  --color-o-line: var(--orbit-line);
+  --color-o-line-strong: var(--orbit-line-strong);
+  --color-o-card-border: var(--orbit-card-border);
+  --color-o-check-edge: var(--orbit-check-edge);
+  --color-o-field: var(--orbit-field);
+  --color-o-field-error: var(--orbit-field-error);
+  --color-o-btn-primary: var(--orbit-btn-primary);
+  --color-o-btn-secondary: var(--orbit-btn-secondary);
+  --color-o-btn-secondary-hover: var(--orbit-btn-secondary-hover);
+  --color-o-btn-danger: var(--orbit-btn-danger);
+  --color-o-btn-danger-hover: var(--orbit-btn-danger-hover);
+  --color-o-switch-on: var(--orbit-switch-on);
+  --color-o-switch-off: var(--orbit-switch-off);
+  --color-o-switch-knob: var(--orbit-switch-knob);
+  --color-o-switch-knob-on: var(--orbit-switch-knob-on);
+  --color-o-bubble-orbi: var(--orbit-bubble-orbi);
+  --color-o-bubble-orbi-border: var(--orbit-bubble-orbi-border);
+  --color-o-bubble-group: var(--orbit-bubble-group);
+  --color-o-bubble-text: var(--orbit-bubble-text);
+
+  --radius-o-sm: var(--orbit-radius-sm);
+  --radius-o-control: var(--orbit-radius-control);
+  --radius-o-lg: var(--orbit-radius-lg);
+  --radius-o-card: var(--orbit-radius-card);
+  --radius-o-dialog: var(--orbit-radius-dialog);
+  --radius-o-bubble: var(--orbit-radius-bubble);
+
+  --shadow-o-menu: var(--orbit-shadow-menu);
+  --shadow-o-knob: var(--orbit-switch-knob-shadow);
+
+  --font-o: var(--orbit-font);
+}
+
+/* Bewegung reduzieren: keine Übergänge, kein Gleiten */
+@keyframes orbit-einblenden {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Menüs und Dialoge federn kurz auf: nur opacity und transform. */
+@keyframes orbit-pop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .orbit-eintritt { animation: orbit-einblenden var(--orbit-dur) var(--orbit-ease-out) both; }
+  .orbit-pop { animation: orbit-pop 200ms var(--orbit-ease-spring) both; transform-origin: var(--pop-ursprung, top); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="allow"]) {
+    --orbit-dur: 0ms;
+  }
+  :root:not([data-motion="allow"]) .orbit-ui *,
+  :root:not([data-motion="allow"]) .orbit-ui *::before,
+  :root:not([data-motion="allow"]) .orbit-ui *::after {
+    transition-duration: 0ms !important;
+    transition-delay: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Profil-Schalter „Reduce motion“ erzwingen, unabhängig vom Mac */
+html[data-motion="reduce"] {
+  --orbit-dur: 0ms;
+}
+html[data-motion="reduce"] .orbit-ui *,
+html[data-motion="reduce"] .orbit-ui *::before,
+html[data-motion="reduce"] .orbit-ui *::after {
+  transition-duration: 0ms !important;
+  transition-delay: 0ms !important;
+  animation-duration: 0ms !important;
+  animation-iteration-count: 1 !important;
+}
+
+@layer base {
+  .orbit-ui {
+    font-family: var(--orbit-font);
+    color: var(--orbit-text);
+    -webkit-font-smoothing: antialiased;
+  }
+}

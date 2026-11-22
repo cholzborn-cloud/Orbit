@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orbit</title>
+    <style>
+      /* Beim ersten Paint sind die Orbit-Tokens und das React-Bundle noch unterwegs. */
+      html, body, #root { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
+      .orbit-startbild {
+        --start-hintergrund: #fff;
+        --start-figur: #de3a8e;
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: var(--orbit-bg, var(--start-hintergrund));
+      }
+      .orbit-startbild > span {
+        position: relative;
+        width: min(11.22vw, 17.95vh, 162px);
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: var(--orbit-orbi-pink, var(--start-figur));
+        animation: orbit-startatmen 2.6s ease-in-out infinite;
+      }
+      .orbit-startbild > span::before,
+      .orbit-startbild > span::after {
+        content: "";
+        position: absolute;
+        top: 38%;
+        left: 35%;
+        width: 10%;
+        height: 23%;
+        border-radius: 999px;
+        background: #fff;
+      }
+      .orbit-startbild > span::after { left: 55%; }
+      @keyframes orbit-startatmen { 50% { transform: scale(1.035); } }
+      @media (prefers-color-scheme: dark) {
+        .orbit-startbild { --start-hintergrund: #121212; --start-figur: #e74897; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .orbit-startbild > span { animation: none; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root">
+      <div class="orbit-startbild" role="status" aria-label="Orbit lädt"><span aria-hidden="true"></span></div>
+    </div>
+    <script type="module">void import("/src/main.tsx");</script>
+  </body>
+</html>

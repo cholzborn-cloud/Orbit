@@ -1,0 +1,12 @@
+{
+  "body": {
+    "ok": true,
+    "proposals": []
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/skills/proposals",
+  "status": 200
+}

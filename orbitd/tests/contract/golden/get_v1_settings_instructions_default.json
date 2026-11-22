@@ -1,0 +1,13 @@
+{
+  "body": {
+    "limit": 8000,
+    "ok": true,
+    "text": "<text-lang>"
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/settings/instructions/default",
+  "status": 200
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <title>Orbit</title>
+  <defs>
+    <clipPath id="tile">
+      <rect x="76" y="76" width="872" height="872" rx="204"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <rect x="76" y="76" width="872" height="872" fill="#000000"/>
+    <path fill="#ffffff" d="M258 728C256 542 366 345 503 307C647 267 790 328 875 468C958 606 1012 813 952 929C900 1031 796 1066 646 1060C409 1050 262 944 258 728Z"/>
+    <g fill="#000000">
+      <ellipse cx="423" cy="539" rx="35" ry="52" transform="rotate(-22 423 539)"/>
+      <ellipse cx="561" cy="502" rx="35" ry="52" transform="rotate(-22 561 502)"/>
+    </g>
+  </g>
+</svg>

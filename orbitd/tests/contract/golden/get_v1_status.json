@@ -1,0 +1,14 @@
+{
+  "body": {
+    "chats": [],
+    "interrupted": [],
+    "needsYou": 0,
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/status",
+  "status": 200
+}

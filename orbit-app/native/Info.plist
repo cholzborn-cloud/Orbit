@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key><string>orbit-mac</string>
+    <key>CFBundleIdentifier</key><string>de.consti.orbit.rust</string>
+    <key>CFBundleName</key><string>Orbit</string>
+    <key>CFBundleDisplayName</key><string>Orbit</string>
+    <key>CFBundleIconFile</key><string>Orbit.icns</string>
+    <key>CFBundleURLTypes</key><array><dict>
+        <key>CFBundleURLName</key><string>de.consti.orbit.rust.auth</string>
+        <key>CFBundleURLSchemes</key><array><string>orbit-rust</string></array>
+    </dict></array>
+    <key>CFBundlePackageType</key><string>APPL</string>
+    <key>CFBundleShortVersionString</key><string>0.1.0</string>
+    <key>CFBundleVersion</key><string>1</string>
+    <key>CFBundleDevelopmentRegion</key><string>de</string>
+    <key>LSMinimumSystemVersion</key><string>13.0</string>
+    <key>LSApplicationCategoryType</key><string>public.app-category.productivity</string>
+    <key>NSAppleEventsUsageDescription</key><string>Orbit steuert Apps auf deinem Mac, wenn ein Orbi das für dich erledigt.</string>
+    <key>NSCalendarsFullAccessUsageDescription</key><string>Orbit liest oder erstellt Termine nur, wenn ein Orbi das für dich erledigt.</string>
+    <key>NSContactsUsageDescription</key><string>Orbit sucht in deinen Kontakten nur, wenn ein Orbi das für dich erledigt.</string>
+    <key>NSRemindersFullAccessUsageDescription</key><string>Orbit liest oder erstellt Erinnerungen nur auf deine Anfrage.</string>
+    <key>NSAppTransportSecurity</key><dict><key>NSAllowsLocalNetworking</key><true/></dict>
+    <key>NSHighResolutionCapable</key><true/>
+    <key>NSPrincipalClass</key><string>NSApplication</string>
+</dict>
+</plist>

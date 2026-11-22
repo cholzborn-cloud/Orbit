@@ -1,0 +1,47 @@
+{
+  "body": {
+    "models": [
+      {
+        "cli": {
+          "model": "gemini-3.8-flash-high",
+          "provider": "agy"
+        },
+        "description": "Schnell, mit tiefem Denken",
+        "efforts": [],
+        "id": "gemini-3.8-flash-high",
+        "label": "3.8 Flash High",
+        "provider": "google"
+      },
+      {
+        "cli": {
+          "model": "gemini-3.8-flash-medium",
+          "provider": "agy"
+        },
+        "description": "Ausgewogen und schnell",
+        "efforts": [],
+        "id": "gemini-3.8-flash-medium",
+        "label": "3.8 Flash Medium",
+        "provider": "google"
+      },
+      {
+        "cli": {
+          "model": "gemini-3.8-flash-low",
+          "provider": "agy"
+        },
+        "description": "Leicht und schnell",
+        "efforts": [],
+        "id": "gemini-3.8-flash-low",
+        "label": "3.8 Flash Low",
+        "provider": "google"
+      }
+    ],
+    "modelsAvailable": true,
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/models",
+  "status": 200
+}

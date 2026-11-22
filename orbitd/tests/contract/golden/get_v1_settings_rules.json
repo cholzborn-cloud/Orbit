@@ -1,0 +1,48 @@
+{
+  "body": {
+    "ok": true,
+    "rules": [
+      {
+        "botId": "OqldvjIIwWmCTm1X88nsi",
+        "botName": "Nova",
+        "id": "XwNvkiLsaDhJgWPpIEQJz",
+        "mode": "allow",
+        "tool": "apple_calendar_delete"
+      },
+      {
+        "botId": "OqldvjIIwWmCTm1X88nsi",
+        "botName": "Nova",
+        "id": "I7KBxlacnZUAhIxbTD9gu",
+        "mode": "allow",
+        "tool": "automation_create"
+      },
+      {
+        "botId": "OqldvjIIwWmCTm1X88nsi",
+        "botName": "Nova",
+        "id": "M329jwJ3z2zzx9N9glTtM",
+        "mode": "allow",
+        "tool": "create_orbi"
+      },
+      {
+        "botId": "OqldvjIIwWmCTm1X88nsi",
+        "botName": "Nova",
+        "id": "gETuTDab97nRB0zzeD8gY",
+        "mode": "allow",
+        "tool": "handoff"
+      },
+      {
+        "botId": "pjvoTB9nhBsvHZ2Ei6SYA",
+        "botName": "Cloudee",
+        "id": "ITYVosWagP1QrYEMW1bLw",
+        "mode": "allow",
+        "tool": "share_file"
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/settings/rules",
+  "status": 200
+}

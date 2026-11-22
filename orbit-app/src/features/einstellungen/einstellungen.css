@@ -1,0 +1,10 @@
+/* Dialoge der Einstellungen (Figma 07 Eigener Server): Abdunkeln 0,40 hell / 0,60 dunkel, Schatten 0 24 60 mit 0,16 / 0,6,
+   Dialog 20 px über der Mitte. */
+.einst-abdunkeln { background: rgb(0 0 0 / 0.4); padding-bottom: 40px; }
+.einst-dialog { box-shadow: 0 24px 60px rgb(0 0 0 / 0.16); }
+:root[data-theme="dark"] .einst-abdunkeln { background: rgb(0 0 0 / 0.6); }
+:root[data-theme="dark"] .einst-dialog { box-shadow: 0 24px 60px rgb(0 0 0 / 0.6); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .einst-abdunkeln { background: rgb(0 0 0 / 0.6); }
+  :root:not([data-theme="light"]) .einst-dialog { box-shadow: 0 24px 60px rgb(0 0 0 / 0.6); }
+}

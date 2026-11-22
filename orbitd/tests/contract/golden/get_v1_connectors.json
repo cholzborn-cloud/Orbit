@@ -1,0 +1,12 @@
+{
+  "body": {
+    "connectors": [],
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/connectors",
+  "status": 200
+}

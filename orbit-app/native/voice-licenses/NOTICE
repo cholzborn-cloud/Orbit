@@ -1,0 +1,12 @@
+Orbit Voice Memo (offline, arm64).
+Runtime: sherpa-onnx v1.12.35 (k2-fsa, Apache-2.0) with ONNX Runtime (Microsoft, MIT),
+piper-phonemize (Rhasspy, MIT), and espeak-ng (GPL-3.0-or-later).
+Source and build instructions: https://github.com/k2-fsa/sherpa-onnx/tree/v1.12.35
+Release archives: https://github.com/k2-fsa/sherpa-onnx/releases/tag/v1.12.35
+Voice archives: https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models
+Thorsten Medium: Thorsten Müller, German Thorsten Voice dataset (CC0).
+https://github.com/thorstenMueller/Thorsten-Voice
+LibriTTS-R Medium: restored LibriTTS-R dataset, OpenSLR 141 (CC BY 4.0).
+https://www.openslr.org/141/ · https://creativecommons.org/licenses/by/4.0/
+Original Piper model cards accompany both voices. This build uses the upstream
+quantized INT8 conversions, without further modification of model weights.

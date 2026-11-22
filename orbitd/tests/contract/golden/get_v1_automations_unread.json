@@ -1,0 +1,12 @@
+{
+  "body": {
+    "count": 1,
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/automations/unread",
+  "status": 200
+}

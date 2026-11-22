@@ -1,0 +1,210 @@
+import SwiftUI
+
+// Reiter „Einrichtung“ (Phase 5): was für Orbit fehlt, je Dienst grün oder rot mit einem Satz zur Abhilfe; Schlüssel nur schreiben
+// („gesetzt ✓“, nie angezeigt); darunter das Tagesbudget. Prüfung beim Öffnen und auf „Erneut prüfen“.
+struct SettingsSetupView: View {
+    let store: SettingsStore
+    @State private var entries: [String: String] = [:]
+    @State private var jevBudget = ""
+    @State private var sandboxes = 3
+
+    private var setup: SetupModel { store.setup }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.Metrics.pt16) {
+            SettingsTitle(text: "Allgemein")
+            general
+            switch setup.checks {
+            case .idle, .loading:
+                VStack(spacing: Theme.Metrics.pt8) { ForEach(0..<4, id: \.self) { _ in SettingsSkeleton(height: Theme.Metrics.pt56, radius: Theme.Radius.lg) } }
+                    .accessibilityElement(children: .ignore).accessibilityLabel("Prüfung läuft")
+            case .failed(let message, let offline):
+                SettingsFailure(message: message, offline: offline) { Task { await setup.load() } }
+            case .loaded:
+                // K49: Prüfliste gekürzt: nur Zeilen mit Handlungsbedarf oder Schlüsselfeld.
+                ForEach(setup.rows.filter { $0.id != "notifications" && ($0.state != .ok || $0.key != nil) }) { check in row(check) }
+                if setup.rows.contains(where: { $0.state != .ok }) == false {
+                    SettingsHint(text: "Alles bereit.", small: true)
+                }
+            }
+            if let error = setup.keyError { SettingsAlert(text: error, symbol: "info.circle") }
+            if !setup.needsRestart.isEmpty {
+                SettingsHint(text: "Der Schlüssel gilt nach dem nächsten Start von Orbit.", small: true)
+            }
+            Button("Erneut prüfen") { Task { await setup.load() } }.buttonStyle(.card(.outline)).disabled(setup.checks.isLoading)
+            budgetSection
+        }
+        .onChange(of: setup.budget.value) { _, value in if let value { sync(value) } }
+        .onAppear { if let value = setup.budget.value { sync(value) } }
+    }
+
+    private func sync(_ value: BudgetState) {
+        jevBudget = value.jevDailyUsd.formatted(.number.locale(Locale(identifier: "de_DE")).precision(.fractionLength(2)))
+        sandboxes = value.maxSandboxes
+    }
+
+    // Figma „Einstellungen · Allgemein“: Mitteilungen und Dienst als zwei Zeilen; bei ausgeschalteten Mitteilungen mit Erklärung und Knopf.
+    @ViewBuilder private var general: some View {
+        let notifications = setup.notification
+        SettingsBox {
+            if notifications == .denied {
+                HStack(alignment: .center, spacing: Theme.Metrics.pt12) {
+                    VStack(alignment: .leading, spacing: Theme.Metrics.pt2) {
+                        Text("Mitteilungen").font(Theme.Fonts.bodyMedium)
+                        Text("In den Systemeinstellungen ausgeschaltet. Hinweise erscheinen dann nur in Orbit.").font(Theme.Fonts.small).foregroundStyle(Theme.Palette.mutedForeground).fixedSize(horizontal: false, vertical: true)
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                    Button("Systemeinstellungen öffnen") {
+                        if let url = URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension") { NSWorkspace.shared.open(url) }
+                    }.buttonStyle(.card(.outline, small: true))
+                }
+            } else {
+                HStack {
+                    Text("Mitteilungen").font(Theme.Fonts.bodyMedium)
+                    Spacer(minLength: Theme.Metrics.pt0)
+                    Text(notifications == .allowed ? "Erlaubt" : "Noch nicht gefragt").font(Theme.Fonts.subhead).foregroundStyle(Theme.Palette.mutedForeground)
+                }
+            }
+        }
+        SettingsBox {
+            HStack(spacing: Theme.Metrics.pt6) {
+                Text("Dienst").font(Theme.Fonts.bodyMedium)
+                Spacer(minLength: Theme.Metrics.pt0)
+                if case .loaded = setup.checks {
+                    Circle().fill(Theme.Status.info).frame(width: Theme.Metrics.pt6, height: Theme.Metrics.pt6)
+                    Text("Läuft").font(Theme.Fonts.subhead)   // Figma 143:54101: 13
+                } else if case .failed = setup.checks {
+                    Text("Nicht erreichbar").font(Theme.Fonts.body).foregroundStyle(Theme.Palette.mutedForeground)
+                } else {
+                    Text("Prüfung läuft …").font(Theme.Fonts.body).foregroundStyle(Theme.Palette.mutedForeground)
+                }
+            }
+        }
+    }
+
+    // MARK: Prüfzeilen
+
+    private func row(_ check: HealthCheck) -> some View {
+        SettingsBox {
+            VStack(alignment: .leading, spacing: Theme.Metrics.pt10) {
+                HStack(alignment: .top, spacing: Theme.Metrics.pt10) {
+                    Image(systemName: symbol(check)).font(.system(size: Theme.Metrics.pt15)).foregroundStyle(tint(check)).frame(width: Theme.Metrics.pt18, height: Theme.Metrics.pt18).padding(.top, Theme.Metrics.pt1)
+                    VStack(alignment: .leading, spacing: Theme.Metrics.pt2) {
+                        Text(check.label).font(Theme.Fonts.bodyMedium).lineHeight(.exact(points: Theme.Metrics.pt20))
+                        Text(statusText(check)).font(Theme.Fonts.small).lineHeight(.exact(points: Theme.Metrics.pt16))
+                            .foregroundStyle(check.state == .ok ? Theme.Palette.mutedForeground : tint(check)).fixedSize(horizontal: false, vertical: true)
+                        if check.state != .ok, let fix = check.fix {
+                            Text(fix).font(Theme.Fonts.small).lineHeight(.exact(points: Theme.Metrics.pt16)).foregroundStyle(Theme.Palette.mutedForeground).fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                if let key = check.key { keyField(key, label: check.label) }
+            }
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("\(check.label): \(statusText(check))")
+    }
+
+    private func keyField(_ key: String, label: String) -> some View {
+        HStack(spacing: Theme.Metrics.pt8) {
+            SecureField(setup.isSet(key) ? "Gesetzt. Ein neuer Schlüssel ersetzt ihn." : "Schlüssel einfügen", text: Binding(get: { entries[key] ?? "" }, set: { entries[key] = $0 }))
+                .webInput().accessibilityLabel("Schlüssel für \(label)")
+            Button("Setzen") {
+                let value = entries[key] ?? ""
+                Task { if await setup.setKey(key, value: value) { entries[key] = nil } }
+            }
+            .buttonStyle(.card(.primary, small: true)).disabled(setup.keyBusy != nil || (entries[key] ?? "").isEmpty)
+            if setup.isSet(key) { Text("gesetzt ✓").font(Theme.Fonts.small).foregroundStyle(Theme.Status.success).fixedSize() }
+        }
+    }
+
+    private func statusText(_ check: HealthCheck) -> String {
+        switch check.state {
+        case .ok: "In Ordnung"
+        case .fehlt: check.optional ? "Nicht eingerichtet" : "Fehlt"
+        case .fehler: "Geht gerade nicht"
+        }
+    }
+
+    private func symbol(_ check: HealthCheck) -> String {
+        switch check.state {
+        case .ok: "checkmark.circle.fill"
+        case .fehlt: check.optional ? "minus.circle" : "xmark.circle.fill"
+        case .fehler: "xmark.circle.fill"
+        }
+    }
+
+    private func tint(_ check: HealthCheck) -> Color {
+        switch check.state {
+        case .ok: Theme.Status.success
+        case .fehlt: check.optional ? Theme.Palette.mutedForeground : Theme.Status.danger
+        case .fehler: Theme.Status.danger
+        }
+    }
+
+    // MARK: Tagesbudget
+
+    @ViewBuilder private var budgetSection: some View {
+        VStack(alignment: .leading, spacing: Theme.Metrics.pt12) {
+            SettingsSectionTitle(text: "Tagesbudget").padding(.top, Theme.Metrics.pt8)   // P37
+            SettingsHint(text: "Abos (Claude, ChatGPT, Gemini) kosten hier nichts extra. Jev und Daytona schon — das Tagesbudget begrenzt sie.", small: true)
+            switch setup.budget {
+            case .idle, .loading:
+                SettingsSkeleton(height: Theme.Metrics.pt56, radius: Theme.Radius.lg)
+            case .failed(let message, let offline):
+                SettingsFailure(message: message, offline: offline) { Task { await setup.loadBudget() } }
+            case .loaded(let state):
+                SettingsBox {
+                    VStack(alignment: .leading, spacing: Theme.Metrics.pt10) {
+                        HStack(spacing: Theme.Metrics.pt8) {
+                            Text("Jev pro Tag in Dollar").font(Theme.Fonts.bodyMedium).frame(maxWidth: .infinity, alignment: .leading)
+                            TextField("", text: $jevBudget, prompt: Text(verbatim: "0,50")).webInput().frame(width: Theme.Metrics.pt90).multilineTextAlignment(.trailing)
+                            Button("Setzen") {
+                                if let value = Double(jevBudget.replacingOccurrences(of: ",", with: ".")) { Task { await setup.saveBudget(jevDailyUsd: value) } }
+                                else { setup.budgetError = "Gib eine Zahl ein, zum Beispiel 0,50." }
+                            }
+                            .buttonStyle(.card(.primary, small: true)).disabled(setup.budgetSaving)
+                        }
+                        SettingsProgress(label: "Jev heute", percent: min(state.jevPercent, 100))
+                        Text("Heute \(BudgetText.dollars(state.jevSpentUsd)) von \(BudgetText.dollars(state.jevDailyUsd))")
+                            .font(Theme.Fonts.small).foregroundStyle(Theme.Palette.mutedForeground)
+                        if let notice = BudgetText.jevNotice(state) { Text(notice).font(Theme.Fonts.small).foregroundStyle(Theme.Palette.foreground).fixedSize(horizontal: false, vertical: true) }
+                    }
+                }
+                SettingsBox {
+                    VStack(alignment: .leading, spacing: Theme.Metrics.pt10) {
+                        HStack(spacing: Theme.Metrics.pt8) {
+                            Text("Sandboxes gleichzeitig").font(Theme.Fonts.bodyMedium).frame(maxWidth: .infinity, alignment: .leading)
+                            Stepper(value: $sandboxes, in: 1...10) { Text("\(sandboxes)").font(Theme.Fonts.body) }.fixedSize()
+                            Button("Setzen") { Task { await setup.saveBudget(maxSandboxes: sandboxes) } }.buttonStyle(.card(.primary, small: true)).disabled(setup.budgetSaving)
+                        }
+                        Text("Jetzt laufen \(state.sandboxesActive). Ungenutzte Sandboxes stoppen nach 15 Minuten.")
+                            .font(Theme.Fonts.small).foregroundStyle(Theme.Palette.mutedForeground).fixedSize(horizontal: false, vertical: true)
+                        if let notice = BudgetText.sandboxNotice(state) { Text(notice).font(Theme.Fonts.small).fixedSize(horizontal: false, vertical: true) }
+                    }
+                }
+                tokens(state)
+            }
+            if let error = setup.budgetError { SettingsAlert(text: error) }
+        }
+    }
+
+    @ViewBuilder private func tokens(_ state: BudgetState) -> some View {
+        VStack(alignment: .leading, spacing: Theme.Metrics.pt8) {
+            Text("Tokens heute").font(Theme.Fonts.bodyMedium)
+            if state.tokens.isEmpty {
+                SettingsHint(text: "Heute noch nichts verbraucht.", small: true)
+            } else {
+                let names = store.botNames()
+                ForEach(state.tokens) { item in
+                    HStack {
+                        Text(names[item.botId] ?? "Gelöschter Orbi").font(Theme.Fonts.body)
+                        Spacer(minLength: Theme.Metrics.pt8)
+                        Text("\(BudgetText.tokens(item.totalTokens)) · \(item.turns) \(item.turns == 1 ? "Antwort" : "Antworten")")
+                            .font(Theme.Fonts.small).foregroundStyle(Theme.Palette.mutedForeground)
+                    }
+                }
+            }
+        }
+    }
+}

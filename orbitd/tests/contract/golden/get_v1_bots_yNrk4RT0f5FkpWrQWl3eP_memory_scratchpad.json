@@ -1,0 +1,23 @@
+{
+  "body": {
+    "entry": {
+      "body": "<text-lang>",
+      "createdAt": 1794219024244,
+      "description": "<text-kurz>",
+      "name": "<text-kurz>",
+      "origin": "self",
+      "source": "<text-kurz>",
+      "stated": false,
+      "type": "scratchpad",
+      "updatedAt": 1794219534536,
+      "version": 1
+    },
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/bots/yNrk4RT0f5FkpWrQWl3eP/memory/scratchpad",
+  "status": 200
+}

@@ -1,0 +1,34 @@
+{
+  "body": {
+    "budget": {
+      "jevDailyUsd": 0.5,
+      "maxSandboxes": 3
+    },
+    "jev": {
+      "percent": 0,
+      "spentUsd": 0,
+      "state": "ok"
+    },
+    "ok": true,
+    "sandboxes": {
+      "active": 0,
+      "max": 3,
+      "waiting": false
+    },
+    "tokens": [
+      {
+        "botId": "OqldvjIIwWmCTm1X88nsi",
+        "inputTokens": 121359,
+        "outputTokens": 1897,
+        "totalTokens": 123256,
+        "turns": 1
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/budget",
+  "status": 200
+}

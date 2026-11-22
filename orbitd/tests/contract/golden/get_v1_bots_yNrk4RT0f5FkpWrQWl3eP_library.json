@@ -1,0 +1,28 @@
+{
+  "body": {
+    "files": [
+      {
+        "chatId": "o22U5INm54UhtaDr3xdrk",
+        "createdAt": 1794219220323,
+        "filename": "<text-kurz>",
+        "id": "4b245b2654f6e94d10a74536911388813ba3af050e325db1a36240d14b7d30d4",
+        "kind": "file",
+        "mediaType": "text/markdown",
+        "messageId": "863da656-7254-4aab-be0c-6c6ec87b1d96",
+        "size": 1730
+      }
+    ],
+    "limitations": [
+      "Die Bibliothek enthält vom Orbi ausdrücklich bereitgestellte Dateien und gespeicherte Bildgenerierungen. Bereitgestellt bedeutet nicht zwingend selbst erstellt.",
+      "Nutzeranhänge und nur erwähnte oder gefundene Dateien werden nicht automatisch übernommen. Geteilte Dateien bleiben auch nach dem Leeren des Chats gespeichert."
+    ],
+    "ok": true,
+    "truncated": false
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/bots/yNrk4RT0f5FkpWrQWl3eP/library",
+  "status": 200
+}

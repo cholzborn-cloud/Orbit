@@ -1,0 +1,30 @@
+{
+  "body": {
+    "reactions": [
+      {
+        "actor": "user",
+        "createdAt": 1793901465618,
+        "emoji": "<text-kurz>",
+        "messageId": "test-1793791879"
+      },
+      {
+        "actor": "user",
+        "createdAt": 1793901470055,
+        "emoji": "<text-kurz>",
+        "messageId": "b1a2dce5-5ecb-45a6-9df1-642386887880"
+      },
+      {
+        "actor": "user",
+        "createdAt": 1794311378809,
+        "emoji": "<text-kurz>",
+        "messageId": "9983f2db-31b9-4cb8-a4d8-d995a39d86ba"
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/chats/xxGeMqFxiSxdXgpMZFijW/reactions",
+  "status": 200
+}

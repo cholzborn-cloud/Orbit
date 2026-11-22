@@ -1,0 +1,18 @@
+{
+  "body": [
+    {
+      "approvals": [],
+      "automations": [],
+      "steps": [],
+      "tasks": [],
+      "type": "snapshot",
+      "working": []
+    }
+  ],
+  "headers": {
+    "content-type": "text/event-stream"
+  },
+  "method": "GET",
+  "path": "/v1/events",
+  "status": 200
+}

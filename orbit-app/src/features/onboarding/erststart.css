@@ -1,0 +1,149 @@
+/*
+ * Erststart und Einstellungen: Tokens, die tokens.css nicht kennt (Figma 04 und 07), und Bewegung.
+ * Dunkel wie in tokens.css: data-theme="dark" oder prefers-color-scheme, außer data-theme="light".
+ */
+:root,
+[data-theme="light"] {
+  --o-spur: rgb(28 28 28 / 0.05);          /* Pillengruppe: Spur */
+  --o-schieber: #ffffff;                   /* gewählte Pille */
+  --o-schieber-schatten: 0 1px 3px rgb(0 0 0 / 0.1);
+  --o-karte-schatten: 0 12px 40px rgb(0 0 0 / 0.06);
+  --o-abdunkeln: rgb(0 0 0 / 0.4);
+  --o-dialog-schatten: 0 24px 60px rgb(0 0 0 / 0.16);
+  --o-hinweis: rgb(28 28 28 / 0.06);
+  --o-warn: #f25c05;
+}
+
+[data-theme="dark"] {
+  --o-spur: rgb(255 255 255 / 0.05);
+  --o-schieber: #333336;
+  --o-schieber-schatten: 0 1px 3px rgb(0 0 0 / 0.35);
+  --o-karte-schatten: 0 12px 40px rgb(0 0 0 / 0.35);
+  --o-abdunkeln: rgb(0 0 0 / 0.55);
+  --o-dialog-schatten: 0 24px 60px rgb(0 0 0 / 0.5);
+  --o-hinweis: rgb(255 255 255 / 0.06);
+  --o-warn: #ff9240;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --o-spur: rgb(255 255 255 / 0.05);
+    --o-schieber: #333336;
+    --o-schieber-schatten: 0 1px 3px rgb(0 0 0 / 0.35);
+    --o-karte-schatten: 0 12px 40px rgb(0 0 0 / 0.35);
+    --o-abdunkeln: rgb(0 0 0 / 0.55);
+    --o-dialog-schatten: 0 24px 60px rgb(0 0 0 / 0.5);
+    --o-hinweis: rgb(255 255 255 / 0.06);
+    --o-warn: #ff9240;
+  }
+}
+
+/* Schrittwechsel mit kleiner Bewegung und derselben Auslaufkurve wie die Anmeldekarten. */
+@keyframes o-schritt-ein {
+  from { opacity: 0; transform: translateX(var(--o-schritt-weg, 30px)) scale(0.986); }
+  to { opacity: 1; transform: none; }
+}
+[data-richtung="zurueck"] { --o-schritt-weg: -30px; }
+@keyframes o-uebersicht-ein {
+  from { opacity: 0; transform: translateY(10px) scale(0.994); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes o-blende {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes o-karte-ein {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes o-haken-ein {
+  0% { transform: scale(0.4); }
+  100% { transform: scale(1); }
+}
+@keyframes o-lauf {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+.o-lauf { animation: o-lauf 1500ms cubic-bezier(0.45, 0, 0.25, 1) infinite; }
+@keyframes o-schritt-sanft {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes o-orbi-wechsel {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+.o-schritt-sanft { animation: o-schritt-sanft 420ms var(--orbit-ease-out) both; }
+.o-orbi-wechsel { animation: o-orbi-wechsel 240ms var(--orbit-ease-out) both; }
+.o-schritt { animation: o-schritt-ein 360ms var(--orbit-ease-out) both; }
+@keyframes o-uebersicht-schieben {
+  from { opacity: 0; transform: translateY(56px); }
+  to { opacity: 1; transform: none; }
+}
+.o-uebersicht-schieben { animation: o-uebersicht-schieben 640ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.o-uebersicht-ein { animation: o-uebersicht-ein 420ms var(--orbit-ease-out) both; }
+.o-karte-ein { animation: o-karte-ein 260ms var(--orbit-ease) both; }
+.o-blende { animation: o-blende 300ms ease both; }
+
+.o-auth-viewport {
+  display: grid;
+  justify-items: center;
+  align-items: safe center;
+  overflow: auto;
+  padding: 3.75rem 1.25rem 2rem;
+}
+
+[data-login-gate] { padding-block: 2rem; }
+
+/* Erster Orbi: die Orbis gleiten zusammen (Bühne), danach blendet die echte Figur ein (eine Easing-Familie: ease-out-expo). */
+@keyframes o-erster-ein {
+  0% { opacity: 0; transform: scale(0.94); }
+  100% { opacity: 1; transform: none; }
+}
+/* Fertig: einmal sanft nicken und winken (ruhig, kein Dauerhüpfen). */
+@keyframes o-winken {
+  0% { transform: translateY(0) rotate(0); }
+  25% { transform: translateY(-10px) rotate(0); }
+  45% { transform: translateY(-4px) rotate(-8deg); }
+  65% { transform: translateY(-4px) rotate(8deg); }
+  85% { transform: translateY(0) rotate(-3deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+.o-erster { animation: o-erster-ein 400ms cubic-bezier(0.22, 1, 0.36, 1) 450ms both; }
+.o-winken { animation: o-winken 760ms var(--orbit-ease-out) 110ms 1 both; transform-origin: 50% 90%; }
+@keyframes o-funken {
+  0% { opacity: 0; transform: scale(0.7); }
+  30% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--funken-x), var(--funken-y)) scale(0.4); }
+}
+.o-fertig-funken { position: absolute; inset: 0; color: var(--o-text); }
+.o-fertig-funken i {
+  position: absolute; width: 7px; height: 7px; border-radius: 50%; background: currentColor;
+  animation: o-funken 620ms var(--orbit-ease-out) 160ms both;
+}
+.o-fertig-funken i:nth-child(1) { left: 12%; top: 24%; --funken-x: -27px; --funken-y: -19px; }
+.o-fertig-funken i:nth-child(2) { left: 67%; top: 12%; --funken-x: 12px; --funken-y: -30px; }
+.o-fertig-funken i:nth-child(3) { left: 90%; top: 33%; --funken-x: 25px; --funken-y: -12px; }
+
+/* Farbschimmer hinter Willkommen und Start (nimmt die Farbe des Orbis in Führung auf); sehr dezent. */
+:root, [data-theme="light"] { --o-schimmer-a: 0.1; }
+[data-theme="dark"] { --o-schimmer-a: 0.17; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --o-schimmer-a: 0.17; } }
+@keyframes o-schimmer-ein { from { opacity: 0; } to { opacity: var(--o-schimmer-a); } }
+@keyframes o-schimmer-aus { from { opacity: var(--o-schimmer-a); } to { opacity: 0; } }
+.o-schimmer { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(closest-side, var(--c), transparent); opacity: 0; animation: o-schimmer-ein 1600ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.o-schimmer-weg { animation: o-schimmer-aus 1600ms cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+.o-schieber { transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1); }
+.o-kachel { transition: background-color 200ms ease, border-color 200ms ease; }
+.o-kachel[data-wert="an"] .o-haken { animation: o-haken-ein 440ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .o-lauf { animation: none; width: 100%; opacity: 0.35; }
+  .o-schritt, .o-schritt-sanft, .o-orbi-wechsel, .o-karte-ein, .o-blende, .o-uebersicht-ein, .o-uebersicht-schieben { animation: none; }
+  .o-erster { animation: o-blende 200ms linear both; }
+  .o-winken { animation: none; }
+  .o-schimmer, .o-schimmer-weg { animation: none; opacity: var(--o-schimmer-a); }
+  .o-schieber, .o-kachel { transition: none; }
+  .o-kachel[data-wert="an"] .o-haken { animation: none; }
+}

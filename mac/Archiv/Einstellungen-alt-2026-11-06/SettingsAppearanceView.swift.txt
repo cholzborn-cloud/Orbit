@@ -1,0 +1,41 @@
+import SwiftUI
+
+// Reiter „Darstellung“ (appearance-section.tsx): System, Dunkel, Hell als Auswahlkacheln.
+struct SettingsAppearanceView: View {
+    let store: SettingsStore
+
+    private static let options: [(value: String, label: String, symbol: String)] = [
+        ("light", "Hell", "sun.max"), ("dark", "Dunkel", "moon"), ("system", "System", "display"),
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.Metrics.pt16) {
+            SettingsTitle(text: "Darstellung")
+            // Figma „Darstellung“: eine Zeile „Erscheinungsbild“ mit drei Kapselschaltern rechts (gewählt = Rand und Medium).
+            SettingsBox {
+                HStack(spacing: Theme.Metrics.pt8) {
+                    Text("Erscheinungsbild").font(Theme.Fonts.body).lineHeight(.exact(points: Theme.Metrics.pt20)).frame(maxWidth: .infinity, alignment: .leading)
+                    ForEach(Self.options, id: \.value) { option in
+                        let on = store.theme == option.value
+                        Button { Task { await store.setTheme(option.value) } } label: {
+                            HStack(spacing: Theme.Metrics.pt6) {
+                                Image(systemName: option.symbol).font(.system(size: Theme.Metrics.pt12))
+                                Text(option.label).font(on ? Theme.Fonts.bodyMedium : Theme.Fonts.body)
+                            }
+                            .foregroundStyle(Theme.Palette.foreground)
+                            // Figma Darstellung (143:55472): Rechteck r8, gewählt Fläche secondary + Rand foreground 1, sonst Rand 0,5.
+                            .padding(.horizontal, Theme.Metrics.pt10).frame(height: Theme.Metrics.pt28)
+                            .background(on ? Theme.Palette.secondary : Theme.Palette.background, in: .rect(cornerRadius: Theme.Radius.md))
+                            .overlay(RoundedRectangle(cornerRadius: Theme.Radius.md).strokeBorder(on ? Theme.Palette.foreground : Theme.Palette.border, lineWidth: on ? Theme.Metrics.pt1 : Theme.Metrics.pt0_5))
+                            .contentShape(.rect(cornerRadius: Theme.Radius.md))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(on ? [.isButton, .isSelected] : .isButton)
+                    }
+                }
+            }
+            if let error = store.themeError { Text(error).font(Theme.Fonts.body).foregroundStyle(Theme.Palette.destructive) }
+            SettingsAppIconView().padding(.top, Theme.Metrics.pt8)
+        }
+    }
+}

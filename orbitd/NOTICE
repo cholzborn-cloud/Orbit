@@ -1,0 +1,17 @@
+orbitd (Python-Dienst von Orbit)
+
+In orbitd wurde kein fremder Quellcode kopiert. Vorbilder (regnull/openbot, OpenClaw, Vibe Kanban, Hermes Agent) sind nur als Ideen genutzt, siehe docs/neubau/VORBILDER.md.
+
+Laufzeit-Abhängigkeiten (pyproject.toml, Lizenz laut Paket-Metadaten in .venv):
+
+  starlette 1.10.0      BSD-3-Clause
+  uvicorn   0.54.0      BSD-3-Clause
+  httpx     0.28.1      BSD-3-Clause
+  mcp       2.3.0       MIT
+
+Direkt importiert, aber nicht in pyproject.toml aufgeführt (kommen über mcp mit):
+
+  jsonschema 4.26.0     MIT
+  anyio      4.16.0     MIT
+
+Weitere Pakete in .venv (nur Unterabhängigkeiten) sind nicht geprüft.

@@ -1,0 +1,201 @@
+{
+  "body": {
+    "indexing": false,
+    "ok": true,
+    "results": [
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "43824B1C-2800-4559-9C2B-ECFE8C7B4BDA",
+        "rank": -3.6925269932903575,
+        "role": "user",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "C537F6A8-200B-4E65-9883-7FC4B88005CC",
+        "rank": -3.5196883535112704,
+        "role": "user",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "cloudee",
+        "chatId": "6uMZASpB61scHjLyjAb_w",
+        "chatName": "Cloudee",
+        "color": null,
+        "createdAt": "<text-kurz>",
+        "messageId": "96EC9115-AA40-4043-A963-2B8C4B926EC5",
+        "rank": -3.3623065673581953,
+        "role": "user",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "796bb484-b671-4c34-a3af-5fbf1ecafa6f",
+        "rank": -3.281949248932342,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "cloudee",
+        "chatId": "6uMZASpB61scHjLyjAb_w",
+        "chatName": "Cloudee",
+        "color": null,
+        "createdAt": "<text-kurz>",
+        "messageId": "6af2abaf-6a61-4c36-8f1b-ad8559fdbeae",
+        "rank": -3.236765062344706,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "cloudee",
+        "chatId": "6uMZASpB61scHjLyjAb_w",
+        "chatName": "Cloudee",
+        "color": null,
+        "createdAt": "<text-kurz>",
+        "messageId": "24bc601e-37f6-4a2e-83c2-9e3a4afadb3b",
+        "rank": -3.15683325250963,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "e2a57456-e04e-4f0f-ac0d-2ac7ae069027",
+        "rank": -3.022473059083703,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "12CED35B-9510-490B-972B-9B0C6D377134",
+        "rank": -2.907308618498906,
+        "role": "user",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "999c499f-ccfe-4341-9c28-911e2e9a7d6a",
+        "rank": -2.907308618498906,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "cloudee",
+        "chatId": "6uMZASpB61scHjLyjAb_w",
+        "chatName": "Cloudee",
+        "color": null,
+        "createdAt": "<text-kurz>",
+        "messageId": "27b030c3-298d-42c8-b9ec-253119598da0",
+        "rank": -2.713447447770616,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "79354edb-5fb0-4360-82fb-468453a7a598",
+        "rank": -2.5307966351278273,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "d0c0fa3b-967d-4949-a6a4-3549a301a02c",
+        "rank": -2.4363218104405426,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "b2acf7bb-014c-4fc4-b7e9-c3dd9c1f2223",
+        "rank": -2.240443974632479,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "768a1bd2-c493-4899-9d12-ad0bf100d16a",
+        "rank": -1.937387941702344,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "ac3d95e9-375e-4f19-97c1-78613fbbbf81",
+        "rank": -1.8652989027077678,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "b1a2dce5-5ecb-45a6-9df1-642386887880",
+        "rank": -1.3281988741106805,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      },
+      {
+        "avatar": "nova",
+        "chatId": "xxGeMqFxiSxdXgpMZFijW",
+        "chatName": "Nova",
+        "color": "#43a561",
+        "createdAt": "<text-kurz>",
+        "messageId": "8e69f857-d6bb-4166-a9ba-733866ae0a89",
+        "rank": -1.204321017114561,
+        "role": "assistant",
+        "snippet": "<text-mittel>"
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/search?q=a",
+  "status": 200
+}

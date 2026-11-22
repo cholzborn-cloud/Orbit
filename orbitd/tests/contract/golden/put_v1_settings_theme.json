@@ -1,0 +1,11 @@
+{
+  "body": {
+    "error": "<text-kurz>"
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "PUT",
+  "path": "/v1/settings/theme",
+  "status": 400
+}

@@ -1,0 +1,58 @@
+{
+  "body": {
+    "approximate": true,
+    "bot": {
+      "id": "OqldvjIIwWmCTm1X88nsi",
+      "isMain": true,
+      "job": "<text-kurz>",
+      "name": "<text-kurz>"
+    },
+    "chatId": "xxGeMqFxiSxdXgpMZFijW",
+    "fullPrompt": "<text-lang>",
+    "layers": {
+      "layer1Stable": "<text-lang>",
+      "layer2Tools": "<text-lang>",
+      "layer3Volatile": "<text-lang>"
+    },
+    "note": "<text-mittel>",
+    "ok": true,
+    "sections": [
+      {
+        "content": "<text-mittel>",
+        "id": "persona",
+        "layer": "stable",
+        "title": "<text-kurz>"
+      },
+      {
+        "content": "<text-lang>",
+        "id": "base_instructions",
+        "layer": "stable",
+        "title": "<text-kurz>"
+      },
+      {
+        "content": "<text-lang>",
+        "id": "grok_core",
+        "layer": "stable",
+        "title": "<text-kurz>"
+      },
+      {
+        "content": "<text-lang>",
+        "id": "reply_habits",
+        "layer": "stable",
+        "title": "<text-kurz>"
+      },
+      {
+        "content": "<text-lang>",
+        "id": "tool_rules",
+        "layer": "tools",
+        "title": "<text-kurz>"
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/chats/xxGeMqFxiSxdXgpMZFijW/prompt-preview",
+  "status": 200
+}

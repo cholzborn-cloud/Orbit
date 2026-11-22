@@ -1,0 +1,11 @@
+{
+  "body": {
+    "error": "<text-kurz>"
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "POST",
+  "path": "/v1/settings/rules",
+  "status": 400
+}

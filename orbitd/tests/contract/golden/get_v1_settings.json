@@ -1,0 +1,17 @@
+{
+  "body": {
+    "ok": true,
+    "settings": {
+      "baseInstructions": null,
+      "jevAuto": true,
+      "jevHandoff": true,
+      "theme": "system"
+    }
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/settings",
+  "status": 200
+}

@@ -1,0 +1,32 @@
+/* Werte aus Figma 05/06, die kein Token der Grundlagen sind (Hell, Dunkel, wie tokens.css). */
+:root,
+[data-theme="light"] {
+  --oo-seg: rgb(28 28 28 / 0.05);
+  --oo-slider: #ffffff;
+  --oo-slider-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+  --oo-scrim: rgb(0 0 0 / 0.4);
+  --oo-dlg-shadow: 0 24px 60px rgb(0 0 0 / 0.16);
+  --oo-warn: #f25c05;
+  --oo-screen-a: #5480f2;
+  --oo-screen-b: #d178d9;
+}
+
+[data-theme="dark"] {
+  --oo-seg: rgb(255 255 255 / 0.05);
+  --oo-slider: #333336;
+  --oo-slider-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+  --oo-scrim: rgb(0 0 0 / 0.6);
+  --oo-dlg-shadow: 0 24px 60px rgb(0 0 0 / 0.6);
+  --oo-warn: #ff7a1a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --oo-seg: rgb(255 255 255 / 0.05);
+    --oo-slider: #333336;
+    --oo-slider-shadow: 0 1px 3px rgb(0 0 0 / 0.35);
+    --oo-scrim: rgb(0 0 0 / 0.6);
+    --oo-dlg-shadow: 0 24px 60px rgb(0 0 0 / 0.6);
+    --oo-warn: #ff7a1a;
+  }
+}

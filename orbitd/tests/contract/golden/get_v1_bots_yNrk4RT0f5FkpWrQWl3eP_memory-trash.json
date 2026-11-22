@@ -1,0 +1,12 @@
+{
+  "body": {
+    "entries": [],
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/bots/yNrk4RT0f5FkpWrQWl3eP/memory-trash",
+  "status": 200
+}

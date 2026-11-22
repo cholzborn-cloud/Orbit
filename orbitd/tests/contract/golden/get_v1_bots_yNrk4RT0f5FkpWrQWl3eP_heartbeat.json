@@ -1,0 +1,19 @@
+{
+  "body": {
+    "enabled": false,
+    "everyMinutes": 30,
+    "lastMessageDay": null,
+    "lastRunAt": null,
+    "ok": true,
+    "window": {
+      "from": "08:00",
+      "to": "22:00"
+    }
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/bots/yNrk4RT0f5FkpWrQWl3eP/heartbeat",
+  "status": 200
+}

@@ -1,0 +1,74 @@
+{
+  "body": {
+    "count": 5,
+    "ok": true,
+    "orbis": [
+      {
+        "archivedAt": null,
+        "avatar": "nova",
+        "color": "#43a561",
+        "id": "OqldvjIIwWmCTm1X88nsi",
+        "instructions": "<text-mittel>",
+        "isMain": true,
+        "job": "<text-kurz>",
+        "name": "<text-kurz>",
+        "status": "frei",
+        "version": 1
+      },
+      {
+        "archivedAt": null,
+        "avatar": "cloudee",
+        "color": null,
+        "id": "pjvoTB9nhBsvHZ2Ei6SYA",
+        "instructions": "<text-mittel>",
+        "isMain": false,
+        "job": "<text-kurz>",
+        "name": "<text-kurz>",
+        "status": "frei",
+        "version": 1
+      },
+      {
+        "archivedAt": null,
+        "avatar": "strobi",
+        "color": null,
+        "id": "ginZYxxayGQ4fimvfZbaW",
+        "instructions": "<text-mittel>",
+        "isMain": false,
+        "job": "<text-mittel>",
+        "name": "<text-kurz>",
+        "status": "frei",
+        "version": 1
+      },
+      {
+        "archivedAt": null,
+        "avatar": "citrus",
+        "color": "#de3a8e",
+        "id": "DyE4pL0C2dnVI6e4wVI2H",
+        "instructions": "<text-lang>",
+        "isMain": false,
+        "job": "<text-kurz>",
+        "name": "<text-kurz>",
+        "status": "frei",
+        "version": 1
+      },
+      {
+        "archivedAt": null,
+        "avatar": "freddy",
+        "color": null,
+        "id": "yNrk4RT0f5FkpWrQWl3eP",
+        "instructions": "<text-mittel>",
+        "isMain": false,
+        "job": "<text-mittel>",
+        "name": "<text-kurz>",
+        "status": "frei",
+        "version": 1
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/orbis",
+  "status": 200
+}

@@ -1,0 +1,12 @@
+{
+  "body": {
+    "error": "<text-kurz>",
+    "ok": false
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/routines/gibt-es-nicht",
+  "status": 404
+}

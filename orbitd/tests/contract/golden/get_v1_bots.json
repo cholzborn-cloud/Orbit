@@ -1,0 +1,79 @@
+{
+  "body": {
+    "bots": [
+      {
+        "avatar": "freddy",
+        "chatId": "o22U5INm54UhtaDr3xdrk",
+        "color": null,
+        "id": "yNrk4RT0f5FkpWrQWl3eP",
+        "instructions": "<text-mittel>",
+        "isMain": false,
+        "job": "<text-mittel>",
+        "lastMessageAt": "<text-kurz>",
+        "look": null,
+        "name": "<text-kurz>",
+        "onboardingDone": true
+      },
+      {
+        "avatar": "cloudee",
+        "chatId": "6uMZASpB61scHjLyjAb_w",
+        "color": null,
+        "id": "pjvoTB9nhBsvHZ2Ei6SYA",
+        "instructions": "<text-mittel>",
+        "isMain": false,
+        "job": "<text-kurz>",
+        "lastMessageAt": "<text-kurz>",
+        "look": null,
+        "name": "<text-kurz>",
+        "onboardingDone": true
+      },
+      {
+        "avatar": "strobi",
+        "chatId": "8K71Gv3OFrNqTwssQBgaK",
+        "color": null,
+        "id": "ginZYxxayGQ4fimvfZbaW",
+        "instructions": "<text-mittel>",
+        "isMain": false,
+        "job": "<text-mittel>",
+        "lastMessageAt": "<text-kurz>",
+        "look": null,
+        "name": "<text-kurz>",
+        "onboardingDone": true
+      },
+      {
+        "avatar": "citrus",
+        "chatId": "zqFeai7WexV7VAPFZxnRy",
+        "color": "#de3a8e",
+        "id": "DyE4pL0C2dnVI6e4wVI2H",
+        "instructions": "<text-lang>",
+        "isMain": false,
+        "job": "<text-kurz>",
+        "lastMessageAt": "<text-kurz>",
+        "look": null,
+        "name": "<text-kurz>",
+        "onboardingDone": true
+      }
+    ],
+    "groups": [],
+    "main": {
+      "avatar": "nova",
+      "chatId": "xxGeMqFxiSxdXgpMZFijW",
+      "color": "#43a561",
+      "id": "OqldvjIIwWmCTm1X88nsi",
+      "instructions": "<text-mittel>",
+      "isMain": true,
+      "job": "<text-kurz>",
+      "lastMessageAt": "<text-kurz>",
+      "look": null,
+      "name": "<text-kurz>",
+      "onboardingDone": true
+    },
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/bots",
+  "status": 200
+}

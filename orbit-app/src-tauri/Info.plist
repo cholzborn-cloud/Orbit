@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key><string>de</string>
+    <key>NSAppleEventsUsageDescription</key><string>Orbit steuert Apps auf deinem Mac, wenn ein Orbi das für dich erledigt.</string>
+    <key>NSCalendarsFullAccessUsageDescription</key><string>Orbit liest oder erstellt Termine nur, wenn ein Orbi das für dich erledigt.</string>
+    <key>NSContactsUsageDescription</key><string>Orbit sucht in deinen Kontakten nur, wenn ein Orbi das für dich erledigt.</string>
+    <key>NSRemindersFullAccessUsageDescription</key><string>Orbit liest oder erstellt Erinnerungen nur auf deine Anfrage.</string>
+    <key>NSAppTransportSecurity</key><dict><key>NSAllowsLocalNetworking</key><true/></dict>
+</dict>
+</plist>

@@ -1,0 +1,24 @@
+{
+  "body": {
+    "brainOffline": true,
+    "ok": true,
+    "skills": [
+      {
+        "description": "desc",
+        "name": "my-skill",
+        "source": "orbit"
+      },
+      {
+        "description": "test",
+        "name": "pdf-export",
+        "source": "orbit"
+      }
+    ]
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/skills/slash",
+  "status": 200
+}

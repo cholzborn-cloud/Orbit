@@ -1,0 +1,12 @@
+@import "tailwindcss";
+/* Tokens kommen aus src/ui/tokens.css (Figma Seite 04) */
+@import "./ui/tokens.css";
+
+/* Fenster fest: Gummiband/Weiter-Scroll der ganzen Seite unterbinden. */
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}

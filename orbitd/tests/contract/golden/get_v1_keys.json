@@ -1,0 +1,27 @@
+{
+  "body": {
+    "keys": [
+      {
+        "label": "<text-kurz>",
+        "liveReload": true,
+        "name": "<text-kurz>",
+        "set": false,
+        "source": null
+      },
+      {
+        "label": "<text-kurz>",
+        "liveReload": true,
+        "name": "<text-kurz>",
+        "set": false,
+        "source": null
+      }
+    ],
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/keys",
+  "status": 200
+}

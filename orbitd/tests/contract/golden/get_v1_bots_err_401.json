@@ -1,0 +1,11 @@
+{
+  "body": {
+    "error": "<text-kurz>"
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/bots?err=401",
+  "status": 401
+}

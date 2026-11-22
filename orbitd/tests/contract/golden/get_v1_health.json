@@ -1,0 +1,11 @@
+{
+  "body": {
+    "ok": true
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/health",
+  "status": 200
+}

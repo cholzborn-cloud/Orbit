@@ -1,0 +1,34 @@
+{
+  "body": {
+    "ok": true,
+    "task": {
+      "answers": null,
+      "assignedBotId": "yNrk4RT0f5FkpWrQWl3eP",
+      "brief": "<text-mittel>",
+      "createdAt": 1794219597911,
+      "doneWhen": "<text-mittel>",
+      "finishedAt": 1794219618326,
+      "id": "17f5b459-5d76-4052-85b4-a520c3855763",
+      "lastProgressAt": null,
+      "mode": "work",
+      "orbiId": "OqldvjIIwWmCTm1X88nsi",
+      "parentChatId": "xxGeMqFxiSxdXgpMZFijW",
+      "parentTaskId": "32b18ace-0227-468a-9f7c-46c44df79775",
+      "progress": null,
+      "reply": "resume",
+      "result": "<text-mittel>",
+      "resumeOf": null,
+      "rework": null,
+      "startedAt": null,
+      "status": "done",
+      "title": "<text-kurz>",
+      "updatedAt": 1794219618326
+    }
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/tasks/17f5b459-5d76-4052-85b4-a520c3855763",
+  "status": 200
+}

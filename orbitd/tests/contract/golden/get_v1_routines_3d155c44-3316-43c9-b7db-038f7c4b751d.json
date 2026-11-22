@@ -1,0 +1,25 @@
+{
+  "body": {
+    "ok": true,
+    "routine": {
+      "botId": "OqldvjIIwWmCTm1X88nsi",
+      "createdAt": 1794306266749,
+      "enabled": false,
+      "id": "3d155c44-3316-43c9-b7db-038f7c4b751d",
+      "name": "<text-kurz>",
+      "nextRunAt": 1794466800000,
+      "prompt": "<text-lang>",
+      "schedule": {
+        "at": "08:00",
+        "kind": "daily"
+      },
+      "timezone": "Europe/Berlin"
+    }
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "method": "GET",
+  "path": "/v1/routines/3d155c44-3316-43c9-b7db-038f7c4b751d",
+  "status": 200
+}

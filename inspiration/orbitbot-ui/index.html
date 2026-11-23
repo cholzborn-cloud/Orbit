@@ -1,0 +1,457 @@
+<!doctype html>
+<!--
+  OrbitBot – UI-Inspiration (Prototyp)
+  NUR INSPIRATION: Aussehen, Karten und Orbi-Animationen zeigen die Richtung.
+  Funktionen, Struktur und Code müssen NICHT 1:1 übernommen werden.
+  Orbi-Formen + Verhalten: gebündelt aus orbit-app/src/orbi (geometry, behavior, shapes, ticker, morph).
+-->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrbitBot</title>
+<style>
+  :root{
+    --bg:#141414; --side:#161616; --panel:#1f1f1f; --panel2:#262626; --line:#2c2c2c;
+    --text:#ececec; --mute:#8d8d8d; --accent:#d63f8c; --blue:#3b82f6;
+  }
+  :root{color-scheme:dark}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font:15px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,system-ui,sans-serif;height:100vh;overflow:hidden}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  input,textarea{font:inherit;color:inherit;background:none;border:0;outline:0}
+  .app{display:grid;grid-template-columns:300px 1fr auto;grid-template-rows:100vh;height:100vh}
+
+  .orbi{display:inline-block;line-height:0;flex:none}
+  .orbi svg{overflow:visible;display:block}
+  .big{cursor:pointer}
+  .gal{display:grid;grid-template-columns:repeat(5,1fr);gap:14px 8px;margin:6px 0 18px;text-align:center;font-size:12.5px;color:var(--mute)}
+  .gal div{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .states{display:flex;gap:8px;flex-wrap:wrap}
+  .states .on{background:#fff;color:#111}
+  .typing .orbi{margin-right:6px}
+  /* Sidebar */
+  .side{background:var(--side);border-right:1px solid #1e1e1e;display:flex;flex-direction:column;min-height:0;position:relative}
+  .side-top{display:flex;justify-content:flex-end;gap:10px;padding:14px 16px}
+  .icon-btn{width:36px;height:36px;border-radius:50%;background:#232323;display:grid;place-items:center;color:#ccc}
+  .icon-btn:hover{background:#2e2e2e}
+  .bot-tile{margin:4px auto 18px;width:96px;padding:10px 0 8px;border-radius:14px;background:#232323;text-align:center;font-size:13px;position:relative}
+  .bot-tile .star{position:absolute;right:20px;top:46px;width:18px;height:18px;border-radius:50%;background:#f0a33a;border:2px solid #232323;font-size:10px;line-height:14px}
+  .chats{flex:1;overflow:auto;padding:0 10px}
+  .chat{display:flex;gap:12px;align-items:center;padding:8px 10px;border-radius:12px;cursor:pointer;position:relative}
+  .chat:hover,.chat.active{background:#212121}
+  .chat b{font-weight:500;display:block}
+  .chat span{color:var(--mute);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;max-width:190px}
+  .chat .dot{position:absolute;right:14px;top:22px;width:7px;height:7px;border-radius:50%;background:var(--blue)}
+  .me{display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid #1e1e1e;cursor:pointer}
+  .me .av{width:36px;height:36px;border-radius:50%;background:#bbb;display:grid;place-items:center;color:#666}
+  .me .grow{flex:1}
+  .menu{position:absolute;left:12px;right:-8px;bottom:64px;background:#232323;border:1px solid var(--line);border-radius:14px;padding:6px;display:none;box-shadow:0 20px 40px #0008;z-index:5}
+  .menu.open{display:block}
+  .menu button{display:flex;width:100%;gap:10px;padding:8px 10px;border-radius:8px;text-align:left}
+  .menu button:hover{background:#2e2e2e}
+  .menu small{margin-left:auto;color:var(--mute)}
+  .menu hr{border:0;border-top:1px solid var(--line);margin:4px 6px}
+
+  /* Main */
+  .main{position:relative;min-height:0;display:flex;flex-direction:column;min-width:0}
+  .top{position:absolute;top:14px;left:0;right:0;display:flex;justify-content:center;pointer-events:none;z-index:2}
+  .pill{pointer-events:auto;display:flex;align-items:center;gap:8px;background:#1d1d1d;border:1px solid var(--line);padding:5px 14px 5px 8px;border-radius:999px}
+  .share{position:absolute;right:16px;top:14px;pointer-events:auto;background:#1d1d1d;border:1px solid var(--line);padding:7px 16px;border-radius:999px}
+  .feed{flex:1;overflow:auto;padding:70px 24px 120px}
+  .col{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+  .msg{max-width:min(700px,85%);padding:9px 15px;border-radius:16px;background:var(--panel)}
+  .msg p+p{margin-top:10px}
+  .msg.user{align-self:flex-end;background:var(--accent);color:#fff;border-radius:18px}
+  .time{align-self:center;color:var(--mute);font-size:13px;margin:12px 0}
+  .tag{align-self:flex-start;background:var(--panel);padding:7px 15px;border-radius:12px}
+  .card{max-width:min(700px,100%);width:100%;background:var(--panel);border:1px solid #262626;border-radius:20px;padding:20px}
+  .typing{display:flex;gap:5px;align-items:center;padding:8px 16px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:#777;animation:b 1s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  @keyframes b{0%,80%,100%{opacity:.3;transform:none}40%{opacity:1;transform:translateY(-3px)}}
+
+  /* Question card */
+  .q h4{font-weight:600;color:#bdbdbd;margin-bottom:16px}
+  .opt{display:flex;align-items:center;gap:12px;padding:10px 0;color:#9a9a9a;cursor:pointer}
+  .opt:hover{color:#ddd}
+  .key{width:30px;height:30px;border-radius:8px;border:1px solid #333;display:grid;place-items:center;font-size:13px}
+  .opt.on{color:#fff}.opt.on .key{background:var(--accent);border-color:var(--accent)}
+  .opt.warn{color:#e5484d}.opt.warn .key{border-color:#5a2526}
+  .own{width:100%;border:1px solid #333;border-radius:12px;padding:12px 14px;margin-top:6px}
+  .qfoot{display:flex;align-items:center;margin-top:40px}
+  .dots{display:flex;gap:7px;flex:1}.dots i{width:7px;height:7px;border-radius:50%;background:#3a3a3a}.dots i.on{background:#aaa}
+  .btn{padding:8px 18px;border-radius:999px;background:#2a2a2a}
+  .btn:disabled{color:#555;cursor:default}
+  .btn.white{background:#fff;color:#111}
+
+  /* Products */
+  .products{display:flex;gap:14px}
+  .prod{width:200px;background:var(--panel);border:1px solid #262626;border-radius:18px;overflow:hidden}
+  .prod .img{height:150px;background:#fff;display:grid;place-items:center;position:relative;font-size:72px}
+  .prod .badge{position:absolute;left:10px;top:10px;background:#555c;color:#fff;font-size:13px;padding:2px 10px;border-radius:999px}
+  .prod .body{padding:12px 14px}
+  .prod s{color:var(--mute)}
+  .prod .shop{color:var(--mute);margin-top:10px;font-size:14px}
+
+  /* Mail + secret */
+  .label{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+  .subject{background:#292929;border-radius:8px;padding:6px 10px;font-weight:600}
+  .field{display:flex;gap:10px;padding:14px 8px;border-bottom:1px solid #2a2a2a}.field em{color:var(--mute);font-style:normal}
+  .mailbody{padding:20px 8px;white-space:pre-line}
+  .actions{display:flex;justify-content:flex-end;gap:12px;align-items:center}
+  .secret input{width:100%;border:1px solid #333;border-radius:12px;padding:10px 14px;margin:8px 0 26px}
+  .hint{color:var(--mute);font-size:13.5px;flex:1}
+
+  /* Composer */
+  .composer{position:absolute;left:24px;right:24px;bottom:18px}
+  .composer form{max-width:1210px;margin:0 auto;display:flex;align-items:center;gap:10px;background:#1d1d1d;border:1px solid var(--line);border-radius:999px;padding:7px 8px}
+  .composer input{flex:1}
+  .round{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#262626;color:#bbb}
+  .round.accent{background:var(--accent);color:#fff}
+
+  /* Right panel */
+  .right{width:370px;border-left:1px solid #1e1e1e;padding:16px 20px;position:relative;overflow:auto}
+  .right.hidden{display:none}
+  .right .close{position:absolute;right:16px;top:14px}
+  .profile{text-align:center;margin-top:70px}
+  .profile h3{font-weight:500;font-size:20px;margin:8px 0 18px}
+  .tabs{display:inline-flex;gap:4px}
+  .tabs button{padding:3px 10px;border-radius:8px;color:var(--mute)}
+  .tabs button.on{background:#232323;color:#fff}
+  .empty{color:var(--mute);text-align:center;margin:80px 20px 80px}
+  .sec{color:#a5a5a5;margin:22px 16px 10px}
+  .box{background:var(--panel);border:1px solid #262626;border-radius:14px;padding:6px 16px}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+  .row small{color:var(--mute);display:block;line-height:1.2}
+  .sel{background:#262626;border-radius:8px;padding:3px 10px;font-size:14px}
+  .pc{width:80px;height:46px;border-radius:8px;background:linear-gradient(#5a5a5a,#3a3a3a);display:grid;place-items:center}
+
+  /* Settings modal */
+  .modal{position:fixed;inset:0;background:#000a;display:none;place-items:center;z-index:10}
+  .modal.open{display:grid}
+  .dialog{width:min(1140px,92vw);height:min(890px,84vh);background:#1b1b1b;border:1px solid var(--line);border-radius:20px;display:grid;grid-template-columns:250px 1fr;overflow:hidden;position:relative}
+  .snav{border-right:1px solid #262626;padding:16px}
+  .snav button{display:flex;gap:10px;width:100%;text-align:left;padding:8px 12px;border-radius:10px}
+  .snav button.on{background:#2a2a2a}
+  .sbody{padding:40px 40px;overflow:auto}
+  .sbody h2{font-weight:500;font-size:22px;margin-bottom:24px}
+  .sbody .sec{margin:26px 0 10px;font-size:14px}
+  .sbody .box{padding:6px 18px}
+  .sbody .row{padding:14px 0}
+  .acct{display:flex;align-items:center;gap:16px;padding:16px 0}
+  .acct .av{width:54px;height:54px;border-radius:50%;background:#bbb}
+  .toggle{width:42px;height:24px;border-radius:999px;background:#3a3a3a;position:relative;transition:.2s}
+  .toggle::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
+  .toggle.on{background:var(--blue)}.toggle.on::after{left:21px}
+  .dialog .x{position:absolute;right:18px;top:16px}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="side">
+    <div class="side-top">
+      <button class="icon-btn" title="Suchen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button>
+      <button class="icon-btn" title="Neuer Bot"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+    <div class="bot-tile"><span class="orbi" data-orbi="kirby" data-state="lebendig" data-size="64" data-toni></span><div class="star">★</div><div>Toni</div></div>
+    <div class="chats" id="chats"></div>
+    <div class="menu" id="menu">
+      <button>◔ Premium <small>99 % genutzt</small></button>
+      <button>⇧ Upgrade auf Super</button>
+      <hr>
+      <button>▯ Hol dir OrbitBot für Mobilgeräte</button>
+      <button>▤ Support <small>›</small></button>
+      <button id="openSettings">⚙ Einstellungen</button>
+      <hr>
+      <button>⚇ Konto hinzufügen</button>
+      <button>⇠ Abmelden</button>
+    </div>
+    <div class="me" id="me">
+      <div class="av">●</div><div class="grow">Consti</div>
+      <button class="icon-btn" title="Apps"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M17 14v6M14 17h6"/></svg></button>
+    </div>
+  </aside>
+
+  <!-- Chat -->
+  <main class="main">
+    <div class="top"><div class="pill"><span class="orbi" data-orbi="kirby" data-state="blick" data-size="24" data-toni></span>Toni</div></div>
+    <button class="share">Teilen</button>
+    <div class="feed" id="feed"><div class="col" id="col"></div></div>
+    <div class="composer">
+      <form id="form">
+        <button type="button" class="round"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <input id="input" placeholder="Nachricht an Toni" autocomplete="off">
+        <button type="button" class="round"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+        <button type="submit" class="round accent"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10v4M10 7v10M14 5v14M18 9v6"/></svg></button>
+      </form>
+    </div>
+  </main>
+
+  <!-- Right panel -->
+  <aside class="right" id="right">
+    <button class="icon-btn close" id="closeRight">✕</button>
+    <div class="profile">
+      <span class="orbi big" id="big" title="Klick: nächste Form" data-orbi="kirby" data-state="blick" data-follow data-size="84" data-toni></span>
+      <h3>Toni</h3>
+      <div class="tabs"><button class="on">Aktivität</button><button>Bibliothek</button></div>
+    </div>
+    <p class="empty">Gib mir Arbeit, und ich halte hier alles fest, damit du jederzeit nachsehen kannst</p>
+    <div class="sec">Computer</div>
+    <div class="box"><div class="row"><div>Computer des Bots<small>Schläft</small></div><div class="pc"><span class="orbi" data-orbi="grokbot" data-state="schlaeft" data-size="30"></span></div></div></div>
+    <div class="sec">Sprachchat</div>
+    <div class="box">
+      <div class="row">Stimme <span class="sel">Liora 1,25x ⌄</span></div>
+      <div class="row">Sprache <span class="sel">German ⌄</span></div>
+    </div>
+  </aside>
+</div>
+
+<!-- Settings -->
+<div class="modal" id="modal">
+  <div class="dialog">
+    <button class="icon-btn x" id="closeSettings">✕</button>
+    <nav class="snav">
+      <button class="on">⚙ Allgemein</button><button>▭ Computer</button><button>⛉ Berechtigungen</button>
+      <button>▣ Tresor</button><button>▥ Nutzung &amp; Abrechnung</button><button>⇪ Updates</button>
+    </nav>
+    <div class="sbody">
+      <h2>Allgemein</h2>
+      <div class="sec">Konto</div>
+      <div class="box"><div class="acct"><div class="av"></div>
+        <div style="flex:1">Consti<small style="display:block;color:var(--mute)">du@example.com</small></div>
+        <button class="btn">Konto hinzufügen</button><button class="btn">Abmelden</button></div></div>
+      <div class="sec">Erscheinungsbild</div>
+      <div class="box">
+        <div class="row">Design <span class="sel">Dunkel ⌄</span></div>
+        <div class="row">Akzent <span class="sel">Bot-Farbe ⌄</span></div>
+        <div class="row">Sprache <span class="sel">System folgen ⌄</span></div>
+        <div class="row">Rechtschreibung beim Tippen prüfen <button class="toggle on"></button></div>
+        <div class="row"><div>Mit ⌘↵ senden<small>Drücke ⌘↵, um deine Nachricht zu senden. Enter beginnt eine neue Zeile.</small></div><button class="toggle"></button></div>
+      </div>
+      <div class="sec">System</div>
+      <div class="box">
+        <div class="row">Mikrofon <span class="sel">Systemstandard ⌄</span></div>
+        <div class="row">Hardwarebeschleunigung verwenden <button class="toggle on"></button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>/* Orbi-Kern: gebündelt aus orbit-app/src/orbi (nicht von Hand ändern) */
+var OrbiCore=(()=>{var Ze=Object.defineProperty;var Mr=Object.getOwnPropertyDescriptor;var mr=Object.getOwnPropertyNames;var gr=Object.prototype.hasOwnProperty;var yr=(p,l)=>{for(var f in l)Ze(p,f,{get:l[f],enumerable:!0})},xr=(p,l,f,m)=>{if(l&&typeof l=="object"||typeof l=="function")for(let g of mr(l))!gr.call(p,g)&&g!==f&&Ze(p,g,{get:()=>l[g],enumerable:!(m=Mr(l,g))||m.enumerable});return p};var br=p=>xr(Ze({},"__esModule",{value:!0}),p);var Rr={};yr(Rr,{BASE_COLORS:()=>er,Behavior:()=>Kt,SHAPES:()=>vt,SLEEP_PERIOD:()=>He,gestalt:()=>pr,isHex:()=>rr,luminance:()=>ir,mische:()=>ur,mischeHex:()=>fr,mouseLook:()=>lr,neutralExpression:()=>Wt,punkteZuPfad:()=>cr,renderGeometry:()=>qt,shapeOf:()=>Ut,sleeping:()=>Jt,subscribe:()=>sr,trackPointer:()=>hr});var Tt={strobi:{surface:{type:"sphere",width:240,height:240,depth:240.03671875,roundness:1},bodyNodes:[],neutral:[0,0,0,23,23,56,56,35,0,0,-7,-7,0,0,1]},freddy:{surface:{type:"cube",width:174.732421875,height:149.474609375,depth:125.596484375,roundness:.7621875},bodyNodes:[{id:"shape-1089630b-c718-4abb-9891-aa817d0a26c0",name:"Sph\xE8re 1",surface:{type:"sphere",width:81.60000000000001,height:81.60000000000001,depth:37.96875000000001,roundness:1},position:[-82,-72,-18],rotation:[0,0,0]},{id:"shape-6c5a8bdd-04b7-4581-8889-cf8e1af5246e",name:"Sph\xE8re 2",surface:{type:"sphere",width:81.60000000000001,height:81.60000000000001,depth:37.024609375000004,roundness:1},position:[82,-72,-18],rotation:[0,0,0]},{id:"shape-68a52731-6b5b-487d-8508-dd3c6cebf781",name:"Cylindre 3",surface:{type:"cylinder",width:59.483593750000004,height:63.461328124999994,depth:73.10000000000001,roundness:1.5026171875,morphRoundness:.366171875},position:[-1.021484375,-72,-18],rotation:[0,0,0]}],neutral:[0,0,0,33.275,33.275,68.14,68.14,47.381,-.12,-.12,-4.311,-4.311,0,0,1]},citrus:{surface:{type:"cone",width:252.708984375,height:274.9671875,depth:225,roundness:0,morphRoundness:1.1473828125,tipRoundness:.743515625,baseRoundness:1.34375},bodyNodes:[],neutral:[0,0,0,23,23,56,56,35,0,0,22.955,22.955,0,0,1]},nova:{surface:{type:"capsule",width:205,height:270,depth:205,roundness:1},bodyNodes:[],neutral:[0,0,0,15.251,15.251,29.203,52.628,19.765,-12.966,-12.966,.797,-6.371,-7.489,-7.797,1]},grokbot:{surface:{type:"sphere",width:240,height:240,depth:240,roundness:1},bodyNodes:[],neutral:[0,0,0,23,23,56,56,35,0,0,-7,-7,0,0,1]},sunee:{surface:{type:"sphere",width:182.95728256225593,height:185.5484375,depth:100.01221191461767,roundness:1},bodyNodes:[{id:"shape-38130162-a15b-4fa8-a58b-9c74b07e1a25",name:"Sph\xE8re 1",surface:{type:"sphere",width:60,height:60,depth:24.375287224264703,roundness:1},position:[-94.48309236361106,-95.44637036124786,-10.398419675330803],rotation:[0,0,0]},{id:"shape-f987c6e1-02e3-4256-9053-655414890a3c",name:"Sph\xE8re 1 copie",surface:{type:"sphere",width:59.57851562500001,height:59.57851562500001,depth:24.204057179245304,roundness:1},position:[-6.440040491385305,-133.984012454223,-10.398419675330803],rotation:[0,0,0]},{id:"shape-0f31bd3d-2d53-4c9d-a5e0-d587d6ef9b8c",name:"Sph\xE8re 1 copie copie",surface:{type:"sphere",width:81.60000000000001,height:81.60000000000001,depth:33.150390625,roundness:1},position:[89.09066821815593,-114.30101031028101,-10.398419675330803],rotation:[0,0,0]},{id:"shape-9a17a167-46fb-4871-9252-24abbb80b1ca",name:"Sph\xE8re 1 copie copie copie",surface:{type:"sphere",width:70.12148437500001,height:70.12148437500001,depth:28.487188703873578,roundness:1},position:[132.2484739833418,-11.704819633353354,-10.398419675330803],rotation:[0,0,0]},{id:"shape-e6574431-f8b6-482f-89d0-c280a327461f",name:"Sph\xE8re 1 copie copie copie copie",surface:{type:"sphere",width:61.89843750000001,height:61.89843750000001,depth:25.146536546594966,roundness:1},position:[-138.13379284351342,-1.1847860044189815,-10.398419675330803],rotation:[0,0,0]},{id:"shape-5bc8f568-1cbb-4419-84bc-ce264b218a02",name:"Sph\xE8re 1 copie copie copie copie copie",surface:{type:"sphere",width:61.11328125000001,height:61.11328125000001,depth:24.827563061433676,roundness:1},position:[-103.29429634246448,92.4041125555865,-10.398419675330803],rotation:[0,0,0]},{id:"shape-405e86d3-93c9-4de8-a15e-9ae1ba33c88c",name:"Sph\xE8re 1 copie copie copie copie copie copie",surface:{type:"sphere",width:61.726171875000006,height:61.726171875000006,depth:25.076552811790915,roundness:1},position:[-2.4878844479075983,133.06983674233183,-10.398419675330803],rotation:[0,0,0]},{id:"shape-0abdf33f-450d-4125-9354-b02842084138",name:"Sph\xE8re 1 copie copie copie copie copie copie copie",surface:{type:"sphere",width:64.116796875,height:64.116796875,depth:26.047755662132705,roundness:1},position:[109.54168183067505,83.98361858650364,-10.398419675330803],rotation:[0,0,0]}],neutral:[0,0,0,23,23,56,56,35,0,0,-7,-7,0,0,1]},kirby:{surface:{type:"sphere",width:240,height:240,depth:240,roundness:1},bodyNodes:[{id:"shape-2f26b4c0-61de-4fde-ae09-c4595cdaab59",name:"Sph\xE8re 1",surface:{type:"sphere",width:108.11015625000002,height:81.60000000000001,depth:81.60000000000001,roundness:1},position:[-103.30437876033604,30.4449714479682,-9.784765625],rotation:[0,0,-14.843359375]},{id:"shape-3cd1a09e-b9a8-4271-95b1-4c21a09a6580",name:"Sph\xE8re 1 copie",surface:{type:"sphere",width:108.11015625000002,height:81.60000000000001,depth:81.60000000000001,roundness:1},position:[98.15429266544173,32.55003025735345,-9.784765625],rotation:[0,0,15.175000000000004]}],neutral:[0,0,0,23,23,67.731,67.731,28.749,0,0,-7,-7,0,0,1]},cloudee:{surface:{type:"sphere",width:159.787109375,height:159.787109375,depth:159.77982741038028,roundness:1},bodyNodes:[{id:"shape-3e98b39e-4765-4895-9309-3d0dd55bd316",name:"Sph\xE8re 1",surface:{type:"sphere",width:81.60000000000001,height:81.60000000000001,depth:81.60000000000001,roundness:1},position:[-54.211163573292225,-19.983270576375716,-18],rotation:[0,0,0]},{id:"shape-52d58f1c-c8da-4077-8d29-454907ad8847",name:"Sph\xE8re 1 copie",surface:{type:"sphere",width:108.64140625000002,height:87.10000590491492,depth:90.99923895827905,roundness:1},position:[-64.06931629506641,18.35102511266605,-18],rotation:[0,0,0]},{id:"shape-d4b4e8ad-8625-488d-920c-c497da226f9f",name:"Sph\xE8re 1 copie copie",surface:{type:"sphere",width:97.79101562500003,height:96.8381380478929,depth:89.56416057242059,roundness:1},position:[61.23234219342984,18.962019686907013,-18],rotation:[0,0,0]},{id:"shape-56ea10ed-1202-4b78-9968-96f870f633f7",name:"Sph\xE8re 1 copie",surface:{type:"sphere",width:94.34892531002268,height:94.3451962078319,depth:100.53515625000001,roundness:1},position:[41.48876642638391,-37.63883372407813,-17.99133043155456],rotation:[0,0,0]}],neutral:[0,0,0,16.034,16.034,50.871,50.871,30,0,0,-1.069,-1.069,0,0,1]},cubee:{surface:{type:"cube",width:191.49921875,height:191.49921875,depth:171.95848214285726,roundness:.73265625},bodyNodes:[],neutral:[0,0,0,22.972,32.21,33.582,41.425,31,0,0,-7,-7,0,0,1]},onee:{surface:{type:"cone",width:250,height:182.006640625,depth:225,roundness:0,morphRoundness:1.2003515624999999,tipRoundness:2,baseRoundness:2},bodyNodes:[],neutral:[0,0,0,15.397,21.969,49.293,41.663,21.413,0,0,18.614,18.614,6.98,-7.013,1]},rauti:{surface:{type:"diamond",width:235,height:260,depth:215,roundness:1},bodyNodes:[],neutral:[0,0,0,23,23,56,56,35,0,0,-7,-7,0,0,1]},trixi:{surface:{type:"cone",width:250,height:265,depth:225,roundness:0,morphRoundness:0,tipRoundness:1.2,baseRoundness:1.6},bodyNodes:[],neutral:[0,0,0,23,23,56,56,35,0,0,22,22,0,0,1]},tropi:{surface:{type:"cone",width:220,height:265,depth:225,roundness:0,morphRoundness:.6,tipRoundness:.2,baseRoundness:2},bodyNodes:[],neutral:[0,0,0,23,23,56,56,35,0,0,22,22,0,0,1]},mopsi:{surface:{type:"mickey",width:220,height:210,depth:145,roundness:1.5},bodyNodes:[],neutral:[0,0,0,23,23,56,56,35,0,0,-7,-7,0,0,1]},dosi:{surface:{type:"cylinder",width:235,height:250,depth:215,roundness:1.2,morphRoundness:0},bodyNodes:[],neutral:[0,0,0,23,23,56,56,35,0,0,-7,-7,0,0,1]}};var qe=function(){var p=function(l){Object.defineProperty(l,Symbol.toStringTag,{value:"Module"});var f=t=>t*t*(3-2*t),m=t=>{let e=Math.sin(t*127.1+311.7)*43758.5453;return(e-Math.floor(e))*2-1},g=t=>t.headX*.71+t.headY*1.13+t.headZ*1.37,M=17.29,b=(t,e,i,r)=>{let a=t/r,n=Math.floor(a),o=f(a-n),s=m(n*3+e+i);return s+(m((n+1)*3+e+i)-s)*o},P=(t,e,i)=>{let r=1100;if(t<=0)return 0;let a=Math.floor(t/r),n=(t-a*r)/140,o=f(Math.min(n,1)),s=a===0?0:m((a-1)*2+e+i);return s+(m(a*2+e+i)-s)*o},v=t=>t.eyeMotion!=="none"||t.bodyMotion!=="none",B=(t,e,i=1)=>{let r=g(t);if(t.bodyMotion==="slowDrift")return{x:b(e,3,r,2900)*1.45*i,y:b(e,4,r,3700)*1.1*i};if(t.bodyMotion==="shake"){let a=e/1e3;return{x:(Math.sin(a*31)+Math.sin(a*53)*.45)*1.35*i,y:(Math.sin(a*37)+Math.sin(a*61)*.4)*1.1*i}}return{x:0,y:0}},Z=(t,e,i=1)=>{if(t.eyeMotion==="microSaccades")return{x:P(e,0,M)*1.5*i,y:P(e,1,M)*.9*i};if(t.eyeMotion==="shake"){let r=e/1e3;return{x:(Math.sin(r*47)+Math.sin(r*71)*.45)*1.2*i,y:(Math.sin(r*59)+Math.sin(r*83)*.4)*.8*i}}return{x:0,y:0}},F=(t,e,i=1)=>{let r={...t},a=g(t);if(t.bodyMotion==="slowDrift")r.headX+=b(e,0,a,2600)*.8*i,r.headY+=b(e,1,a,3300)*1.15*i,r.headZ+=b(e,2,a,4100)*.45*i;else if(t.bodyMotion==="shake"){let n=e/1e3;r.headX+=(Math.sin(n*31)+Math.sin(n*53)*.45)*1.15*i,r.headY+=(Math.sin(n*37)+Math.sin(n*61)*.4)*1.35*i,r.headZ+=Math.sin(n*43)*.7*i}return r},O=(t,e,i=1)=>{let r=F(t,e,i),a=Z(t,e,i);return r.positionXLeft+=a.x,r.positionXRight+=a.x,r.positionYLeft+=a.y,r.positionYRight+=a.y,r},L=(t,e)=>Math.sign(t)*Math.abs(t)**e,D=(t,e,i,r,a,n,o)=>{let s=L(Math.cos(e),n);return[i/2*s*L(Math.sin(t),o),r/2*L(Math.sin(e),n),a/2*s*L(Math.cos(t),o)]},J=(t,e,i)=>{let r=t.width/2,a=t.depth/2,n=Math.min(r,t.height/2),o=Math.max(0,(t.height-n*2)/2),s=o*2+Math.PI*n,h=(i+Math.PI/2)/Math.PI*s,d=r,c=0;if(h<Math.PI*n/2){let x=-Math.PI/2+h/n;d=r*Math.cos(x),c=-o+n*Math.sin(x)}else if(h<=Math.PI*n/2+o*2)c=-o+h-Math.PI*n/2;else{let x=(h-Math.PI*n/2-o*2)/n;d=r*Math.cos(x),c=o+n*Math.sin(x)}let u=r?a/r:1;return[d*Math.sin(e),c,d*u*Math.cos(e)]},R=t=>Math.max(0,Math.min(2,t??0)),S=t=>1+R(t.roundness)/2,j=.04,ut=t=>t.roundness<=0?1/0:2/(j+R(t.roundness)/2*.96),It=(t,e,i,r)=>{let a=Math.cos(i)*Math.sin(e),n=Math.sin(i),o=Math.cos(i)*Math.cos(e),s=Number.isFinite(r)?(Math.abs(a)**r+Math.abs(n)**r+Math.abs(o)**r)**(1/r)||1:Math.max(Math.abs(a),Math.abs(n),Math.abs(o))||1;return[t.width/2*(a/s),t.height/2*(n/s),t.depth/2*(o/s)]},Qt=(t,e,i)=>It(t,e,i,S(t)),te=(t,e,i)=>It(t,e,i,ut(t)),ee=.24,re=.2,ie=.22,ae=t=>R(t.morphRoundness)/2,wt=(t,e,i)=>{let r=ae(t),a=Math.max(0,Math.min(1,e)),n=Math.sin(a*Math.PI),o=(1-Math.cos(a*Math.PI))/2;return{radiusScale:i.radiusScale+(n-i.radiusScale)*r,verticalProgress:i.verticalProgress+(o-i.verticalProgress)*r}},tt=(t,e,i,r,a)=>{let n=1-a;return n**3*t+3*n*n*a*e+3*n*a*a*i+a**3*r},ne=t=>({tipFraction:(t.tipRoundness??0)*ee,baseFraction:(t.baseRoundness??0)*re}),ct=(t,e)=>{let i=Math.max(0,Math.min(1,e)),r=t.roundness*ie;if(r<=0)return{radiusScale:1,verticalProgress:(Math.sin((i-.5)*Math.PI)+1)/2};if(i<r){let n=-Math.PI/2+i/r*(Math.PI/2);return{radiusScale:1-r+r*Math.cos(n),verticalProgress:(r+r*Math.sin(n))/2}}if(i>1-r){let n=(i-(1-r))/r*(Math.PI/2);return{radiusScale:1-r+r*Math.cos(n),verticalProgress:1-r/2+r*Math.sin(n)/2}}let a=(i-r)/(1-r*2);return{radiusScale:1,verticalProgress:r/2+a*(1-r)}},$t=(t,e)=>wt(t,e,ct(t,e)),ft=(t,e,i)=>{let r=Math.max(0,Math.min(1,e)),a=0,n=1;for(let o=0;o<14;o+=1){let s=(a+n)/2;i(t,s).verticalProgress<r?a=s:n=s}return i(t,(a+n)/2).radiusScale},oe=(t,e)=>{let i=Math.max(0,Math.min(1,e)),{tipFraction:r,baseFraction:a}=ne(t);if(a>0&&i<a){let n=i/a;return{radiusScale:tt(1-a,1,1-a/2,1-a,n),verticalProgress:tt(0,0,a/2,a,n)}}if(r>0&&i>1-r){let n=(i-(1-r))/r;return{radiusScale:tt(r,r/2,r/4,0,n),verticalProgress:tt(1-r,1-r/2,1,1,n)}}return{radiusScale:1-i,verticalProgress:i}},St=(t,e)=>wt(t,e,oe(t,e)),et=t=>{let e=t.height*.36,i=t.height-e;return{coneApexY:-t.height/2,coneBaseY:-t.height/2+e,bodyHeight:i,bodyCenterY:t.height/2-i/2,bodyWidth:t.width*.54,bodyDepth:t.depth*.62}},z=(t,e,i)=>{let{width:r,height:a,depth:n}=t;switch(t.type){case"sphere":case"mickey":return D(e,i,r,a,n,1,1);case"cube":return te(t,e,i);case"cylinder":{let o=$t(t,(i+Math.PI/2)/Math.PI);return[r/2*o.radiusScale*Math.sin(e),-a/2+a*o.verticalProgress,n/2*o.radiusScale*Math.cos(e)]}case"cursor":{let o=et(t),s=(i+Math.PI/2)/Math.PI,h=ct({...t,width:o.bodyWidth,height:o.bodyHeight,depth:o.bodyDepth},s);return[o.bodyWidth/2*h.radiusScale*Math.sin(e),o.bodyCenterY-o.bodyHeight/2+o.bodyHeight*h.verticalProgress,o.bodyDepth/2*h.radiusScale*Math.cos(e)]}case"diamond":return Qt(t,e,i);case"capsule":return J(t,e,i);case"cone":{let o=St(t,(i+Math.PI/2)/Math.PI);return[r/2*o.radiusScale*Math.sin(e),a/2-a*o.verticalProgress,n/2*o.radiusScale*Math.cos(e)]}}},At=(t,e)=>[t[0]-e[0],t[1]-e[1],t[2]-e[2]],H=([t,e,i])=>{let r=Math.hypot(t,e,i)||1;return[t/r,e/r,i/r]},se=(t,e,i)=>{let r=t.type==="cone"?-1:1;return H([r*(e[1]*i[2]-e[2]*i[1]),r*(e[2]*i[0]-e[0]*i[2]),r*(e[0]*i[1]-e[1]*i[0])])},he=(t,e,i)=>{let r=5e-4;if(t.type==="cone"&&i>=Math.PI/2-r)return[0,-1,0];let a=z(t,e-r,i),n=z(t,e+r,i),o=z(t,e,Math.max(-Math.PI/2,i-r)),s=z(t,e,Math.min(Math.PI/2,i+r));return se(t,At(n,a),At(s,o))},Mt=(t,e)=>Math.sign(t)*Math.abs(t)**e,Rt=(t,e,i)=>{let r=t.width/2||1,a=t.height/2||1,n=t.depth/2||1;return H([Mt(e[0]/r,i-1)/r,Mt(e[1]/a,i-1)/a,Mt(e[2]/n,i-1)/n])},kt=(t,e)=>Rt(t,e,S(t)),Yt=(t,e)=>{let i=ut(t);if(Number.isFinite(i))return Rt(t,e,i);let r=[e[0]/(t.width/2||1),e[1]/(t.height/2||1),e[2]/(t.depth/2||1)],a=r.reduce((n,o,s)=>Math.abs(o)>Math.abs(r[n])?s:n,0);return[a===0?Math.sign(r[0]):0,a===1?Math.sign(r[1]):0,a===2?Math.sign(r[2]):0]},Et=(t,e,i,r,a)=>{let n=t.width/2||1,o=t.height/2||1,s=t.depth/2||1;if(!Number.isFinite(r)){let $=[Math.max(-n,Math.min(n,e)),Math.max(-o,Math.min(o,i)),s];return{point:$,normal:a(t,$)}}let h=Math.max(-1,Math.min(1,i/o)),d=Math.max(0,1-Math.abs(h)**r)**(1/r),c=Math.max(-n*d,Math.min(n*d,e)),u=c/n,x=Math.max(0,1-Math.abs(u)**r-Math.abs(h)**r)**(1/r),y=[c,h*o,s*x];return{point:y,normal:a(t,y)}},Nt=(t,e,i,r,a,n=0)=>{let o=e-n,s=Math.max(0,1-(t/(i||1))**2-(o/(r||1))**2),h=a*Math.sqrt(s);return{point:[t,e,h],normal:H([t/(i*i||1),o/(r*r||1),h/(a*a||1)])}},mt=(t,e,i,r,a)=>{let n=t.width/2||1,o=t.depth/2||1,s=Math.max(0,Math.min(1,.5+a*(i/t.height))),h=ft(t,s,r),d=n*h,c=o*h,u=Math.max(-d,Math.min(d,e)),x=d>0?Math.max(0,1-(u/d)**2):0,y=c*Math.sqrt(x),$=1e-4,C=Math.max(0,s-$),Q=Math.min(1,s+$),_=ft(t,C,r),lt=(ft(t,Q,r)-_)/(Q-C||1),V=Math.max(Math.sqrt(x),1e-4),dt=-(o/n)*u/(d*V||1),q=a*o*lt/(t.height*V||1);return{point:[u,i,y],normal:H([-dt,-q,1])}},le=(t,e,i)=>{let r=t.width/2||1,a=t.height/2||1,n=t.depth/2||1;switch(t.type){case"sphere":case"mickey":return Nt(e,i,r,a,n);case"cube":return Et(t,e,i,ut(t),Yt);case"capsule":{let o=Math.min(r,a),s=Math.max(0,a-o);return Nt(e,i,r,o,n,i<-s?-s:i>s?s:i)}case"cylinder":return mt(t,e,i,$t,1);case"cursor":{let o=et(t),s=mt({...t,width:o.bodyWidth,height:o.bodyHeight,depth:o.bodyDepth},e,i-o.bodyCenterY,ct,1);return{point:[s.point[0],s.point[1]+o.bodyCenterY,s.point[2]],normal:s.normal}}case"cone":return mt(t,e,i,St,-1);case"diamond":return Et(t,e,i,S(t),kt)}},de=(t,e,i)=>{let r=z(t,e,i);if(t.type==="sphere"||t.type==="mickey"){let a=t.width/2||1,n=t.height/2||1,o=t.depth/2||1;return{point:r,normal:H([r[0]/(a*a),r[1]/(n*n),r[2]/(o*o)])}}return t.type==="cylinder"&&t.roundness<=0&&(t.morphRoundness??0)<=0?{point:r,normal:H([Math.sin(e)/(t.width/2||1),0,Math.cos(e)/(t.depth/2||1)])}:t.type==="diamond"?{point:r,normal:kt(t,r)}:t.type==="cube"?{point:r,normal:Yt(t,r)}:{point:r,normal:he(t,e,i)}},rt=620,Lt=14,pe=["headX","headY","headZ","widthLeft","widthRight","heightLeft","heightRight","spacing","positionXLeft","positionXRight","positionYLeft","positionYRight","leftAngle","rightAngle","perspective"],I=t=>t*Math.PI/180,Xt=([t,e,i,r])=>{let a=Math.hypot(t,e,i,r)||1;return[t/a,e/a,i/a,r/a]},Ct=([t,e,i,r],[a,n,o,s])=>Xt([t*a-e*n-i*o-r*s,t*n+e*a+i*s-r*o,t*o-e*s+i*a+r*n,t*s+e*o-i*n+r*a]),gt=([t,e,i],r)=>{let a=r/2,n=Math.sin(a);return Xt([Math.cos(a),t*n,e*n,i*n])},yt=(t,e,i)=>{let r=gt([1,0,0],t),a=gt([0,1,0],e);return Ct(Ct(gt([0,0,1],i),r),a)},w=([t,e,i,r],[a,n,o])=>{let s=2*(i*o-r*n),h=2*(r*a-e*o),d=2*(e*n-i*a);return[a+t*s+(i*d-r*h),n+t*h+(r*s-e*d),o+t*d+(e*h-i*s)]},ue=(t,e)=>{let i=t/2,r=e/2,a=Math.min(r,i),n=[],o=(h,d)=>{let c=Math.max(2,Math.ceil(Math.hypot(d[0]-h[0],d[1]-h[1])/1.5));for(let u=0;u<c;u+=1){let x=u/c;n.push([h[0]+(d[0]-h[0])*x,h[1]+(d[1]-h[1])*x])}},s=(h,d,c)=>{for(let u=0;u<Lt;u+=1){let x=c+u/Lt*(Math.PI/2);n.push([h+Math.cos(x)*a,d+Math.sin(x)*a])}};return o([-i+a,-r],[i-a,-r]),s(i-a,-r+a,-Math.PI/2),o([i,-r+a],[i,r-a]),s(i-a,r-a,0),o([i-a,r],[-i+a,r]),s(-i+a,r-a,Math.PI/2),o([-i,r-a],[-i,-r+a]),s(-i+a,-r+a,Math.PI),n},it=(t,e)=>{let i=rt-t[2]*e,r=Math.abs(i)<1e-4?rt/1e-4:rt/i;return[t[0]*r,t[1]*r,t[2]]},k=(t,e=!0)=>t.length?`M${t[0][0].toFixed(2)} ${t[0][1].toFixed(2)}${t.slice(1).map(i=>`L${i[0].toFixed(2)} ${i[1].toFixed(2)}`).join("")}${e?"Z":""}`:"",ce=t=>({expression:t,orientation:yt(I(t.headX),I(t.headY),I(t.headZ))}),fe=24,Me=25,me=73,xt=144,ge=33,ye=73,at=new Map,zt=new Map,Bt=new Map,nt=t=>JSON.stringify([t.type,t.width,t.height,t.depth,t.roundness,t.morphRoundness,t.tipRoundness,t.baseRoundness]),ot=(t,e,i)=>(t.size>=fe&&t.delete(t.keys().next().value),t.set(e,i),i),Ot=(t,e,i)=>de(t,e,i),Dt=(t,e)=>({point:it(w(t.orientation,e.point),t.expression.perspective),normal:w(t.orientation,e.normal)}),xe=(t,e)=>{let i=t/120,r=e/120;return[120*Math.cos(r)*Math.sin(i),120*Math.sin(r)]},be=(t,e,i,r)=>{let[a,n]=xe(i,r);return Dt(t,le(e,a,n))},Zt=(t,e,i,r,a={x:0,y:0})=>{let n=t.expression,o=i<0?"Left":"Right",s=n[`width${o}`],h=5+(n[`height${o}`]-5)*r,d=i*n.spacing/2+n[`positionX${o}`]+a.x,c=n[`positionY${o}`]+a.y,u=I(i<0?n.leftAngle:n.rightAngle);return ue(s,h).map(([x,y])=>{let $=x*Math.cos(u)-y*Math.sin(u),C=x*Math.sin(u)+y*Math.cos(u);return be(t,e,d+$,c+C)})},Pe=t=>{let e=[],i=[];return t.forEach(({point:r,normal:a})=>{a[2]>0?i.push(r):i.length&&(e.push(i),i=[])}),i.length&&e.push(i),e.filter(r=>r.length>1).map(r=>k(r,!1)).join("")},Fe=(t,e)=>{let i=nt(e),r=Bt.get(i);if(!r){let a=[-60,-30,0,30,60].map(o=>Array.from({length:73},(s,h)=>Ot(e,I(-180+h*5),I(o)))),n=Array.from({length:12},(o,s)=>-150+s*30).map(o=>Array.from({length:37},(s,h)=>Ot(e,I(o),I(-90+h*5))));r=ot(Bt,i,[...a,...n])}return r.map(a=>Pe(a.map(n=>Dt(t,n))))},Y=t=>{let e=[...t].sort((a,n)=>a[0]-n[0]||a[1]-n[1]),i=(a,n,o)=>(n[0]-a[0])*(o[1]-a[1])-(n[1]-a[1])*(o[0]-a[0]),r=a=>{let n=[];return a.forEach(o=>{for(;n.length>=2&&i(n.at(-2),n.at(-1),o)<=0;)n.pop();n.push(o)}),n};return[...r(e).slice(0,-1),...r(e.reverse()).slice(0,-1)]},T=t=>{if(t.length<3)return k(t);let e=i=>t[(i+t.length)%t.length];return`M${t[0][0].toFixed(2)} ${t[0][1].toFixed(2)}${t.map((i,r)=>{let a=e(r-1),n=e(r+1),o=e(r+2),s=[i[0]+(n[0]-a[0])/6,i[1]+(n[1]-a[1])/6,i[2]],h=[n[0]-(o[0]-i[0])/6,n[1]-(o[1]-i[1])/6,n[2]];return`C${s[0].toFixed(2)} ${s[1].toFixed(2)} ${h[0].toFixed(2)} ${h[1].toFixed(2)} ${n[0].toFixed(2)} ${n[1].toFixed(2)}`}).join("")}Z`},U=(t,e=7)=>t.flatMap((i,r)=>{let a=t[(r+1)%t.length],n=Math.max(1,Math.ceil(Math.hypot(a[0]-i[0],a[1]-i[1])/e));return Array.from({length:n},(o,s)=>{let h=s/n;return[i[0]+(a[0]-i[0])*h,i[1]+(a[1]-i[1])*h,i[2]+(a[2]-i[2])*h]})}),ve=t=>t.length?t.length===1?`${t[0][0].toFixed(2)} ${t[0][1].toFixed(2)}`:t.slice(0,-1).map((e,i)=>{let r=t[Math.max(0,i-1)],a=t[i+1],n=t[Math.min(t.length-1,i+2)],o=e[0]+(a[0]-r[0])/6,s=e[1]+(a[1]-r[1])/6,h=a[0]-(n[0]-e[0])/6,d=a[1]-(n[1]-e[1])/6;return`C${o.toFixed(2)} ${s.toFixed(2)} ${h.toFixed(2)} ${d.toFixed(2)} ${a[0].toFixed(2)} ${a[1].toFixed(2)}`}).join(""):"",X=(t,e)=>it(w(t.orientation,e),t.expression.perspective),G=(t,e,i)=>Array.from({length:145},(r,a)=>{let n=a/xt*Math.PI*2;return[t/2*Math.sin(n),i,e/2*Math.cos(n)]}),st=(t,e)=>{let i=nt(e),r=at.get(i);return r||(r=Array.from({length:ge},(a,n)=>{let o=-Math.PI/2+n/32*Math.PI;return Array.from({length:ye},(s,h)=>z(e,-Math.PI+h/72*Math.PI*2,o))}).flat(),ot(at,i,r)),T(U(Y(r.map(a=>X(t,a)))))},Ie=(t,e)=>{if(e.roundness>0||(e.morphRoundness??0)>0)return st(t,e);let i=e.height/2;return T(U(Y([...G(e.width,e.depth,-i),...G(e.width,e.depth,i)].map(r=>X(t,r)))))},we=(t,e)=>{let i=et(e),r=i.bodyHeight/2;return T(U(Y([...G(i.bodyWidth,i.bodyDepth,i.bodyCenterY-r),...G(i.bodyWidth,i.bodyDepth,i.bodyCenterY+r)].map(a=>X(t,a)))))},$e=(t,e)=>{let i=et(e),r=X(t,[0,i.coneApexY,0]);return T(U(Y([...G(e.width,e.depth,i.coneBaseY).map(a=>X(t,a)),r])))},Se=(t,e)=>{if((e.morphRoundness??0)>0||(e.tipRoundness??0)>0||(e.baseRoundness??0)>0)return st(t,e);let i=X(t,[0,-e.height/2,0]),r=Y([...G(e.width,e.depth,e.height/2).map(o=>X(t,o)),i]),a=r.findIndex(o=>Math.hypot(o[0]-i[0],o[1]-i[1])<.01);if(a<0)return T(r);let n=[...r.slice(a),...r.slice(0,a)].slice(1);return n.length<2?k(r):`M${i[0].toFixed(2)} ${i[1].toFixed(2)}L${n[0][0].toFixed(2)} ${n[0][1].toFixed(2)}${ve(n)}L${i[0].toFixed(2)} ${i[1].toFixed(2)}Z`},Ae=(t,e)=>{if(e.roundness>0)return st(t,e);let i=e.width/2,r=e.height/2,a=e.depth/2;return k(Y([-1,1].flatMap(n=>[-1,1].flatMap(o=>[-1,1].map(s=>[n*i,o*r,s*a]))).map(n=>X(t,n))))},Re=(t,e)=>{if(e.roundness>0)return st(t,e);let i=e.width/2,r=e.height/2,a=e.depth/2;return k(Y([[-i,0,0],[i,0,0],[0,-r,0],[0,r,0],[0,0,-a],[0,0,a]].map(n=>X(t,n))))},jt=(t,e,i,r,a)=>{let n=i+a,o=Math.hypot(i-a,r*2),s=(n+o)/2,h=(n-o)/2;return s<=0||h<=0?null:{centerX:t,centerY:e,majorRadius:Math.sqrt(s),minorRadius:Math.sqrt(h),rotation:Math.atan2(r*2,i-a)/2}},bt=({centerX:t,centerY:e,majorRadius:i,minorRadius:r,rotation:a})=>{let n=a*180/Math.PI,o=Math.cos(a)*i,s=Math.sin(a)*i,h=t+o,d=e+s,c=t-o,u=e-s;return`M${h.toFixed(2)} ${d.toFixed(2)}A${i.toFixed(2)} ${r.toFixed(2)} ${n.toFixed(2)} 0 1 ${c.toFixed(2)} ${u.toFixed(2)}A${i.toFixed(2)} ${r.toFixed(2)} ${n.toFixed(2)} 0 1 ${h.toFixed(2)} ${d.toFixed(2)}Z`},ht=(t,e,i=[0,0,0])=>{let r=[w(t.orientation,[1,0,0]),w(t.orientation,[0,1,0]),w(t.orientation,[0,0,1])],a=w(t.orientation,i);if(Math.abs(t.expression.perspective)<1e-4){let W=r.reduce((E,N,A)=>E+N[0]*N[0]*e[A]*e[A],0),K=r.reduce((E,N,A)=>E+N[0]*N[1]*e[A]*e[A],0),Pt=r.reduce((E,N,A)=>E+N[1]*N[1]*e[A]*e[A],0);return jt(a[0],a[1],W,K,Pt)}let n=e.map(W=>1/(W*W)),o=Array.from({length:3},(W,K)=>Array.from({length:3},(Pt,E)=>r.reduce((N,A,De)=>N+A[K]*n[De]*A[E],0))),s=rt/t.expression.perspective,h=[-a[0],-a[1],s-a[2]],d=[o[0][0]*h[0]+o[0][1]*h[1]+o[0][2]*h[2],o[1][0]*h[0]+o[1][1]*h[1]+o[1][2]*h[2],o[2][0]*h[0]+o[2][1]*h[1]+o[2][2]*h[2]],c=h[0]*d[0]+h[1]*d[1]+h[2]*d[2]-1,u=[d[0],d[1],-s*d[2]],x=[[o[0][0],o[0][1],-s*o[0][2]],[o[1][0],o[1][1],-s*o[1][2]],[-s*o[2][0],-s*o[2][1],s*s*o[2][2]]],y=Array.from({length:3},(W,K)=>Array.from({length:3},(Pt,E)=>u[K]*u[E]-c*x[K][E])),$=y[0][0]*y[1][1]-y[0][1]*y[0][1];if(Math.abs($)<1e-12)return null;let C=-(y[1][1]*y[0][2]-y[0][1]*y[1][2])/$,Q=(y[0][1]*y[0][2]-y[0][0]*y[1][2])/$,_=-(y[2][2]+y[0][2]*C+y[1][2]*Q);if(Math.abs(_)<1e-12)return null;let lt=y[0][0]/_,V=y[0][1]/_,dt=y[1][1]/_,q=lt*dt-V*V;return q<=0?null:jt(C,Q,dt/q,-V/q,lt/q)},ke=(t,e)=>{let i=ht(t,[e.width/2,e.height/2,e.depth/2]),r=e.width===e.height&&e.height===e.depth;if(i&&r){let a=(i.majorRadius+i.minorRadius)/2;return bt({centerX:0,centerY:0,majorRadius:a,minorRadius:a,rotation:0})}return i?bt(i):null},Ye=(t,e)=>{if(e.type!=="mickey")return[];let i=Math.min(e.width,e.height)*.23,r=Math.min(i,e.depth*.29),a=e.width*.37,n=-e.height*.39,o=-e.depth*.12,s=[i,i,r];return[-1,1].map(h=>ht(t,s,[h*a,n,o])).filter(h=>h!==null).map(bt)},Ee=(t,e)=>e.type==="mickey"?Ye(t,e):e.type==="cursor"?[$e(t,e)]:[],Ht=t=>Array.from({length:xt},(e,i)=>{let r=i/xt*Math.PI*2,a=Math.cos(r)*t.majorRadius,n=Math.sin(r)*t.minorRadius;return[t.centerX+a*Math.cos(t.rotation)-n*Math.sin(t.rotation),t.centerY+a*Math.sin(t.rotation)+n*Math.cos(t.rotation),0]}),Ne=t=>{if(t.length<3)return k(t);let e=t.map((o,s)=>{let h=t[(s+1)%t.length];return Math.hypot(h[0]-o[0],h[1]-o[1])}),i=[...e].sort((o,s)=>o-s),r=i[Math.floor(i.length/2)]||1,a=Math.max(8,r*3.5),n=e.map(o=>o>a);return`M${t[0][0].toFixed(2)} ${t[0][1].toFixed(2)}${t.map((o,s)=>{let h=(s+1)%t.length,d=t[h];if(n[s])return`L${d[0].toFixed(2)} ${d[1].toFixed(2)}`;let c=n[(s-1+t.length)%t.length]?o:t[(s-1+t.length)%t.length],u=n[h]?d:t[(s+2)%t.length],x=o[0]+(d[0]-c[0])/6,y=o[1]+(d[1]-c[1])/6,$=d[0]-(u[0]-o[0])/6,C=d[1]-(u[1]-o[1])/6;return`C${x.toFixed(2)} ${y.toFixed(2)} ${$.toFixed(2)} ${C.toFixed(2)} ${d[0].toFixed(2)} ${d[1].toFixed(2)}`}).join("")}Z`},Le=(t,e)=>{let i=e.width/2,r=Math.min(i,e.height/2),a=e.depth/2,n=Math.max(0,(e.height-r*2)/2),o=[i,r,a],s=ht(t,o,[0,n,0]),h=ht(t,o,[0,-n,0]);return!s||!h?null:Ne(Y([...Ht(s),...Ht(h)]))},Xe=(t,e)=>{if(e.type==="sphere"||e.type==="mickey"){let a=ke(t,e);if(a)return a}if(e.type==="capsule"){let a=Le(t,e);if(a)return a}if(e.type==="cylinder")return Ie(t,e);if(e.type==="cursor")return we(t,e);if(e.type==="cone")return Se(t,e);if(e.type==="cube")return Ae(t,e);if(e.type==="diamond")return Re(t,e);let i=nt(e),r=at.get(i);return r||(r=Array.from({length:Me},(a,n)=>{let o=-Math.PI/2+n/24*Math.PI;return Array.from({length:me},(s,h)=>z(e,-Math.PI+h/72*Math.PI*2,o))}).flat(),ot(at,i,r)),k(Y(r.map(a=>it(w(t.orientation,a),t.expression.perspective))))},Ce=(t,e)=>{let i=nt(e.surface),r=zt.get(i);r||(r=Array.from({length:17},(o,s)=>{let h=-Math.PI/2+s/16*Math.PI;return Array.from({length:49},(d,c)=>{let u=-Math.PI+c/48*Math.PI*2;return z(e.surface,u,h)})}).flat(),ot(zt,i,r));let a=yt(I(e.rotation[0]),I(e.rotation[1]),I(e.rotation[2])),n=Y(r.map(o=>{let s=w(a,o),h=[s[0]+e.position[0],s[1]+e.position[1],s[2]+e.position[2]];return it(w(t.orientation,h),t.expression.perspective)}));return(e.surface.type==="cube"||e.surface.type==="diamond")&&e.surface.roundness<=0?k(n):T(U(n))},ze=.1,Be=(t,e)=>{let i=yt(I(e.rotation[0]),I(e.rotation[1]),I(e.rotation[2])),r=[[1,0,0],[0,1,0],[0,0,1]].map(a=>w(t.orientation,w(i,a))[2]);return Math.hypot(r[0]*(e.surface.width/2),r[1]*(e.surface.height/2),r[2]*(e.surface.depth/2))},Oe=(t,e)=>{let i=e.map(r=>{let a=w(t.orientation,r.position)[2];return{id:r.id,path:Ce(t,r),depth:a,front:a>Be(t,r)*ze}}).sort((r,a)=>r.depth-a.depth);return{backPaths:i.filter(r=>!r.front).map(r=>r.path),frontPaths:i.filter(r=>r.front).map(r=>r.path),backNodeIds:i.filter(r=>!r.front).map(r=>r.id),frontNodeIds:i.filter(r=>r.front).map(r=>r.id)}};return l.ambientBodyOffset=B,l.ambientEyeOffset=Z,l.applyAmbientBodyMotion=F,l.applyAmbientMotion=O,l.expressionFields=pe,l.hasAmbientMotion=v,l.poseFromExpression=ce,l.renderAvatar=(t,e,i=1,r={})=>{let a=Zt(t,e,-1,i,r.eyeOffset),n=Zt(t,e,1,i,r.eyeOffset),o=a.map(c=>c.point),s=n.map(c=>c.point),h=Oe(t,r.bodyNodes??[]),d=Ee(t,e);return{backPaths:[...d,...h.backPaths],frontPaths:h.frontPaths,backNodeIds:[...d.map(()=>null),...h.backNodeIds],frontNodeIds:h.frontNodeIds,headPath:Xe(t,e),leftPath:k(o),rightPath:k(s),leftVisible:a.reduce((c,u)=>c+u.normal[2],0)>0,rightVisible:n.reduce((c,u)=>c+u.normal[2],0)>0,wirePaths:r.includeWire===!1?[]:Fe(t,e)}},l}({});return p}(),We=function(){var p=function(l){Object.defineProperty(l,Symbol.toStringTag,{value:"Module"});var f=t=>t*t*(3-2*t),m=t=>{let e=Math.sin(t*127.1+311.7)*43758.5453;return(e-Math.floor(e))*2-1},g=t=>t.headX*.71+t.headY*1.13+t.headZ*1.37,M=17.29,b=(t,e,i,r)=>{let a=t/r,n=Math.floor(a),o=f(a-n),s=m(n*3+e+i);return s+(m((n+1)*3+e+i)-s)*o},P=(t,e,i)=>{let r=1100;if(t<=0)return 0;let a=Math.floor(t/r),n=(t-a*r)/140,o=f(Math.min(n,1)),s=a===0?0:m((a-1)*2+e+i);return s+(m(a*2+e+i)-s)*o},v=t=>t.eyeMotion!=="none"||t.bodyMotion!=="none",B=(t,e,i=1)=>{let r=g(t);if(t.bodyMotion==="slowDrift")return{x:b(e,3,r,2900)*1.45*i,y:b(e,4,r,3700)*1.1*i};if(t.bodyMotion==="shake"){let a=e/1e3;return{x:(Math.sin(a*31)+Math.sin(a*53)*.45)*1.35*i,y:(Math.sin(a*37)+Math.sin(a*61)*.4)*1.1*i}}return{x:0,y:0}},Z=(t,e,i=1)=>{if(t.eyeMotion==="microSaccades")return{x:P(e,0,M)*1.5*i,y:P(e,1,M)*.9*i};if(t.eyeMotion==="shake"){let r=e/1e3;return{x:(Math.sin(r*47)+Math.sin(r*71)*.45)*1.2*i,y:(Math.sin(r*59)+Math.sin(r*83)*.4)*.8*i}}return{x:0,y:0}},F=(t,e,i=1)=>{let r={...t},a=g(t);if(t.bodyMotion==="slowDrift")r.headX+=b(e,0,a,2600)*.8*i,r.headY+=b(e,1,a,3300)*1.15*i,r.headZ+=b(e,2,a,4100)*.45*i;else if(t.bodyMotion==="shake"){let n=e/1e3;r.headX+=(Math.sin(n*31)+Math.sin(n*53)*.45)*1.15*i,r.headY+=(Math.sin(n*37)+Math.sin(n*61)*.4)*1.35*i,r.headZ+=Math.sin(n*43)*.7*i}return r},O=(t,e,i=1)=>{let r=F(t,e,i),a=Z(t,e,i);return r.positionXLeft+=a.x,r.positionXRight+=a.x,r.positionYLeft+=a.y,r.positionYRight+=a.y,r},L=(t,e)=>Math.sign(t)*Math.abs(t)**e,D=(t,e,i,r,a,n,o)=>{let s=L(Math.cos(e),n);return[i/2*s*L(Math.sin(t),o),r/2*L(Math.sin(e),n),a/2*s*L(Math.cos(t),o)]},J=(t,e,i)=>{let r=t.width/2,a=t.depth/2,n=Math.min(r,t.height/2),o=Math.max(0,(t.height-n*2)/2),s=o*2+Math.PI*n,h=(i+Math.PI/2)/Math.PI*s,d=r,c=0;if(h<Math.PI*n/2){let x=-Math.PI/2+h/n;d=r*Math.cos(x),c=-o+n*Math.sin(x)}else if(h<=Math.PI*n/2+o*2)c=-o+h-Math.PI*n/2;else{let x=(h-Math.PI*n/2-o*2)/n;d=r*Math.cos(x),c=o+n*Math.sin(x)}let u=r?a/r:1;return[d*Math.sin(e),c,d*u*Math.cos(e)]},R=t=>Math.max(0,Math.min(2,t??0)),S=t=>1+R(t.roundness)/2,j=.04,ut=t=>t.roundness<=0?1/0:2/(j+R(t.roundness)/2*.96),It=(t,e,i,r)=>{let a=Math.cos(i)*Math.sin(e),n=Math.sin(i),o=Math.cos(i)*Math.cos(e),s=Number.isFinite(r)?(Math.abs(a)**r+Math.abs(n)**r+Math.abs(o)**r)**(1/r)||1:Math.max(Math.abs(a),Math.abs(n),Math.abs(o))||1;return[t.width/2*(a/s),t.height/2*(n/s),t.depth/2*(o/s)]},Qt=(t,e,i)=>It(t,e,i,S(t)),te=(t,e,i)=>It(t,e,i,ut(t)),ee=.24,re=.2,ie=.22,ae=t=>R(t.morphRoundness)/2,wt=(t,e,i)=>{let r=ae(t),a=Math.max(0,Math.min(1,e)),n=Math.sin(a*Math.PI),o=(1-Math.cos(a*Math.PI))/2;return{radiusScale:i.radiusScale+(n-i.radiusScale)*r,verticalProgress:i.verticalProgress+(o-i.verticalProgress)*r}},tt=(t,e,i,r,a)=>{let n=1-a;return n**3*t+3*n*n*a*e+3*n*a*a*i+a**3*r},ne=t=>({tipFraction:(t.tipRoundness??0)*ee,baseFraction:(t.baseRoundness??0)*re}),ct=(t,e)=>{let i=Math.max(0,Math.min(1,e)),r=t.roundness*ie;if(r<=0)return{radiusScale:1,verticalProgress:(Math.sin((i-.5)*Math.PI)+1)/2};if(i<r){let n=-Math.PI/2+i/r*(Math.PI/2);return{radiusScale:1-r+r*Math.cos(n),verticalProgress:(r+r*Math.sin(n))/2}}if(i>1-r){let n=(i-(1-r))/r*(Math.PI/2);return{radiusScale:1-r+r*Math.cos(n),verticalProgress:1-r/2+r*Math.sin(n)/2}}let a=(i-r)/(1-r*2);return{radiusScale:1,verticalProgress:r/2+a*(1-r)}},$t=(t,e)=>wt(t,e,ct(t,e)),ft=(t,e,i)=>{let r=Math.max(0,Math.min(1,e)),a=0,n=1;for(let o=0;o<14;o+=1){let s=(a+n)/2;i(t,s).verticalProgress<r?a=s:n=s}return i(t,(a+n)/2).radiusScale},oe=(t,e)=>{let i=Math.max(0,Math.min(1,e)),{tipFraction:r,baseFraction:a}=ne(t);if(a>0&&i<a){let n=i/a;return{radiusScale:tt(1-a,1,1-a/2,1-a,n),verticalProgress:tt(0,0,a/2,a,n)}}if(r>0&&i>1-r){let n=(i-(1-r))/r;return{radiusScale:tt(r,r/2,r/4,0,n),verticalProgress:tt(1-r,1-r/2,1,1,n)}}return{radiusScale:1-i,verticalProgress:i}},St=(t,e)=>wt(t,e,oe(t,e)),et=t=>{let e=t.height*.36,i=t.height-e;return{coneApexY:-t.height/2,coneBaseY:-t.height/2+e,bodyHeight:i,bodyCenterY:t.height/2-i/2,bodyWidth:t.width*.54,bodyDepth:t.depth*.62}},z=(t,e,i)=>{let{width:r,height:a,depth:n}=t;switch(t.type){case"sphere":case"mickey":return D(e,i,r,a,n,1,1);case"cube":return te(t,e,i);case"cylinder":{let o=$t(t,(i+Math.PI/2)/Math.PI);return[r/2*o.radiusScale*Math.sin(e),-a/2+a*o.verticalProgress,n/2*o.radiusScale*Math.cos(e)]}case"cursor":{let o=et(t),s=(i+Math.PI/2)/Math.PI,h=ct({...t,width:o.bodyWidth,height:o.bodyHeight,depth:o.bodyDepth},s);return[o.bodyWidth/2*h.radiusScale*Math.sin(e),o.bodyCenterY-o.bodyHeight/2+o.bodyHeight*h.verticalProgress,o.bodyDepth/2*h.radiusScale*Math.cos(e)]}case"diamond":return Qt(t,e,i);case"capsule":return J(t,e,i);case"cone":{let o=St(t,(i+Math.PI/2)/Math.PI);return[r/2*o.radiusScale*Math.sin(e),a/2-a*o.verticalProgress,n/2*o.radiusScale*Math.cos(e)]}}},At=(t,e)=>[t[0]-e[0],t[1]-e[1],t[2]-e[2]],H=([t,e,i])=>{let r=Math.hypot(t,e,i)||1;return[t/r,e/r,i/r]},se=(t,e,i)=>{let r=t.type==="cone"?-1:1;return H([r*(e[1]*i[2]-e[2]*i[1]),r*(e[2]*i[0]-e[0]*i[2]),r*(e[0]*i[1]-e[1]*i[0])])},he=(t,e,i)=>{let r=5e-4;if(t.type==="cone"&&i>=Math.PI/2-r)return[0,-1,0];let a=z(t,e-r,i),n=z(t,e+r,i),o=z(t,e,Math.max(-Math.PI/2,i-r)),s=z(t,e,Math.min(Math.PI/2,i+r));return se(t,At(n,a),At(s,o))},Mt=(t,e)=>Math.sign(t)*Math.abs(t)**e,Rt=(t,e,i)=>{let r=t.width/2||1,a=t.height/2||1,n=t.depth/2||1;return H([Mt(e[0]/r,i-1)/r,Mt(e[1]/a,i-1)/a,Mt(e[2]/n,i-1)/n])},kt=(t,e)=>Rt(t,e,S(t)),Yt=(t,e)=>{let i=ut(t);if(Number.isFinite(i))return Rt(t,e,i);let r=[e[0]/(t.width/2||1),e[1]/(t.height/2||1),e[2]/(t.depth/2||1)],a=r.reduce((n,o,s)=>Math.abs(o)>Math.abs(r[n])?s:n,0);return[a===0?Math.sign(r[0]):0,a===1?Math.sign(r[1]):0,a===2?Math.sign(r[2]):0]},Et=(t,e,i,r,a)=>{let n=t.width/2||1,o=t.height/2||1,s=t.depth/2||1;if(!Number.isFinite(r)){let $=[Math.max(-n,Math.min(n,e)),Math.max(-o,Math.min(o,i)),s];return{point:$,normal:a(t,$)}}let h=Math.max(-1,Math.min(1,i/o)),d=Math.max(0,1-Math.abs(h)**r)**(1/r),c=Math.max(-n*d,Math.min(n*d,e)),u=c/n,x=Math.max(0,1-Math.abs(u)**r-Math.abs(h)**r)**(1/r),y=[c,h*o,s*x];return{point:y,normal:a(t,y)}},Nt=(t,e,i,r,a,n=0)=>{let o=e-n,s=Math.max(0,1-(t/(i||1))**2-(o/(r||1))**2),h=a*Math.sqrt(s);return{point:[t,e,h],normal:H([t/(i*i||1),o/(r*r||1),h/(a*a||1)])}},mt=(t,e,i,r,a)=>{let n=t.width/2||1,o=t.depth/2||1,s=Math.max(0,Math.min(1,.5+a*(i/t.height))),h=ft(t,s,r),d=n*h,c=o*h,u=Math.max(-d,Math.min(d,e)),x=d>0?Math.max(0,1-(u/d)**2):0,y=c*Math.sqrt(x),$=1e-4,C=Math.max(0,s-$),Q=Math.min(1,s+$),_=ft(t,C,r),lt=(ft(t,Q,r)-_)/(Q-C||1),V=Math.max(Math.sqrt(x),1e-4),dt=-(o/n)*u/(d*V||1),q=a*o*lt/(t.height*V||1);return{point:[u,i,y],normal:H([-dt,-q,1])}},le=(t,e,i)=>{let r=t.width/2||1,a=t.height/2||1,n=t.depth/2||1;switch(t.type){case"sphere":case"mickey":return Nt(e,i,r,a,n);case"cube":return Et(t,e,i,ut(t),Yt);case"capsule":{let o=Math.min(r,a),s=Math.max(0,a-o);return Nt(e,i,r,o,n,i<-s?-s:i>s?s:i)}case"cylinder":return mt(t,e,i,$t,1);case"cursor":{let o=et(t),s=mt({...t,width:o.bodyWidth,height:o.bodyHeight,depth:o.bodyDepth},e,i-o.bodyCenterY,ct,1);return{point:[s.point[0],s.point[1]+o.bodyCenterY,s.point[2]],normal:s.normal}}case"cone":return mt(t,e,i,St,-1);case"diamond":return Et(t,e,i,S(t),kt)}},de=(t,e,i)=>{let r=z(t,e,i);if(t.type==="sphere"||t.type==="mickey"){let a=t.width/2||1,n=t.height/2||1,o=t.depth/2||1;return{point:r,normal:H([r[0]/(a*a),r[1]/(n*n),r[2]/(o*o)])}}return t.type==="cylinder"&&t.roundness<=0&&(t.morphRoundness??0)<=0?{point:r,normal:H([Math.sin(e)/(t.width/2||1),0,Math.cos(e)/(t.depth/2||1)])}:t.type==="diamond"?{point:r,normal:kt(t,r)}:t.type==="cube"?{point:r,normal:Yt(t,r)}:{point:r,normal:he(t,e,i)}},rt=620,Lt=14,pe=["headX","headY","headZ","widthLeft","widthRight","heightLeft","heightRight","spacing","positionXLeft","positionXRight","positionYLeft","positionYRight","leftAngle","rightAngle","perspective"],I=t=>t*Math.PI/180,Xt=([t,e,i,r])=>{let a=Math.hypot(t,e,i,r)||1;return[t/a,e/a,i/a,r/a]},Ct=([t,e,i,r],[a,n,o,s])=>Xt([t*a-e*n-i*o-r*s,t*n+e*a+i*s-r*o,t*o-e*s+i*a+r*n,t*s+e*o-i*n+r*a]),gt=([t,e,i],r)=>{let a=r/2,n=Math.sin(a);return Xt([Math.cos(a),t*n,e*n,i*n])},yt=(t,e,i)=>{let r=gt([1,0,0],t),a=gt([0,1,0],e);return Ct(Ct(gt([0,0,1],i),r),a)},w=([t,e,i,r],[a,n,o])=>{let s=2*(i*o-r*n),h=2*(r*a-e*o),d=2*(e*n-i*a);return[a+t*s+(i*d-r*h),n+t*h+(r*s-e*d),o+t*d+(e*h-i*s)]},ue=(t,e)=>{let i=t/2,r=e/2,a=Math.min(r,i),n=[],o=(h,d)=>{let c=Math.max(2,Math.ceil(Math.hypot(d[0]-h[0],d[1]-h[1])/1.5));for(let u=0;u<c;u+=1){let x=u/c;n.push([h[0]+(d[0]-h[0])*x,h[1]+(d[1]-h[1])*x])}},s=(h,d,c)=>{for(let u=0;u<Lt;u+=1){let x=c+u/Lt*(Math.PI/2);n.push([h+Math.cos(x)*a,d+Math.sin(x)*a])}};return o([-i+a,-r],[i-a,-r]),s(i-a,-r+a,-Math.PI/2),o([i,-r+a],[i,r-a]),s(i-a,r-a,0),o([i-a,r],[-i+a,r]),s(-i+a,r-a,Math.PI/2),o([-i,r-a],[-i,-r+a]),s(-i+a,-r+a,Math.PI),n},it=(t,e)=>{let i=rt-t[2]*e,r=Math.abs(i)<1e-4?rt/1e-4:rt/i;return[t[0]*r,t[1]*r,t[2]]},k=(t,e=!0)=>t.length?`M${t[0][0].toFixed(2)} ${t[0][1].toFixed(2)}${t.slice(1).map(i=>`L${i[0].toFixed(2)} ${i[1].toFixed(2)}`).join("")}${e?"Z":""}`:"",ce=t=>({expression:t,orientation:yt(I(t.headX),I(t.headY),I(t.headZ))}),fe=24,Me=25,me=73,xt=72,ge=33,ye=73,at=new Map,zt=new Map,Bt=new Map,nt=t=>JSON.stringify([t.type,t.width,t.height,t.depth,t.roundness,t.morphRoundness,t.tipRoundness,t.baseRoundness]),ot=(t,e,i)=>(t.size>=fe&&t.delete(t.keys().next().value),t.set(e,i),i),Ot=(t,e,i)=>de(t,e,i),Dt=(t,e)=>({point:it(w(t.orientation,e.point),t.expression.perspective),normal:w(t.orientation,e.normal)}),xe=(t,e)=>{let i=t/120,r=e/120;return[120*Math.cos(r)*Math.sin(i),120*Math.sin(r)]},be=(t,e,i,r)=>{let[a,n]=xe(i,r);return Dt(t,le(e,a,n))},Zt=(t,e,i,r,a={x:0,y:0})=>{let n=t.expression,o=i<0?"Left":"Right",s=n[`width${o}`],h=5+(n[`height${o}`]-5)*r,d=i*n.spacing/2+n[`positionX${o}`]+a.x,c=n[`positionY${o}`]+a.y,u=I(i<0?n.leftAngle:n.rightAngle);return ue(s,h).map(([x,y])=>{let $=x*Math.cos(u)-y*Math.sin(u),C=x*Math.sin(u)+y*Math.cos(u);return be(t,e,d+$,c+C)})},Pe=t=>{let e=[],i=[];return t.forEach(({point:r,normal:a})=>{a[2]>0?i.push(r):i.length&&(e.push(i),i=[])}),i.length&&e.push(i),e.filter(r=>r.length>1).map(r=>k(r,!1)).join("")},Fe=(t,e)=>{let i=nt(e),r=Bt.get(i);if(!r){let a=[-60,-30,0,30,60].map(o=>Array.from({length:73},(s,h)=>Ot(e,I(-180+h*5),I(o)))),n=Array.from({length:12},(o,s)=>-150+s*30).map(o=>Array.from({length:37},(s,h)=>Ot(e,I(o),I(-90+h*5))));r=ot(Bt,i,[...a,...n])}return r.map(a=>Pe(a.map(n=>Dt(t,n))))},Y=t=>{let e=[...t].sort((a,n)=>a[0]-n[0]||a[1]-n[1]),i=(a,n,o)=>(n[0]-a[0])*(o[1]-a[1])-(n[1]-a[1])*(o[0]-a[0]),r=a=>{let n=[];return a.forEach(o=>{for(;n.length>=2&&i(n.at(-2),n.at(-1),o)<=0;)n.pop();n.push(o)}),n};return[...r(e).slice(0,-1),...r(e.reverse()).slice(0,-1)]},T=t=>{if(t.length<3)return k(t);let e=i=>t[(i+t.length)%t.length];return`M${t[0][0].toFixed(2)} ${t[0][1].toFixed(2)}${t.map((i,r)=>{let a=e(r-1),n=e(r+1),o=e(r+2),s=[i[0]+(n[0]-a[0])/6,i[1]+(n[1]-a[1])/6,i[2]],h=[n[0]-(o[0]-i[0])/6,n[1]-(o[1]-i[1])/6,n[2]];return`C${s[0].toFixed(2)} ${s[1].toFixed(2)} ${h[0].toFixed(2)} ${h[1].toFixed(2)} ${n[0].toFixed(2)} ${n[1].toFixed(2)}`}).join("")}Z`},U=(t,e=7)=>t.flatMap((i,r)=>{let a=t[(r+1)%t.length],n=Math.max(1,Math.ceil(Math.hypot(a[0]-i[0],a[1]-i[1])/e));return Array.from({length:n},(o,s)=>{let h=s/n;return[i[0]+(a[0]-i[0])*h,i[1]+(a[1]-i[1])*h,i[2]+(a[2]-i[2])*h]})}),ve=t=>t.length?t.length===1?`${t[0][0].toFixed(2)} ${t[0][1].toFixed(2)}`:t.slice(0,-1).map((e,i)=>{let r=t[Math.max(0,i-1)],a=t[i+1],n=t[Math.min(t.length-1,i+2)],o=e[0]+(a[0]-r[0])/6,s=e[1]+(a[1]-r[1])/6,h=a[0]-(n[0]-e[0])/6,d=a[1]-(n[1]-e[1])/6;return`C${o.toFixed(2)} ${s.toFixed(2)} ${h.toFixed(2)} ${d.toFixed(2)} ${a[0].toFixed(2)} ${a[1].toFixed(2)}`}).join(""):"",X=(t,e)=>it(w(t.orientation,e),t.expression.perspective),G=(t,e,i)=>Array.from({length:145},(r,a)=>{let n=a/xt*Math.PI*2;return[t/2*Math.sin(n),i,e/2*Math.cos(n)]}),st=(t,e)=>{let i=nt(e),r=at.get(i);return r||(r=Array.from({length:ge},(a,n)=>{let o=-Math.PI/2+n/32*Math.PI;return Array.from({length:ye},(s,h)=>z(e,-Math.PI+h/72*Math.PI*2,o))}).flat(),ot(at,i,r)),T(U(Y(r.map(a=>X(t,a)))))},Ie=(t,e)=>{if(e.roundness>0||(e.morphRoundness??0)>0)return st(t,e);let i=e.height/2;return T(U(Y([...G(e.width,e.depth,-i),...G(e.width,e.depth,i)].map(r=>X(t,r)))))},we=(t,e)=>{let i=et(e),r=i.bodyHeight/2;return T(U(Y([...G(i.bodyWidth,i.bodyDepth,i.bodyCenterY-r),...G(i.bodyWidth,i.bodyDepth,i.bodyCenterY+r)].map(a=>X(t,a)))))},$e=(t,e)=>{let i=et(e),r=X(t,[0,i.coneApexY,0]);return T(U(Y([...G(e.width,e.depth,i.coneBaseY).map(a=>X(t,a)),r])))},Se=(t,e)=>{if((e.morphRoundness??0)>0||(e.tipRoundness??0)>0||(e.baseRoundness??0)>0)return st(t,e);let i=X(t,[0,-e.height/2,0]),r=Y([...G(e.width,e.depth,e.height/2).map(o=>X(t,o)),i]),a=r.findIndex(o=>Math.hypot(o[0]-i[0],o[1]-i[1])<.01);if(a<0)return T(r);let n=[...r.slice(a),...r.slice(0,a)].slice(1);return n.length<2?k(r):`M${i[0].toFixed(2)} ${i[1].toFixed(2)}L${n[0][0].toFixed(2)} ${n[0][1].toFixed(2)}${ve(n)}L${i[0].toFixed(2)} ${i[1].toFixed(2)}Z`},Ae=(t,e)=>{if(e.roundness>0)return st(t,e);let i=e.width/2,r=e.height/2,a=e.depth/2;return k(Y([-1,1].flatMap(n=>[-1,1].flatMap(o=>[-1,1].map(s=>[n*i,o*r,s*a]))).map(n=>X(t,n))))},Re=(t,e)=>{if(e.roundness>0)return st(t,e);let i=e.width/2,r=e.height/2,a=e.depth/2;return k(Y([[-i,0,0],[i,0,0],[0,-r,0],[0,r,0],[0,0,-a],[0,0,a]].map(n=>X(t,n))))},jt=(t,e,i,r,a)=>{let n=i+a,o=Math.hypot(i-a,r*2),s=(n+o)/2,h=(n-o)/2;return s<=0||h<=0?null:{centerX:t,centerY:e,majorRadius:Math.sqrt(s),minorRadius:Math.sqrt(h),rotation:Math.atan2(r*2,i-a)/2}},bt=({centerX:t,centerY:e,majorRadius:i,minorRadius:r,rotation:a})=>{let n=a*180/Math.PI,o=Math.cos(a)*i,s=Math.sin(a)*i,h=t+o,d=e+s,c=t-o,u=e-s;return`M${h.toFixed(2)} ${d.toFixed(2)}A${i.toFixed(2)} ${r.toFixed(2)} ${n.toFixed(2)} 0 1 ${c.toFixed(2)} ${u.toFixed(2)}A${i.toFixed(2)} ${r.toFixed(2)} ${n.toFixed(2)} 0 1 ${h.toFixed(2)} ${d.toFixed(2)}Z`},ht=(t,e,i=[0,0,0])=>{let r=[w(t.orientation,[1,0,0]),w(t.orientation,[0,1,0]),w(t.orientation,[0,0,1])],a=w(t.orientation,i);if(Math.abs(t.expression.perspective)<1e-4){let W=r.reduce((E,N,A)=>E+N[0]*N[0]*e[A]*e[A],0),K=r.reduce((E,N,A)=>E+N[0]*N[1]*e[A]*e[A],0),Pt=r.reduce((E,N,A)=>E+N[1]*N[1]*e[A]*e[A],0);return jt(a[0],a[1],W,K,Pt)}let n=e.map(W=>1/(W*W)),o=Array.from({length:3},(W,K)=>Array.from({length:3},(Pt,E)=>r.reduce((N,A,De)=>N+A[K]*n[De]*A[E],0))),s=rt/t.expression.perspective,h=[-a[0],-a[1],s-a[2]],d=[o[0][0]*h[0]+o[0][1]*h[1]+o[0][2]*h[2],o[1][0]*h[0]+o[1][1]*h[1]+o[1][2]*h[2],o[2][0]*h[0]+o[2][1]*h[1]+o[2][2]*h[2]],c=h[0]*d[0]+h[1]*d[1]+h[2]*d[2]-1,u=[d[0],d[1],-s*d[2]],x=[[o[0][0],o[0][1],-s*o[0][2]],[o[1][0],o[1][1],-s*o[1][2]],[-s*o[2][0],-s*o[2][1],s*s*o[2][2]]],y=Array.from({length:3},(W,K)=>Array.from({length:3},(Pt,E)=>u[K]*u[E]-c*x[K][E])),$=y[0][0]*y[1][1]-y[0][1]*y[0][1];if(Math.abs($)<1e-12)return null;let C=-(y[1][1]*y[0][2]-y[0][1]*y[1][2])/$,Q=(y[0][1]*y[0][2]-y[0][0]*y[1][2])/$,_=-(y[2][2]+y[0][2]*C+y[1][2]*Q);if(Math.abs(_)<1e-12)return null;let lt=y[0][0]/_,V=y[0][1]/_,dt=y[1][1]/_,q=lt*dt-V*V;return q<=0?null:jt(C,Q,dt/q,-V/q,lt/q)},ke=(t,e)=>{let i=ht(t,[e.width/2,e.height/2,e.depth/2]),r=e.width===e.height&&e.height===e.depth;if(i&&r){let a=(i.majorRadius+i.minorRadius)/2;return bt({centerX:0,centerY:0,majorRadius:a,minorRadius:a,rotation:0})}return i?bt(i):null},Ye=(t,e)=>{if(e.type!=="mickey")return[];let i=Math.min(e.width,e.height)*.23,r=Math.min(i,e.depth*.29),a=e.width*.37,n=-e.height*.39,o=-e.depth*.12,s=[i,i,r];return[-1,1].map(h=>ht(t,s,[h*a,n,o])).filter(h=>h!==null).map(bt)},Ee=(t,e)=>e.type==="mickey"?Ye(t,e):e.type==="cursor"?[$e(t,e)]:[],Ht=t=>Array.from({length:xt},(e,i)=>{let r=i/xt*Math.PI*2,a=Math.cos(r)*t.majorRadius,n=Math.sin(r)*t.minorRadius;return[t.centerX+a*Math.cos(t.rotation)-n*Math.sin(t.rotation),t.centerY+a*Math.sin(t.rotation)+n*Math.cos(t.rotation),0]}),Ne=t=>{if(t.length<3)return k(t);let e=t.map((o,s)=>{let h=t[(s+1)%t.length];return Math.hypot(h[0]-o[0],h[1]-o[1])}),i=[...e].sort((o,s)=>o-s),r=i[Math.floor(i.length/2)]||1,a=Math.max(8,r*3.5),n=e.map(o=>o>a);return`M${t[0][0].toFixed(2)} ${t[0][1].toFixed(2)}${t.map((o,s)=>{let h=(s+1)%t.length,d=t[h];if(n[s])return`L${d[0].toFixed(2)} ${d[1].toFixed(2)}`;let c=n[(s-1+t.length)%t.length]?o:t[(s-1+t.length)%t.length],u=n[h]?d:t[(s+2)%t.length],x=o[0]+(d[0]-c[0])/6,y=o[1]+(d[1]-c[1])/6,$=d[0]-(u[0]-o[0])/6,C=d[1]-(u[1]-o[1])/6;return`C${x.toFixed(2)} ${y.toFixed(2)} ${$.toFixed(2)} ${C.toFixed(2)} ${d[0].toFixed(2)} ${d[1].toFixed(2)}`}).join("")}Z`},Le=(t,e)=>{let i=e.width/2,r=Math.min(i,e.height/2),a=e.depth/2,n=Math.max(0,(e.height-r*2)/2),o=[i,r,a],s=ht(t,o,[0,n,0]),h=ht(t,o,[0,-n,0]);return!s||!h?null:Ne(Y([...Ht(s),...Ht(h)]))},Xe=(t,e)=>{if(e.type==="sphere"||e.type==="mickey"){let a=ke(t,e);if(a)return a}if(e.type==="capsule"){let a=Le(t,e);if(a)return a}if(e.type==="cylinder")return Ie(t,e);if(e.type==="cursor")return we(t,e);if(e.type==="cone")return Se(t,e);if(e.type==="cube")return Ae(t,e);if(e.type==="diamond")return Re(t,e);let i=nt(e),r=at.get(i);return r||(r=Array.from({length:Me},(a,n)=>{let o=-Math.PI/2+n/24*Math.PI;return Array.from({length:me},(s,h)=>z(e,-Math.PI+h/72*Math.PI*2,o))}).flat(),ot(at,i,r)),k(Y(r.map(a=>it(w(t.orientation,a),t.expression.perspective))))},Ce=(t,e)=>{let i=nt(e.surface),r=zt.get(i);r||(r=Array.from({length:17},(o,s)=>{let h=-Math.PI/2+s/16*Math.PI;return Array.from({length:49},(d,c)=>{let u=-Math.PI+c/48*Math.PI*2;return z(e.surface,u,h)})}).flat(),ot(zt,i,r));let a=yt(I(e.rotation[0]),I(e.rotation[1]),I(e.rotation[2])),n=Y(r.map(o=>{let s=w(a,o),h=[s[0]+e.position[0],s[1]+e.position[1],s[2]+e.position[2]];return it(w(t.orientation,h),t.expression.perspective)}));return(e.surface.type==="cube"||e.surface.type==="diamond")&&e.surface.roundness<=0?k(n):T(U(n))},ze=.1,Be=(t,e)=>{let i=yt(I(e.rotation[0]),I(e.rotation[1]),I(e.rotation[2])),r=[[1,0,0],[0,1,0],[0,0,1]].map(a=>w(t.orientation,w(i,a))[2]);return Math.hypot(r[0]*(e.surface.width/2),r[1]*(e.surface.height/2),r[2]*(e.surface.depth/2))},Oe=(t,e)=>{let i=e.map(r=>{let a=w(t.orientation,r.position)[2];return{id:r.id,path:Ce(t,r),depth:a,front:a>Be(t,r)*ze}}).sort((r,a)=>r.depth-a.depth);return{backPaths:i.filter(r=>!r.front).map(r=>r.path),frontPaths:i.filter(r=>r.front).map(r=>r.path),backNodeIds:i.filter(r=>!r.front).map(r=>r.id),frontNodeIds:i.filter(r=>r.front).map(r=>r.id)}};return l.ambientBodyOffset=B,l.ambientEyeOffset=Z,l.applyAmbientBodyMotion=F,l.applyAmbientMotion=O,l.expressionFields=pe,l.hasAmbientMotion=v,l.poseFromExpression=ce,l.renderAvatar=(t,e,i=1,r={})=>{let a=Zt(t,e,-1,i,r.eyeOffset),n=Zt(t,e,1,i,r.eyeOffset),o=a.map(c=>c.point),s=n.map(c=>c.point),h=Oe(t,r.bodyNodes??[]),d=Ee(t,e);return{backPaths:[...d,...h.backPaths],frontPaths:h.frontPaths,backNodeIds:[...d.map(()=>null),...h.backNodeIds],frontNodeIds:h.frontNodeIds,headPath:Xe(t,e),leftPath:k(o),rightPath:k(s),leftVisible:a.reduce((c,u)=>c+u.normal[2],0)>0,rightVisible:n.reduce((c,u)=>c+u.normal[2],0)>0,wirePaths:r.includeWire===!1?[]:Fe(t,e)}},l}({});return p}();var Pr=["headX","headY","headZ","widthLeft","widthRight","heightLeft","heightRight","spacing","positionXLeft","positionXRight","positionYLeft","positionYRight","leftAngle","rightAngle","perspective"],Ke=()=>({x0:1/0,y0:1/0,x1:-1/0,y1:-1/0});function Gt(p,l,f){l<p.x0&&(p.x0=l),l>p.x1&&(p.x1=l),f<p.y0&&(p.y0=f),f>p.y1&&(p.y1=f)}function je(p,l=Ke()){let f=p.match(/[A-Za-z]|-?\d*\.?\d+(?:e[+-]?\d+)?/gi)??[],m=0,g=0,M=0,b=0,P=0,v=()=>Number(f[m++]);for(;m<f.length;){let B=f[m++];if(B==="M")g=v(),M=v(),b=g,P=M,Gt(l,g,M);else if(B==="L")g=v(),M=v(),Gt(l,g,M);else if(B==="C"){let Z=v(),F=v(),O=v(),L=v(),D=v(),J=v();for(let R=1;R<=4;R++){let S=R/4,j=1-S;Gt(l,j**3*g+3*j*j*S*Z+3*j*S*S*O+S**3*D,j**3*M+3*j*j*S*F+3*j*S*S*L+S**3*J)}g=D,M=J}else if(B==="A"){let Z=v(),F=v(),O=v()*Math.PI/180;v(),v();let L=v(),D=v(),J=(g+L)/2,R=(M+D)/2,S=Math.hypot(Z*Math.cos(O),F*Math.sin(O)),j=Math.hypot(Z*Math.sin(O),F*Math.cos(O));Gt(l,J-S,R-j),Gt(l,J+S,R+j),g=L,M=D}else(B==="Z"||B==="z")&&(g=b,M=P)}return Number.isFinite(l.x0)?l:null}var Vt=new Map,Fr=3e3;function qt(p,l,f,m,g,M){let b=`${M?1:0}|${p}|${l.map((R,S)=>Math.round(R*(S===14?1e3:8))).join(",")}|${Math.round(f*20)}|${Math.round(m*4)},${Math.round(g*4)}`,P=Vt.get(b);if(P)return P;let v=Tt[p]??Tt.strobi,B=M?We:qe,Z={id:"x",eyeMotion:"none",bodyMotion:"none"};Pr.forEach((R,S)=>{Z[R]=l[S]});let F=B.renderAvatar(B.poseFromExpression(Z),v.surface,f,{includeWire:!1,bodyNodes:v.bodyNodes,eyeOffset:{x:m,y:g}}),O=(F.backPaths??[]).filter(Boolean),L=(F.frontPaths??[]).filter(Boolean),D=Ke();for(let R of[...O,F.headPath,...L])R&&je(R,D);let J={back:O,head:F.headPath??"",left:F.leftPath??"",right:F.rightPath??"",front:L,leftVisible:F.leftVisible,rightVisible:F.rightVisible,leftBox:F.leftPath?je(F.leftPath):null,rightBox:F.rightPath?je(F.rightPath):null,bounds:Number.isFinite(D.x0)?D:null};return Vt.size>Fr&&Vt.clear(),Vt.set(b,J),J}function Wt(p){return[...(Tt[p]??Tt.strobi).neutral]}var Je={lx:0,ly:0,tilt:0,blink:0,x:0,y:0,sx:1,sy:1,pitch:0,sleep:0},He=3.6,vr=[.7,.9],Ir=[1.2,2.5],Ue=[2.5,4],Qe=.17;function tr(p,l,f,m,g){let M=2*Math.PI/m,b=f;for(;b>1e-9;){let P=Math.min(b,.004166666666666667);p.vel+=(M*M*(l-p.v)-2*g*M*p.vel)*P,p.v+=p.vel*P,b-=P}}var Kt=class{constructor(l,f=Math.random,m=.11){this.state=l;this.random=f;this.reaction=m}pose={...Je};settled=!1;untilNext=.5;last=0;started=!1;t0=0;nextGaze=0;gazeFrom={lx:0,tilt:0};gazeTo={lx:0,tilt:0};gazeStart=0;gazeDuration=.8;prevSide=1;nextBlink=0;blinkStart=-1;sx={v:0,vel:0};sy={v:0,vel:0};stretchX=1;stretchY=1;rnd(l){return l[0]+this.random()*(l[1]-l[0])}setState(l){l!==this.state&&(this.state=l,this.started=!1,this.settled=!1,this.blinkStart=-1)}setReaction(l){this.reaction=l}still(){return this.state==="schlaeft"?Jt(0):{...Je}}step(l,f){let m=this.started?Math.min(.05,Math.max(.001,l-this.last)):.016;this.last=l,this.started||(this.started=!0,this.t0=l,this.nextBlink=l+this.rnd(Ue),this.nextGaze=l,this.gazeStart=l,this.gazeDuration=0,this.sx={v:this.pose.lx,vel:0},this.sy={v:this.pose.ly,vel:0});let g=l-this.t0,M=this.pose;if(this.state==="schlaeft")return this.pose=Jt(g),this.settled=!1,this.untilNext=.05,this.pose;let b=0,P=0,v=0,B=0;if(f){b=f.x,P=f.y,v=f.x*5,this.stretchX+=(1+.06*Math.abs(f.x)-.03*Math.abs(f.y)-this.stretchX)*(1-Math.exp(-30*m)),this.stretchY+=(1+.06*Math.abs(f.y)-.03*Math.abs(f.x)-this.stretchY)*(1-Math.exp(-30*m));let F=this.reaction*(.15/.11);tr(this.sx,b,m,F,.75),tr(this.sy,P,m,F,.75),M.lx=this.sx.v,M.ly=this.sy.v,M.tilt+=(v-M.tilt)*(1-Math.exp(-14*m)),M.sx=this.stretchX,M.sy=this.stretchY,this.nextGaze=l,this.gazeDuration=0}else if(this.stretchX+=(1-this.stretchX)*(1-Math.exp(-8*m)),this.stretchY+=(1-this.stretchY)*(1-Math.exp(-8*m)),M.sx=this.stretchX,M.sy=this.stretchY,this.state==="lebendig"){if(this.gazeDuration===0||l>=this.nextGaze){let L=-this.prevSide;this.prevSide=L;let D=(.2+this.random()*.15)*L;this.gazeFrom={lx:M.lx,tilt:M.tilt},this.gazeTo={lx:D,tilt:D*3},this.gazeStart=l,this.gazeDuration=this.rnd(vr),this.nextGaze=l+this.rnd(Ir)}let F=Math.min(1,Math.max(0,(l-this.gazeStart)/this.gazeDuration)),O=F*F*(3-2*F);M.lx=this.gazeFrom.lx+(this.gazeTo.lx-this.gazeFrom.lx)*O,M.tilt=this.gazeFrom.tilt+(this.gazeTo.tilt-this.gazeFrom.tilt)*O,M.ly+=(0-M.ly)*(1-Math.exp(-10*m))}else{let F=1-Math.exp(-m/.35);M.lx+=(0-M.lx)*F,M.ly+=(0-M.ly)*F,M.tilt+=(0-M.tilt)*F,this.sx={v:M.lx,vel:0},this.sy={v:M.ly,vel:0},this.state==="blick"&&(B=Math.sin(g*2*Math.PI/3.2))}if(M.y=this.state==="blick"?B*1.6:M.y*Math.exp(-8*m),this.state!=="normal"){l>=this.nextBlink&&(this.blinkStart=l,this.nextBlink=l+this.rnd(Ue));let F=l-this.blinkStart;M.blink=this.blinkStart>=0&&F<Qe?Math.sin(F/Qe*Math.PI):0}else M.blink=0;M.pitch=0,M.sleep=0;let Z=this.state==="lebendig"||this.state==="blick"||!!f||Math.abs(M.lx)+Math.abs(M.ly)+Math.abs(M.tilt)>.002||Math.abs(M.sx-1)>.001;return this.settled=!Z,this.untilNext=this.state==="normal"?.5:.03,this.pose=M,M}};function Jt(p){let l=Math.sin(p*2*Math.PI/He);return{lx:0,ly:.5,tilt:4,blink:1,x:0,y:1.2+l*.9,sx:1.04-l*.006,sy:.9+l*.012,pitch:10,sleep:1}}var vt=["strobi","freddy","citrus","nova","grokbot","sunee","kirby","cloudee","cubee","onee","rauti","trixi","tropi","mopsi","dosi"],Te={erdi:"strobi",marsi:"cubee",sati:"onee",jupi:"citrus",mondi:"freddy",veni:"kirby",nepi:"trixi",urani:"rauti",pluti:"nova",universi:"sunee"},zr=[...Object.keys(Te),...vt];function Ut(p){let l=p.toLowerCase();if(vt.includes(l))return l;if(Te[l])return Te[l];let f=0;for(let m of p)f=Math.imul(f,31)+(m.codePointAt(0)??0)>>>0;return vt[f%vt.length]}var er={strobi:{light:"#3378ec",dark:"#3e82f4"},freddy:{light:"#906538",dark:"#996e42"},citrus:{light:"#cf811e",dark:"#e9993a"},nova:{light:"#43a191",dark:"#55b5a4"},grokbot:{light:"#6b7585",dark:"#7d8797"},sunee:{light:"#9bc636",dark:"#a5d046"},kirby:{light:"#de3a8e",dark:"#e74897"},cloudee:{light:"#ffffff",dark:"#ffffff"},cubee:{light:"#df363c",dark:"#e84447"},onee:{light:"#199ecd",dark:"#32b3e6"},rauti:{light:"#5a62ed",dark:"#626df5"},trixi:{light:"#8152eb",dark:"#895df3"},tropi:{light:"#43a561",dark:"#5ac078"},mopsi:{light:"#bf3bdb",dark:"#c849e4"},dosi:{light:"#df6521",dark:"#e87031"}};function rr(p){return typeof p=="string"&&/^#[0-9a-fA-F]{6}$/.test(p)}function ir(p){let l=parseInt(p.slice(1),16),f=l>>16&255,m=l>>8&255,g=l&255,M=Math.max(f,m,g)/255,b=Math.min(f,m,g)/255;return(M+b)/2}var _t=new Set,Ft=0,nr=p=>typeof requestAnimationFrame=="function"?requestAnimationFrame(p):setTimeout(()=>p(performance.now()),1e3/60),wr=p=>typeof cancelAnimationFrame=="function"?cancelAnimationFrame(p):clearTimeout(p),Ge=[],_e=null,$r=!1;function or(p){if(Ft=0,_t.size!==0){if($r&&typeof MessageChannel<"u"){let l=performance.now();_e??=new MessageChannel,_e.port1.onmessage=()=>{Ge.push(performance.now()-l),Ge.length>4e4&&Ge.shift()},_e.port2.postMessage(0)}if(typeof document>"u"||!document.hidden)for(let l of[..._t])(l.minMs===0||p-l.last>=l.minMs-1.5)&&(l.last=p,l.fn(p/1e3));Ft=nr(or)}}function sr(p,l){let f={fn:p,minMs:l?.maxFps?1e3/l.maxFps:0,last:-1/0};return _t.add(f),Ft||(Ft=nr(or)),()=>{_t.delete(f),_t.size===0&&Ft&&(wr(Ft),Ft=0)}}var pt={x:-1e9,y:-1e9,moved:0},ar=!1;function hr(){ar||typeof window>"u"||(ar=!0,window.addEventListener("pointermove",p=>{pt.x=p.clientX,pt.y=p.clientY,pt.moved=performance.now()},{passive:!0}),window.addEventListener("blur",()=>{pt.x=-1e9,pt.y=-1e9}))}function lr(p){if(pt.x<-1e8)return null;let l=pt.x-(p.left+p.width/2),f=pt.y-(p.top+p.height/2),m=Math.hypot(l,f);if(m<.5||p.width<=0)return null;let g=Math.tanh(m/(p.width*1.4));return{x:l/m*g,y:f/m*g}}var dr=96,jr=68/240,Ve=new Map;function Sr(p){return qt(p,Wt(p),1,0,0,!0)}function Ar(p){if(typeof document>"u")return null;let l=p.split(/(?=M)/).filter(P=>P.trim().length>1).sort((P,v)=>v.length-P.length);if(!l.length)return null;let f=document.createElementNS("http://www.w3.org/2000/svg","path");if(f.setAttribute("d",l[0]),typeof f.getTotalLength!="function")return null;let m=0;try{m=f.getTotalLength()}catch{return null}if(!(m>0))return null;let g=[];for(let P=0;P<dr;P++){let v=f.getPointAtLength(m*P/dr);g.push([v.x,v.y])}let M=0;for(let P=0;P<g.length;P++){let v=g[(P+1)%g.length];M+=g[P][0]*v[1]-v[0]*g[P][1]}M<0&&(g=g.reverse());let b=0;for(let P=1;P<g.length;P++)g[P][1]<g[b][1]&&(b=P);return[...g.slice(b),...g.slice(0,b)]}function pr(p){let l=Ut(p);if(Ve.has(l))return Ve.get(l);let f=Sr(l),m=Ar(f.head),g=m?{pts:m,extras:{back:f.back,front:f.front,eyes:[f.leftVisible?f.left:"",f.rightVisible?f.right:""].filter(Boolean)}}:null;return Ve.set(l,g),g}function ur(p,l,f){return p.map((m,g)=>[m[0]+(l[g][0]-m[0])*f,m[1]+(l[g][1]-m[1])*f])}function cr(p){return"M"+p.map(l=>`${l[0].toFixed(2)} ${l[1].toFixed(2)}`).join("L")+"Z"}function fr(p,l,f){let m=parseInt(p.slice(1),16),g=parseInt(l.slice(1),16),M=b=>Math.round((m>>b&255)+((g>>b&255)-(m>>b&255))*f);return"#"+[16,8,0].map(b=>M(b).toString(16).padStart(2,"0")).join("")}return br(Rr);})();
+</script>
+<script>
+const $ = s => document.querySelector(s);
+/* ---------- Orbis (Formen + Animation aus orbit-app/src/orbi) ---------- */
+const O = OrbiCore, ES = 68 / 240, PS = 34 / 42, FOOT = 84, figs = new Set();
+let uid = 0;
+const r2 = n => Math.round(n * 100) / 100;
+const eyeOf = body => O.luminance(body) < 0.3 ? '#fff' : '#0f172a'; // dunkles Design
+function mountAll(root = document) { root.querySelectorAll('.orbi[data-orbi]').forEach(mount); }
+function mount(el) {
+  if (el._orbi) return;
+  const f = { el, shape: O.shapeOf(el.dataset.orbi), size: +el.dataset.size || 44, state: el.dataset.state || 'normal',
+    follow: 'follow' in el.dataset, id: 'oc' + uid++, morph: null, clock: 0 };
+  f.b = new O.Behavior(f.state);
+  el._orbi = f; figs.add(f); draw(f, f.b.still());
+}
+function setState(f, s) { f.state = s; f.b.setState(s); draw(f, f.b.still()); }
+function draw(f, p) {
+  const body = O.BASE_COLORS[f.shape].dark, ex = O.neutralExpression(f.shape);
+  ex[0] += -p.ly * 22 - p.pitch; ex[1] += p.lx * 22;
+  const g = O.renderGeometry(f.shape, ex, 1 - 0.94 * p.blink, p.lx * 18, p.ly * 18, f.size <= 100);
+  const tf = `translate(${r2(50 + p.x * PS)} ${r2(FOOT + p.y * PS)}) rotate(${r2(p.tilt)}) scale(${r2(p.sx)} ${r2(p.sy)}) translate(-50 -${FOOT})`;
+  const inner = f.morph ? `<path d="${f.morph.d}" fill="${f.morph.c}"/>` :
+    `<g fill="${body}">${g.back.map(d => `<path d="${d}"/>`).join('')}<path d="${g.head}"/>
+     <g clip-path="url(#${f.id})" fill="${eyeOf(body)}">${g.leftVisible ? `<path d="${g.left}"/>` : ''}${g.rightVisible ? `<path d="${g.right}"/>` : ''}</g>
+     ${g.front.map(d => `<path d="${d}"/>`).join('')}</g>`;
+  const z = f.state !== 'schlaeft' ? '' : [[68, 24, 13, 0], [76, 12, 17, 0.45]].map(([x, y, fs, o]) => {
+    const u = ((f.clock / O.SLEEP_PERIOD + o) % 1 + 1) % 1;
+    return `<text x="${x}" y="${r2(y + 6 - 10 * u)}" font-size="${fs}" font-weight="600" fill="#aab4c4" fill-opacity="${r2(0.75 * Math.sin(Math.PI * u))}">z</text>`;
+  }).join('');
+  f.el.innerHTML = `<svg width="${f.size}" height="${f.size}" viewBox="10 10 80 80"><defs><clipPath id="${f.id}"><path d="${g.head}"/></clipPath></defs>
+    <g transform="${tf}"><g transform="translate(50 50) scale(${ES})">${inner}</g></g>${z}</svg>`;
+}
+// Ein Takt für alle Figuren; ruhige (normal, ohne Zeiger) werden ausgelassen.
+O.trackPointer();
+O.subscribe(now => {
+  for (const f of figs) {
+    if (!f.el.isConnected) { figs.delete(f); continue; }
+    if (f.state === 'normal' && !f.follow && !f.morph) continue;
+    const m = f.follow ? O.mouseLook(f.el.getBoundingClientRect()) : null;
+    f.clock = now; draw(f, { ...f.b.step(now, m) });
+  }
+}, { maxFps: 60 });
+// Formwechsel (Morph): Umrisse punktweise mischen, Farbe mitblenden.
+function morphTo(f, next) {
+  const a = O.gestalt(f.shape), b = O.gestalt(next), to = O.shapeOf(next);
+  if (!a || !b) { f.shape = to; return; }
+  const ca = O.BASE_COLORS[f.shape].dark, cb = O.BASE_COLORS[to].dark, t0 = performance.now();
+  f.morph = { d: O.punkteZuPfad(a.pts), c: ca };
+  (function step() {
+    const u = Math.min(1, (performance.now() - t0) / 480), e = u < .5 ? 4 * u ** 3 : 1 - (-2 * u + 2) ** 3 / 2;
+    f.morph = { d: O.punkteZuPfad(O.mische(a.pts, b.pts, e)), c: O.mischeHex(ca, cb, e) };
+    if (f.state === 'normal') draw(f, f.b.still());
+    if (u < 1) requestAnimationFrame(step); else { f.shape = to; f.morph = null; draw(f, f.b.still()); }
+  })();
+}
+// Hover im Chat-Liste: Figur wird lebendig.
+document.addEventListener('pointerover', e => { const c = e.target.closest('.chat'); c && setState(c.querySelector('.orbi')._orbi, 'lebendig'); });
+document.addEventListener('pointerout', e => { const c = e.target.closest('.chat'); if (c && !c.contains(e.relatedTarget)) setState(c.querySelector('.orbi')._orbi, 'normal'); });
+let toniIdx = O.SHAPES.indexOf('kirby');
+$('#big').onclick = () => {
+  toniIdx = (toniIdx + 1) % O.SHAPES.length;
+  document.querySelectorAll('[data-toni]').forEach(el => morphTo(el._orbi, O.SHAPES[toniIdx]));
+};
+
+const chats = [
+  ['Klamoten','freddy','Die Bestellung passt so weit…'],['Coding','trixi','Ist raus: In ~/.codex/config.t…'],
+  ['Research','rauti','Coding sagt, die Reparatu…',1],['Börsen-Scout','cubee','Erledigt ✅ Laut Depot sind …'],
+  ['Finanzen','nova','Ist raus: @Börsen-Scout sch…'],['Code-Scout','dosi','Stimmt, da hab ich mich ver…'],
+  ['Designer','strobi','Der Gruppenchat mit farbig…'],['Planer','tropi','Womit legen wir los?'],
+  ['Prompt-Labor','mopsi','Modell: ChatGPT mit Deep R…'],['Schule','citrus','Ah, jetzt versteh ich! Du mei…'],
+  ['Bot Designer','sunee','was soll mit dem chat-chec…'],['Wetter','cloudee','Morgen wird es sonnig ☀️'],
+  ['Kita-Kündigung','onee','Finanzen hat jetzt die Rechn…'],
+];
+$('#chats').innerHTML = chats.map(([n,c,t,u]) =>
+  `<div class="chat"><span class="orbi" data-orbi="${c}" data-size="44"></span><div><b>${n}</b><span>${t}</span></div>${u?'<i class="dot"></i>':''}</div>`).join('');
+
+mountAll();
+
+/* ---------- Feed ---------- */
+const col = $('#col');
+const add = html => { col.insertAdjacentHTML('beforeend', html); const el = col.lastElementChild; mountAll(el); $('#feed').scrollTop = 1e9; return el; };
+const user = t => add(`<div class="msg user">${t}</div>`);
+const bot = (...ps) => add(`<div class="msg">${ps.map(p=>`<p>${p}</p>`).join('')}</div>`);
+
+// Question stack: steps = [{q, opts, multi, own, warn}]
+function stack(title, steps) {
+  const el = add(`<div class="tag">${title}</div>`) && add(`<div class="card q"></div>`);
+  let i = 0; const picks = steps.map(() => new Set());
+  const render = () => {
+    const s = steps[i];
+    el.innerHTML = `<h4>${s.q}</h4>` +
+      s.opts.map((o,k)=>`<div class="opt ${picks[i].has(k)?'on':''} ${s.warn===k?'warn':''}" data-k="${k}"><span class="key">${'ABCDEF'[k]}</span>${o}</div>`).join('') +
+      (s.own ? `<input class="own" placeholder="Eigene Antwort tippen…">` : '') +
+      `<div class="qfoot"><div class="dots">${steps.map((_,k)=>`<i class="${k===i?'on':''}"></i>`).join('')}</div>
+       <button class="btn back" ${i?'':'disabled'}>Zurück</button>&nbsp;<button class="btn next">${i===steps.length-1?'Fertig':'Weiter'}</button></div>`;
+    el.querySelectorAll('.opt').forEach(o => o.onclick = () => {
+      const k = +o.dataset.k;
+      if (s.multi) picks[i].has(k) ? picks[i].delete(k) : picks[i].add(k); else picks[i] = new Set([k]);
+      render();
+    });
+    el.querySelector('.back').onclick = () => { i--; render(); };
+    el.querySelector('.next').onclick = () => {
+      if (i < steps.length - 1) { i++; render(); return; }
+      const sum = steps.map((s,k)=>[...picks[k]].map(p=>s.opts[p].replace(' (Empfehlung)','')).join(', ')).filter(Boolean).join(' · ');
+      el.querySelectorAll('button').forEach(b=>b.disabled=true);
+      reply(`Läuft 🍕 ${sum || 'Nichts gewählt, auch okay.'}`);
+    };
+  };
+  render();
+}
+
+function products() {
+  add(`<div class="products">
+    <div class="prod"><div class="img"><span class="badge">Biggest discount</span>🧥</div><div class="body">Barbour Classic B…<br>242,95 € <s>303,95 €</s><div class="shop">Michael Stewart</div></div></div>
+    <div class="prod"><div class="img">🧥</div><div class="body">Barbour Classic B…<br>299,00 £ · Auch die klassische…<div class="shop">English Brands</div></div></div>
+  </div>`);
+}
+
+function mail() {
+  const el = add(`<div class="card">
+    <div class="label">✉ E-Mail</div>
+    <div class="subject">Demo von Toni</div>
+    <div class="field"><em>Von</em>du@example.com</div>
+    <div class="field"><em>An</em>du@example.com</div>
+    <div class="field"><em>Cc</em><span style="color:var(--mute)">name@example.com</span></div>
+    <div class="mailbody">Hi Consti,
+
+das ist nur eine Beispiel-Entwurfskarte. Sie geht an dich selbst und wird erst verschickt, wenn du auf Senden drückst.
+
+Toni</div>
+    <div class="actions"><button class="discard" style="color:#aaa">Verwerfen</button><button class="btn white send">Senden ⌄</button></div>
+  </div>`);
+  el.querySelector('.send').onclick = () => { el.querySelector('.actions').innerHTML = '<span style="color:var(--mute)">✓ Gesendet (Demo)</span>'; };
+  el.querySelector('.discard').onclick = () => { el.querySelector('.actions').innerHTML = '<span style="color:var(--mute)">Verworfen</span>'; };
+}
+
+function secret() {
+  const el = add(`<div class="card secret">
+    <div class="label">⚿ Geheimnisse</div>
+    <b>Demo-Feld (nichts Echtes eintippen)</b>
+    <div style="color:var(--mute);margin-bottom:22px">Nur zur Vorschau, tipp einfach test ein</div>
+    <small style="color:#aaa;letter-spacing:.3px">DEMO_TEST_FELD</small>
+    <input type="password">
+    <div class="actions"><span class="hint">⛉ Sicher hinterlegt, wird deinem Bot nie angezeigt</span><button class="btn send" disabled>Absenden</button></div>
+  </div>`);
+  const inp = el.querySelector('input'), b = el.querySelector('.send');
+  inp.oninput = () => { b.disabled = !inp.value; b.classList.toggle('white', !!inp.value); };
+  b.onclick = () => { el.querySelector('.actions').innerHTML = '<span class="hint">✓ Gespeichert</span>'; inp.disabled = true; };
+}
+
+function reply(text, after) {
+  const t = add(`<div class="msg typing"><span class="orbi" data-orbi="${O.SHAPES[toniIdx]}" data-state="lebendig" data-size="24"></span><i></i><i></i><i></i></div>`);
+  setTimeout(() => { t.remove(); bot(text); after && after(); }, 1600);
+}
+
+function gallery() {
+  const el = add(`<div class="card"><div class="label">Alle Orbis</div>
+    <div class="gal">${O.SHAPES.map(n => `<div><span class="orbi" data-orbi="${n}" data-state="lebendig" data-size="56"></span>${n}</div>`).join('')}</div>
+    <div class="states">${[['normal','Normal'],['lebendig','Lebendig'],['blick','Blick'],['schlaeft','Schläft']].map(([k,v]) =>
+      `<button class="btn ${k==='lebendig'?'on':''}" data-s="${k}">${v}</button>`).join('')}</div></div>`);
+  el.querySelectorAll('[data-s]').forEach(b => b.onclick = () => {
+    el.querySelectorAll('[data-s]').forEach(x => x.classList.toggle('on', x === b));
+    el.querySelectorAll('.gal .orbi').forEach(o => setState(o._orbi, b.dataset.s));
+  });
+}
+
+/* ---------- Demo content ---------- */
+user('zeig mal alle orbis');
+bot('Hier sind alle 15 Formen. Unten kannst du den Zustand umschalten. Klick rechts auf mich, dann wechsle ich die Form.');
+gallery();
+user('arbeite mal für 30 sekunden um die animation zu demonstrieren');
+bot('Alles klar, ich arbeite jetzt 30 Sekunden lang, damit du die Animation siehst ⏳');
+bot('Fertig, die 30 Sekunden sind um ✅ Hast du die Animation gesehen?');
+add('<div class="time">Heute 22:54</div>');
+user('Zeig mal alle fragekarten und alle karten die du sonst hast als beispielkarten im chat');
+bot('Hier kommt ein Stapel mit allen Varianten von Fragekarten: Einfachauswahl, Mehrfachauswahl, eigene Antwort tippen und eine rote Warnoption.');
+stack('Beispiel-Stapel', [
+  { q: "Wohin geht's am Wochenende?", opts: ['Skifahren (Empfehlung)','Kino','Zuhause chillen'] },
+  { q: 'Welche Beläge auf die Pizza?', opts: ['Salami','Pilze','Paprika','Ananas'], multi: true },
+  { q: 'Wie soll ich dich nennen?', opts: [], own: true },
+  { q: 'Alles löschen?', opts: ['Abbrechen','Ja, alles löschen'], warn: 1 },
+]);
+user('zeige alles was du zeigen kannst auch welche die an echten sachen hängen');
+bot('Das hier sind Produktkarten mit echten Angeboten für die Bedale in Oliv. Gekauft wird nichts, das ist nur zum Anschauen.');
+products();
+mail();
+bot('Oben siehst du die Produktkarten und einen E-Mail-Entwurf an dich selbst. Er geht nur raus, wenn du auf Senden drückst.', 'Als Letztes kommt das geschützte Feld für Keys oder Passwörter.');
+secret();
+$('#feed').scrollTop = 1e9;
+
+/* ---------- Interactions ---------- */
+$('#form').onsubmit = e => {
+  e.preventDefault();
+  const v = $('#input').value.trim(); if (!v) return;
+  $('#input').value = ''; user(v.replace(/</g,'&lt;'));
+  /frage|karte/i.test(v)
+    ? reply('Klar, hier ein Stapel:', () => stack('Demo-Stapel', [{ q:'Welches Getränk nimmst du?', opts:['Spezi (Empfehlung)','Cola','Wasser'] }]))
+    : reply('Verstanden 👍 (Demo-Antwort)');
+};
+$('#me').onclick = e => { if (!e.target.closest('.icon-btn')) $('#menu').classList.toggle('open'); };
+document.addEventListener('click', e => { if (!e.target.closest('#menu,#me')) $('#menu').classList.remove('open'); });
+$('#openSettings').onclick = () => { $('#menu').classList.remove('open'); $('#modal').classList.add('open'); };
+$('#closeSettings').onclick = () => $('#modal').classList.remove('open');
+$('#modal').onclick = e => { if (e.target.id === 'modal') e.target.classList.remove('open'); };
+document.querySelectorAll('.toggle').forEach(t => t.onclick = () => t.classList.toggle('on'));
+document.querySelectorAll('.tabs button, .snav button').forEach(b => b.onclick = () => {
+  b.parentElement.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on');
+});
+$('#closeRight').onclick = () => $('#right').classList.add('hidden');
+$('.pill').onclick = () => $('#right').classList.toggle('hidden');
+</script>
+</body>
+</html>
